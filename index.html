@@ -6,6 +6,7 @@
 <title>Mineski Cashflow Weekly</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f3; color: #1a1917; font-size: 13px; min-height: 100vh; }
@@ -27,7 +28,12 @@ button:disabled { opacity: 0.35; cursor: default !important; }
 <script src="cashflow_data.js"></script>
 <script>
 var useState = React.useState;
+var useEffect = React.useEffect;
 var h = React.createElement;
+var _sb = supabase.createClient(
+  'https://tsxeprrdzijykuwrruhg.supabase.co',
+  'sb_publishable_PaUz-6aZuzd1j65bUF5Amg_2F0WEDzK'
+);
 
 function fmt(n, compact) {
   if (n===null||n===undefined||isNaN(n)) return "—";
@@ -897,7 +903,7 @@ function ARSummary() {
 
 // ── FULL YEAR ─────────────────────────────────────────────────────────────────
 
-function FullYear() {
+function FullYear(props) {
   // COLUMN DEFINITIONS
   // Jan-May  = Actual (CF for Mancom, weeks consolidated to month)
   // Jun      = Partial actual / in-progress (CF for Mancom W23-W25, shown as single col)
@@ -947,7 +953,8 @@ function FullYear() {
   var FY_PAY25_BD = _AP_BD25;
 
   // Apply forecast projects onto projection months
-  FORECAST_PROJECTS.forEach(function(p){
+  var fcstProjects = (props && props.projects) || FORECAST_PROJECTS;
+  fcstProjects.forEach(function(p){
     var cos_rate = 1 - p.gp;
     [p.dp, p.fp].forEach(function(pmt){
       if(!pmt) return;
@@ -1393,141 +1400,279 @@ function APPayables() {
 }
 
 // ── 2026 FORECAST COMPONENT ───────────────────────────────────────────────────
-function ForecastTab() {
-  var fmt = function(n){ return "₱"+Math.round(n).toLocaleString(); };
-  var pct = function(n){ return Math.round(n*100)+"%"; };
-  var MONTH_LABELS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  var PROJ_MONTHS  = [6,7,8,9,10,11]; // Jul–Dec indices
+function ForecastTab(props) {
+  var projects   = (props && props.projects) || [];
+  var onRefresh  = (props && props.onRefresh) || function(){};
 
-  // Compute per-month impact from all forecast projects
-  var impactIn  = PROJ_MONTHS.map(function(){ return 0; });
+  var MONTH_LABELS   = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var PROJ_MONTHS    = [6,7,8,9,10,11];
+  var PROJ_OPTS      = PROJ_MONTHS.map(function(m){ return {val:m, label:MONTH_LABELS[m]}; });
+
+  var _modal  = useState(null); var modal=_modal[0],setModal=_modal[1];
+  var _saving = useState(false); var saving=_saving[0],setSaving=_saving[1];
+  var _form   = useState({}); var form=_form[0],setForm=_form[1];
+
+  function blankForm(){ return {name:'',entity:'PDEI',total:'',gp_pct:'25',dp_month:'6',dp_amount:'',fp_month:'11',fp_amount:'',notes:''}; }
+
+  function openAdd(){ setForm(blankForm()); setModal('add'); }
+
+  function openEdit(p){
+    setForm({
+      id:p.id, name:p.name||'', entity:p.entity||'PDEI',
+      total:String(p.total||''), gp_pct:String(Math.round((p.gp||0)*100)),
+      dp_month:p.dp!=null?String(p.dp.month):'6', dp_amount:String(p.dp?p.dp.amount:''),
+      fp_month:p.fp!=null?String(p.fp.month):'11', fp_amount:String(p.fp?p.fp.amount:''),
+      notes:p.notes||''
+    });
+    setModal('edit');
+  }
+
+  function closeModal(){ setModal(null); setSaving(false); }
+
+  function setField(k, v){
+    setForm(function(prev){
+      var next = Object.assign({}, prev, {[k]:v});
+      var total = parseFloat(k==='total' ? v : next.total) || 0;
+      var dp    = parseFloat(k==='dp_amount' ? v : next.dp_amount) || 0;
+      if((k==='total'||k==='dp_amount') && total>0){
+        next.fp_amount = String(dp>0 ? Math.round(total-dp) : total);
+      }
+      return next;
+    });
+  }
+
+  function save(){
+    if(!form.name.trim()){ alert('Project name is required.'); return; }
+    var row = {
+      name:form.name.trim(), entity:form.entity,
+      total_value:parseFloat(form.total)||0,
+      gp_pct:parseFloat(form.gp_pct)||0,
+      dp_month:form.dp_month!==''?parseInt(form.dp_month):null,
+      dp_amount:parseFloat(form.dp_amount)||0,
+      fp_month:form.fp_month!==''?parseInt(form.fp_month):null,
+      fp_amount:parseFloat(form.fp_amount)||0,
+      notes:form.notes||'',
+      updated_at:new Date().toISOString()
+    };
+    setSaving(true);
+    var q = modal==='add'
+      ? _sb.from('forecast_deals').insert([row])
+      : _sb.from('forecast_deals').update(row).eq('id',form.id);
+    q.then(function(res){
+      setSaving(false);
+      if(res.error){ alert('Error: '+res.error.message); return; }
+      closeModal(); onRefresh();
+    });
+  }
+
+  function del(id, name){
+    if(!confirm('Delete "'+name+'"?')) return;
+    _sb.from('forecast_deals').delete().eq('id',id).then(function(res){
+      if(res.error){ alert('Error: '+res.error.message); return; }
+      onRefresh();
+    });
+  }
+
+  // Monthly impact
+  var impactIn  = PROJ_MONTHS.map(function(){ return {pdei:0,gg:0}; });
   var impactCos = PROJ_MONTHS.map(function(){ return 0; });
-  FORECAST_PROJECTS.forEach(function(p){
-    var cos_rate = 1 - p.gp;
-    [p.dp, p.fp].forEach(function(pmt){
+  projects.forEach(function(p){
+    var cos_rate = 1-(p.gp||0);
+    [p.dp,p.fp].forEach(function(pmt){
       if(!pmt) return;
       var fi = PROJ_MONTHS.indexOf(pmt.month);
-      if(fi < 0) return;
-      impactIn[fi]  += pmt.amount;
-      impactCos[fi] += Math.round(pmt.amount * cos_rate);
+      if(fi<0) return;
+      if(p.entity==='GG') impactIn[fi].gg+=pmt.amount; else impactIn[fi].pdei+=pmt.amount;
+      impactCos[fi]+=Math.round(pmt.amount*cos_rate);
     });
   });
 
-  var thStyle = function(left){
-    return {textAlign:left?"left":"right",padding:"7px 10px",background:"#0f0f0f",color:"#fff",fontWeight:500,fontSize:10,whiteSpace:"nowrap"};
-  };
+  var totalRev = projects.reduce(function(s,p){return s+(p.total||0);},0);
+  var totalGP  = projects.reduce(function(s,p){return s+Math.round((p.total||0)*(p.gp||0));},0);
+  var totalCOS = totalRev - totalGP;
 
-  var totalFcstRevenue = FORECAST_PROJECTS.reduce(function(s,p){return s+p.total;},0);
-  var totalFcstGP      = FORECAST_PROJECTS.reduce(function(s,p){return s+Math.round(p.total*p.gp);},0);
-  var totalFcstCOS     = totalFcstRevenue - totalFcstGP;
+  var thS = function(left){ return {textAlign:left?'left':'right',padding:'7px 10px',background:'#0f0f0f',color:'#fff',fontWeight:500,fontSize:10,whiteSpace:'nowrap'}; };
+  var td  = function(content,right,color){ return h('td',{style:{padding:'8px 10px',textAlign:right?'right':'left',color:color||'var(--color-text-primary)',borderBottom:'0.5px solid #e0e0e0'}},content); };
+  var iS  = {width:'100%',padding:'7px 9px',border:'1px solid #ccc',borderRadius:5,fontSize:12,fontFamily:'inherit',outline:'none'};
+  var lS  = {display:'block',fontSize:11,color:'var(--color-text-secondary)',marginBottom:3,fontWeight:500};
 
   return h('div',null,
-    // Header
-    h('div',{style:{fontSize:16,fontWeight:500,marginBottom:2}},"2026 Revenue Forecast"),
-    h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:14}},
-      "Forecasted projects included in Full Year cash flow. Inflow and COS are applied to the months below and reflected automatically in the Full Year tab."
+    // Header row
+    h('div',{style:{display:'flex',alignItems:'center',gap:12,marginBottom:4}},
+      h('div',{style:{fontSize:16,fontWeight:500,flex:1}},"2026 Revenue Forecast"),
+      h('button',{onClick:openAdd,style:{background:'#0a3a7a',color:'#fff',border:'none',borderRadius:6,padding:'6px 14px',fontSize:12,cursor:'pointer',fontWeight:500,fontFamily:'inherit'}},
+        "+ Add Project")
+    ),
+    h('div',{style:{fontSize:12,color:'var(--color-text-secondary)',marginBottom:14}},
+      "DP and FP amounts feed directly into Full Year inflow and COS by month."
     ),
 
     // Summary chips
-    h('div',{style:{display:"flex",gap:10,marginBottom:18,flexWrap:"wrap"}},
-      [
-        {label:"Projects",     val:String(FORECAST_PROJECTS.length),         col:"#0a3a7a"},
-        {label:"Total Revenue",val:fmt(totalFcstRevenue),                    col:"#1a7a4a"},
-        {label:"Total GP",     val:fmt(totalFcstGP)+" ("+pct(totalFcstGP/totalFcstRevenue)+")", col:"#1a5a1a"},
-        {label:"Total COS",    val:fmt(totalFcstCOS),                        col:"#7a1fa2"},
+    h('div',{style:{display:'flex',gap:10,marginBottom:18,flexWrap:'wrap'}},
+      [{label:'Projects',val:String(projects.length),col:'#0a3a7a'},
+       {label:'Total Revenue',val:'₱'+Math.round(totalRev).toLocaleString(),col:'#1a7a4a'},
+       {label:'Total GP',val:'₱'+Math.round(totalGP).toLocaleString()+(totalRev?' ('+Math.round(totalGP/totalRev*100)+'%)':''),col:'#1a5a1a'},
+       {label:'Total COS',val:'₱'+Math.round(totalCOS).toLocaleString(),col:'#7a1fa2'},
       ].map(function(k,i){
-        return h('div',{key:i,style:{background:"var(--color-background-secondary)",borderRadius:8,padding:"10px 14px",borderLeft:"3px solid "+k.col}},
-          h('div',{style:{fontSize:10,color:"var(--color-text-secondary)",marginBottom:2}},k.label),
+        return h('div',{key:i,style:{background:'var(--color-background-secondary)',borderRadius:8,padding:'10px 14px',borderLeft:'3px solid '+k.col}},
+          h('div',{style:{fontSize:10,color:'var(--color-text-secondary)',marginBottom:2}},k.label),
           h('div',{style:{fontSize:14,fontWeight:600,color:k.col}},k.val)
         );
       })
     ),
 
-    // Project list
-    h('div',{style:{fontSize:12,fontWeight:500,color:"var(--color-text-secondary)",marginBottom:8,textTransform:"uppercase",letterSpacing:"0.05em"}},"Projects"),
-    h('div',{style:{overflowX:"auto",marginBottom:20}},
-      h('table',{style:{borderCollapse:"collapse",fontSize:12,width:"100%"}},
+    // Project table
+    projects.length===0
+      ? h('div',{style:{padding:'32px',textAlign:'center',color:'var(--color-text-secondary)',fontSize:13,background:'var(--color-background-secondary)',borderRadius:8,marginBottom:20}},
+          'No projects yet — click "+ Add Project" to get started.')
+      : h('div',{style:{overflowX:'auto',marginBottom:20}},
+          h('table',{style:{borderCollapse:'collapse',fontSize:12,width:'100%'}},
+            h('thead',null,
+              h('tr',null,
+                h('th',{style:thS(true)},'Project'),
+                h('th',{style:thS(false)},'Entity'),
+                h('th',{style:thS(false)},'Total Value'),
+                h('th',{style:thS(false)},'GP%'),
+                h('th',{style:thS(false)},'COS'),
+                h('th',{style:thS(false)},'DP Month'),
+                h('th',{style:thS(false)},'DP Amount'),
+                h('th',{style:thS(false)},'FP Month'),
+                h('th',{style:thS(false)},'FP Amount'),
+                h('th',{style:thS(false)},'')
+              )
+            ),
+            h('tbody',null,
+              projects.map(function(p,i){
+                var gpAmt  = Math.round((p.total||0)*(p.gp||0));
+                var cosAmt = (p.total||0)-gpAmt;
+                return h('tr',{key:p.id||i},
+                  td(h('span',{style:{fontWeight:500}},p.name),false),
+                  td(h('span',{style:{background:p.entity==='GG'?'#f3e8ff':'#e8f0ff',color:p.entity==='GG'?'#7a1fa2':'#0a3a7a',borderRadius:4,padding:'2px 6px',fontSize:11,fontWeight:600}},p.entity),false),
+                  td('₱'+Math.round(p.total||0).toLocaleString(),true),
+                  td(h('span',{style:{background:'#e8fff3',color:'#1a7a4a',borderRadius:4,padding:'2px 6px',fontWeight:600,fontSize:11}},Math.round((p.gp||0)*100)+'%'),false),
+                  td('₱'+Math.round(cosAmt).toLocaleString(),true,'#7a1fa2'),
+                  td(p.dp?MONTH_LABELS[p.dp.month]+' 2026':'—',false),
+                  td(p.dp?'₱'+Math.round(p.dp.amount).toLocaleString():'—',true),
+                  td(p.fp?MONTH_LABELS[p.fp.month]+' 2026':'—',false),
+                  td(p.fp?'₱'+Math.round(p.fp.amount).toLocaleString():'—',true),
+                  h('td',{style:{padding:'8px 10px',borderBottom:'0.5px solid #e0e0e0',whiteSpace:'nowrap'}},
+                    h('button',{onClick:function(){openEdit(p);},style:{background:'none',border:'0.5px solid var(--color-border-tertiary)',borderRadius:4,padding:'3px 8px',fontSize:11,cursor:'pointer',marginRight:4,fontFamily:'inherit'}},'Edit'),
+                    h('button',{onClick:function(){del(p.id,p.name);},style:{background:'none',border:'0.5px solid #e0a0a0',borderRadius:4,padding:'3px 8px',fontSize:11,cursor:'pointer',color:'#c0392b',fontFamily:'inherit'}},'Delete')
+                  )
+                );
+              })
+            )
+          )
+        ),
+
+    // Monthly impact table
+    h('div',{style:{fontSize:12,fontWeight:500,color:'var(--color-text-secondary)',marginBottom:8,textTransform:'uppercase',letterSpacing:'0.05em'}},"Full Year Impact — Jul to Dec"),
+    h('div',{style:{overflowX:'auto'}},
+      h('table',{style:{borderCollapse:'collapse',fontSize:12}},
         h('thead',null,
           h('tr',null,
-            h('th',{style:thStyle(true)},"Project"),
-            h('th',{style:thStyle(false)},"Total"),
-            h('th',{style:thStyle(false)},"GP%"),
-            h('th',{style:thStyle(false)},"GP Amount"),
-            h('th',{style:thStyle(false)},"COS"),
-            h('th',{style:thStyle(false)},"DP Month"),
-            h('th',{style:thStyle(false)},"DP Amount"),
-            h('th',{style:thStyle(false)},"FP Month"),
-            h('th',{style:thStyle(false)},"FP Amount")
+            h('th',{style:{textAlign:'left',padding:'7px 10px',background:'#0f0f0f',color:'#fff',fontWeight:500,fontSize:10,minWidth:160}},''),
+            PROJ_MONTHS.map(function(mi,fi){ return h('th',{key:fi,style:{textAlign:'right',padding:'7px 10px',background:'#3a3520',color:'#e8d88a',fontWeight:500,fontSize:10,minWidth:100}},MONTH_LABELS[mi]); }),
+            h('th',{style:{textAlign:'right',padding:'7px 10px',background:'#0f0f0f',color:'#fff',fontWeight:500,fontSize:10,minWidth:110}},'Total')
           )
         ),
         h('tbody',null,
-          FORECAST_PROJECTS.map(function(p,i){
-            var gp_amt  = Math.round(p.total * p.gp);
-            var cos_amt = p.total - gp_amt;
-            var border  = "0.5px solid #e0e0e0";
-            var td = function(content, right, color){
-              return h('td',{style:{padding:"9px 10px",textAlign:right?"right":"left",color:color||"var(--color-text-primary)",borderBottom:border}},content);
-            };
-            return h('tr',{key:i},
-              td(h('span',{style:{fontWeight:500}},p.name),false),
-              td(fmt(p.total),true),
-              td(h('span',{style:{background:"#e8fff3",color:"#1a7a4a",borderRadius:4,padding:"2px 6px",fontWeight:600,fontSize:11}},pct(p.gp)),false),
-              td(fmt(gp_amt),  true,"#1a7a4a"),
-              td(fmt(cos_amt), true,"#7a1fa2"),
-              td(p.dp?p.dp.label+" 2026":"—",false),
-              td(p.dp?fmt(p.dp.amount):"—",true),
-              td(p.fp?p.fp.label+" 2026":"—",false),
-              td(p.fp?fmt(p.fp.amount):"—",true)
+          [
+            {label:'PDEI Inflow',col:'#0a3a7a',vals:PROJ_MONTHS.map(function(m,fi){return impactIn[fi].pdei;})},
+            {label:'GG Inflow',col:'#7a1fa2',vals:PROJ_MONTHS.map(function(m,fi){return impactIn[fi].gg;})},
+            {label:'COS Outflow',col:'#c0392b',vals:impactCos},
+          ].map(function(row,ri){
+            var total = row.vals.reduce(function(a,b){return a+b;},0);
+            return h('tr',{key:ri,style:{borderBottom:'0.5px solid #e0e0e0'}},
+              h('td',{style:{padding:'8px 10px',fontWeight:600,color:row.col}},row.label),
+              row.vals.map(function(v,fi){ return h('td',{key:fi,style:{textAlign:'right',padding:'8px 10px',color:v?row.col:'#ccc'}},v?'₱'+Math.round(v).toLocaleString():'—'); }),
+              h('td',{style:{textAlign:'right',padding:'8px 10px',fontWeight:600,color:row.col,borderLeft:'1px solid #ddd'}},'₱'+Math.round(total).toLocaleString())
             );
-          })
+          }).concat([
+            h('tr',{key:'gp',style:{background:'#f0fff4',borderTop:'1.5px solid #1a7a4a'}},
+              h('td',{style:{padding:'8px 10px',fontWeight:700,color:'#1a5a1a'}},'Net GP Contribution'),
+              PROJ_MONTHS.map(function(m,fi){
+                var v = impactIn[fi].pdei+impactIn[fi].gg-impactCos[fi];
+                return h('td',{key:fi,style:{textAlign:'right',padding:'8px 10px',fontWeight:v?700:400,color:v?'#1a5a1a':'#ccc'}},v?'₱'+Math.round(v).toLocaleString():'—');
+              }),
+              h('td',{style:{textAlign:'right',padding:'8px 10px',fontWeight:700,color:'#1a5a1a',borderLeft:'1px solid #1a7a4a'}},
+                '₱'+Math.round(PROJ_MONTHS.reduce(function(s,m,fi){return s+impactIn[fi].pdei+impactIn[fi].gg-impactCos[fi];},0)).toLocaleString())
+            )
+          ])
         )
       )
     ),
 
-    // Monthly impact table
-    h('div',{style:{fontSize:12,fontWeight:500,color:"var(--color-text-secondary)",marginBottom:8,textTransform:"uppercase",letterSpacing:"0.05em"}},"Full Year Impact — Jul to Dec"),
-    h('div',{style:{overflowX:"auto"}},
-      h('table',{style:{borderCollapse:"collapse",fontSize:12}},
-        h('thead',null,
-          h('tr',null,
-            h('th',{style:{textAlign:"left",padding:"7px 10px",background:"#0f0f0f",color:"#fff",fontWeight:500,fontSize:10,minWidth:160}},""),
-            PROJ_MONTHS.map(function(mi,fi){
-              return h('th',{key:fi,style:{textAlign:"right",padding:"7px 10px",background:"#3a3520",color:"#e8d88a",fontWeight:500,fontSize:10,minWidth:100}},MONTH_LABELS[mi]);
-            }),
-            h('th',{style:{textAlign:"right",padding:"7px 10px",background:"#0f0f0f",color:"#fff",fontWeight:500,fontSize:10,minWidth:110}},"Total")
+    // Modal
+    modal ? h('div',{style:{position:'fixed',top:0,left:0,right:0,bottom:0,background:'rgba(0,0,0,0.55)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:1000}},
+      h('div',{style:{background:'#fff',borderRadius:12,padding:28,width:520,maxWidth:'92vw',maxHeight:'90vh',overflowY:'auto',boxShadow:'0 20px 60px rgba(0,0,0,0.35)'}},
+        h('div',{style:{fontSize:15,fontWeight:600,marginBottom:20}},modal==='add'?'+ Add Project':'Edit Project'),
+
+        h('div',{style:{marginBottom:14}},
+          h('label',{style:lS},'Project Name'),
+          h('input',{style:iS,value:form.name,placeholder:'e.g. MPL Season 18',onChange:function(e){setField('name',e.target.value);}})
+        ),
+
+        h('div',{style:{marginBottom:14}},
+          h('label',{style:lS},'Entity'),
+          h('div',{style:{display:'flex',gap:8}},
+            ['PDEI','GG'].map(function(e){
+              var active = form.entity===e;
+              return h('button',{key:e,onClick:function(){setField('entity',e);},style:{flex:1,padding:'8px',border:'1.5px solid '+(active?'#0a3a7a':'#ddd'),borderRadius:6,background:active?'#e8f0ff':'#fff',color:active?'#0a3a7a':'#555',fontWeight:active?600:400,cursor:'pointer',fontSize:12,fontFamily:'inherit'}},e);
+            })
           )
         ),
-        h('tbody',null,
-          h('tr',{style:{borderBottom:"0.5px solid #e0e0e0"}},
-            h('td',{style:{padding:"8px 10px",fontWeight:600,color:"#1a7a4a"}},"Inflow (PDEI)"),
-            impactIn.map(function(v,fi){
-              return h('td',{key:fi,style:{textAlign:"right",padding:"8px 10px",fontWeight:v?600:400,color:v?"#1a7a4a":"#ccc"}},v?fmt(v):"—");
-            }),
-            h('td',{style:{textAlign:"right",padding:"8px 10px",fontWeight:600,color:"#1a7a4a",borderLeft:"1px solid #ddd"}},fmt(impactIn.reduce(function(a,b){return a+b;},0)))
+
+        h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:14}},
+          h('div',null,
+            h('label',{style:lS},'Total Contract Value (₱)'),
+            h('input',{style:iS,type:'number',value:form.total,placeholder:'32000000',onChange:function(e){setField('total',e.target.value);}})
           ),
-          h('tr',{style:{borderBottom:"0.5px solid #e0e0e0"}},
-            h('td',{style:{padding:"8px 10px",fontWeight:600,color:"#7a1fa2"}},"COS Outflow"),
-            impactCos.map(function(v,fi){
-              return h('td',{key:fi,style:{textAlign:"right",padding:"8px 10px",fontWeight:v?600:400,color:v?"#7a1fa2":"#ccc"}},v?fmt(v):"—");
-            }),
-            h('td',{style:{textAlign:"right",padding:"8px 10px",fontWeight:600,color:"#7a1fa2",borderLeft:"1px solid #ddd"}},fmt(impactCos.reduce(function(a,b){return a+b;},0)))
-          ),
-          h('tr',{style:{background:"#f0fff4",borderTop:"1.5px solid #1a7a4a"}},
-            h('td',{style:{padding:"8px 10px",fontWeight:700,color:"#1a5a1a"}},"Net GP Contribution"),
-            impactIn.map(function(v,fi){
-              var gp = v - impactCos[fi];
-              return h('td',{key:fi,style:{textAlign:"right",padding:"8px 10px",fontWeight:gp?700:400,color:gp?"#1a5a1a":"#ccc"}},gp?fmt(gp):"—");
-            }),
-            h('td',{style:{textAlign:"right",padding:"8px 10px",fontWeight:700,color:"#1a5a1a",borderLeft:"1px solid #1a7a4a"}},
-              fmt(impactIn.reduce(function(a,b){return a+b;},0) - impactCos.reduce(function(a,b){return a+b;},0))
-            )
+          h('div',null,
+            h('label',{style:lS},'GP %'),
+            h('input',{style:iS,type:'number',min:0,max:100,value:form.gp_pct,placeholder:'25',onChange:function(e){setField('gp_pct',e.target.value);}})
           )
+        ),
+
+        h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:14}},
+          h('div',null,
+            h('label',{style:lS},'DP Month'),
+            h('select',{style:iS,value:form.dp_month,onChange:function(e){setField('dp_month',e.target.value);}},
+              h('option',{value:''},'— None —'),
+              PROJ_OPTS.map(function(o){return h('option',{key:o.val,value:String(o.val)},o.label+' 2026');})
+            )
+          ),
+          h('div',null,
+            h('label',{style:lS},'DP Amount (₱)'),
+            h('input',{style:iS,type:'number',value:form.dp_amount,placeholder:'16000000',onChange:function(e){setField('dp_amount',e.target.value);}})
+          )
+        ),
+
+        h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:14}},
+          h('div',null,
+            h('label',{style:lS},'FP Month'),
+            h('select',{style:iS,value:form.fp_month,onChange:function(e){setField('fp_month',e.target.value);}},
+              h('option',{value:''},'— None —'),
+              PROJ_OPTS.map(function(o){return h('option',{key:o.val,value:String(o.val)},o.label+' 2026');})
+            )
+          ),
+          h('div',null,
+            h('label',{style:lS},'FP Amount (₱) — auto-fills'),
+            h('input',{style:Object.assign({},iS,{background:'#f8fff8'}),type:'number',value:form.fp_amount,placeholder:'auto',onChange:function(e){setField('fp_amount',e.target.value);}})
+          )
+        ),
+
+        h('div',{style:{marginBottom:22}},
+          h('label',{style:lS},'Notes (optional)'),
+          h('input',{style:iS,value:form.notes,placeholder:'Any remarks',onChange:function(e){setField('notes',e.target.value);}})
+        ),
+
+        h('div',{style:{display:'flex',gap:8,justifyContent:'flex-end'}},
+          h('button',{onClick:closeModal,style:{padding:'8px 18px',border:'0.5px solid #ccc',borderRadius:6,background:'#fff',fontSize:12,cursor:'pointer',fontFamily:'inherit'}},'Cancel'),
+          h('button',{onClick:save,disabled:saving,style:{padding:'8px 18px',border:'none',borderRadius:6,background:'#0a3a7a',color:'#fff',fontSize:12,cursor:saving?'default':'pointer',fontWeight:600,fontFamily:'inherit',opacity:saving?0.7:1}},saving?'Saving…':'Save Project')
         )
       )
-    ),
-    h('div',{style:{fontSize:11,color:"var(--color-text-tertiary)",marginTop:10}},
-      "To add a project, update the FORECAST_PROJECTS array in the HTML file."
-    )
+    ) : null
   );
 }
 
@@ -1538,7 +1683,33 @@ var COMPS  = [Cover,WeeklyTableCombined,ARStandard,ARSummary,FullYear,APPayables
 var SLIDE_HIDDEN = [false,false,true,true,false,false,true,false];
 
 function App() {
-  var _s = useState(0); var slide=_s[0],setSlide=_s[1];
+  var _s  = useState(0);    var slide=_s[0],setSlide=_s[1];
+  var _p  = useState([]);   var projects=_p[0],setProjects=_p[1];
+  var _rk = useState(0);    var refreshKey=_rk[0],setRefreshKey=_rk[1];
+
+  var ML = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+  function rowToProject(row){
+    return {
+      id:row.id, name:row.name, entity:row.entity,
+      total:row.total_value, gp:(row.gp_pct||0)/100,
+      dp:row.dp_month!=null?{month:row.dp_month,label:ML[row.dp_month],amount:row.dp_amount}:null,
+      fp:row.fp_month!=null?{month:row.fp_month,label:ML[row.fp_month],amount:row.fp_amount}:null,
+      notes:row.notes||''
+    };
+  }
+
+  function loadProjects(){
+    _sb.from('forecast_deals').select('*').order('created_at',{ascending:true}).then(function(res){
+      var p = res.data ? res.data.map(rowToProject) : [];
+      FORECAST_PROJECTS = p;
+      setProjects(p);
+      setRefreshKey(function(k){return k+1;});
+    });
+  }
+
+  useEffect(function(){ loadProjects(); }, []);
+
   function nav(d){ setSlide(function(s){return Math.max(0,Math.min(SLIDES.length-1,s+d));}); }
   var SlideComp = COMPS[slide];
   return h('div',{className:"app-wrap"},
@@ -1553,7 +1724,7 @@ function App() {
         h('button',{onClick:function(){nav(1);},disabled:slide===SLIDES.length-1,style:{background:"none",border:"0.5px solid var(--color-border-tertiary)",borderRadius:6,padding:"4px 10px",fontSize:12,cursor:"pointer",color:"var(--color-text-secondary)"}},"→")
       )
     ),
-    h(SlideComp,null),
+    h(SlideComp,{projects:projects,onRefresh:loadProjects}),
     h('div',{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:20,paddingTop:12,borderTop:"0.5px solid var(--color-border-tertiary)"}},
       h('div',{style:{fontSize:11,color:"var(--color-text-tertiary)"}},"Mineski PH · "+WEEK+" · "+DATE),
       h('div',{style:{display:"flex",gap:8}},

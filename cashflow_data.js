@@ -219,18 +219,18 @@ var FY_BEG_INIT = [12652564,4697131,3367012,3925661,2108492,599016,-3607826,-861
 var FY_NET_INIT = [4697131,3367012,3925661,2108492,599016,670877,-8610434,-13374606,-20419578,-15816036,-26926978,-36365967];
 
 // Inflow: Jan–Jun from CF rows 53/54; Jul–Dec from AM BD Universe Collections CSV
-var FY_PDEI_IN_INIT = [16323424,9067184,13219958,29063859,13433202,6766445,11033306,381800,0,12639022,0,2145599];
+var FY_PDEI_IN_INIT = [16323424,9067184,13219958,29063859,13433202,6766445,13772169,131000,250800,0,0,2601597];
 var FY_GG_IN_INIT   = [20799694,3302846,23568842,2001826,1950465,4162966,0,3549000,0,0,0,0];
 
 // Inflow breakdowns for projection months (Jul–Dec) — from AM BD Universe CSV
 var FY_PDEI_IN_BD_INIT = [
   null,null,null,null,null,null,
-  [{l:"Moonton – MPL PH S17 FP",a:9704956},{l:"Infinitech – SportsPlus MPBL FZ FP",a:379300},{l:"Moonton – MPL S17 Addendum (Genset)",a:324890},{l:"Jobstreet – LevelUp Tournament S2",a:303971},{l:"Mineski ID – Crossfire Caster Sourcing",a:128781},{l:"Jobstreet – LevelUp Tournament Add.",a:103040},{l:"Jobstreet – Umbrella Production",a:57664},{l:"Jobstreet – LevelUp S2 [Add-On]",a:30706}],
-  [{l:"Mineski ID – Crossfire Caster FP",a:131000},{l:"Alika – The Ragnarok Phase 8",a:125400},{l:"Alika – The Ragnarok Phase 9",a:96900},{l:"Alika – Ragnarok V Phase 2",a:28500}],
+  [{l:"Moonton – MPL PH S17 FP",a:9704956},{l:"Infinitech – SportsPlus MPBL DP (70%)",a:885033},{l:"Globe Telecom – KOW FP",a:783936},{l:"Minotaur – Cobra Core Event FP",a:489969},{l:"Infinitech – SportsPlus MPBL FP (30%)",a:379300},{l:"Moonton – MPL S17 Addendum (Genset)",a:324890},{l:"Jobstreet – LevelUp Tournament S2",a:303971},{l:"Minotaur – Cobra Core Event DP",a:209987},{l:"Mineski ID – Crossfire Caster Sourcing",a:128781},{l:"PESO – NGP Caloocan FP",a:103459},{l:"PESO – NGP Caloocan DP",a:103459},{l:"Jobstreet – LevelUp Tournament Add.",a:103040},{l:"Minotaur – Cobra Core Addendum",a:87181},{l:"Mineski TH – MCGG Rising Stars S4",a:75837},{l:"Jobstreet – Umbrella Production",a:57664},{l:"Jobstreet – Add. (Parking/Boosting)",a:30706}],
+  [{l:"Mineski ID – Crossfire Caster FP",a:131000}],
+  [{l:"Alika – The Ragnarok Phase 8",a:125400},{l:"Alika – The Ragnarok Phase 9",a:96900},{l:"Alika – Ragnarok V Phase 2",a:28500}],
   null,
-  [{l:"Gamemaster – GTCC September Arena FP",a:9410285},{l:"SM Prime – SM Cyberzone Game Fest",a:3134666},{l:"SM Prime – Cyberzone GF Addendum",a:94071}],
   null,
-  [{l:"Minotaur – Minotaur x Jollibee GameJoy",a:2145599}],
+  [{l:"Minotaur – Minotaur x Jollibee GameJoy",a:2145599},{l:"GOSH Live – FIFA World Cup Streamers",a:455998}],
 ];
 var FY_GG_IN_BD_INIT = [
   null,null,null,null,null,null,
@@ -257,16 +257,7 @@ var FY_GG_OUT = [16398498,5723761,23187381,4650000,1883759,4206694,1353245,10340
 
 // ── FORECAST PROJECTS ─────────────────────────────────────────────────────────
 // Add upcoming signed deals here; they auto-inject into Full Year inflow + COS.
-var FORECAST_PROJECTS = [
-  {
-    name:   "MPL Season 18",
-    total:  32000000,
-    gp:     0.25,
-    entity: "PDEI",
-    dp: {month:8,  label:"Sep", amount:16000000},
-    fp: {month:11, label:"Dec", amount:16000000},
-  },
-];
+var FORECAST_PROJECTS = []; // populated from Supabase at runtime
 
 // ── AP COS VENDORS (Arrears Tab) ──────────────────────────────────────────────
 var AP_COS_VENDORS = [
