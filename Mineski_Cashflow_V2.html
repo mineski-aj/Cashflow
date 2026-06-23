@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)https://mskinattefrost.github.io/mineski-cashflow/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mineski Cashflow Weekly</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f3; color: #1a1917; font-size: 13px; min-height: 100vh; }
+:root {
+  --color-text-primary: #1a1917;
+  --color-text-secondary: #6b6860;
+  --color-text-tertiary: #999690;
+  --color-background-secondary: #f0f0ee;
+  --color-border-tertiary: rgba(0,0,0,0.1);
+  --color-border-secondary: rgba(0,0,0,0.2);
+}
+button { font-family: inherit; }
+button:disabled { opacity: 0.35; cursor: default !important; }
+.app-wrap { max-width: 1400px; margin: 0 auto; padding: 20px 16px; }
+</style>
+</head>
+<body>
+<div id="root"><div class="app-wrap"><div style="display: flex; gap: 4px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; border-bottom: 0.5px solid var(--color-border-tertiary); padding-bottom: 10px;"><button style="background: rgb(26, 26, 26); color: rgb(255, 255, 255); border: 0.5px solid rgb(26, 26, 26); border-radius: 6px; padding: 4px 11px; font-size: 12px; font-weight: 500; cursor: pointer;">Cover</button><button style="background: none; color: var(--color-text-secondary); border-width: 0.5px; border-style: solid; border-color: var(--color-border-tertiary); border-image: initial; border-radius: 6px; padding: 4px 11px; font-size: 12px; font-weight: 400; cursor: pointer;">Overview</button><button style="background: none; color: var(--color-text-secondary); border-width: 0.5px; border-style: solid; border-color: var(--color-border-tertiary); border-image: initial; border-radius: 6px; padding: 4px 11px; font-size: 12px; font-weight: 400; cursor: pointer;">Cash Position</button><button style="background: none; color: var(--color-text-secondary); border-width: 0.5px; border-style: solid; border-color: var(--color-border-tertiary); border-image: initial; border-radius: 6px; padding: 4px 11px; font-size: 12px; font-weight: 400; cursor: pointer;">Weekly Table</button><button style="background: none; color: var(--color-text-secondary); border-width: 0.5px; border-style: solid; border-color: var(--color-border-tertiary); border-image: initial; border-radius: 6px; padding: 4px 11px; font-size: 12px; font-weight: 400; cursor: pointer;">AR Standard</button><button style="background: none; color: var(--color-text-secondary); border-width: 0.5px; border-style: solid; border-color: var(--color-border-tertiary); border-image: initial; border-radius: 6px; padding: 4px 11px; font-size: 12px; font-weight: 400; cursor: pointer;">AR Summary</button><button style="background: none; color: var(--color-text-secondary); border-width: 0.5px; border-style: solid; border-color: var(--color-border-tertiary); border-image: initial; border-radius: 6px; padding: 4px 11px; font-size: 12px; font-weight: 400; cursor: pointer;">Full Year</button><div style="margin-left: auto; display: flex; gap: 8px; align-items: center;"><button disabled="" style="background: none; border: 0.5px solid var(--color-border-tertiary); border-radius: 6px; padding: 4px 10px; font-size: 12px; cursor: pointer; color: var(--color-text-secondary);">←</button><span style="font-size: 11px; color: var(--color-text-tertiary);">1 / 7</span><button style="background: none; border: 0.5px solid var(--color-border-tertiary); border-radius: 6px; padding: 4px 10px; font-size: 12px; cursor: pointer; color: var(--color-text-secondary);">→</button></div></div><div style="background: rgb(15, 15, 15); border-radius: 12px; padding: 60px 40px; text-align: center; min-height: 340px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 16px;"><div style="font-size: 11px; letter-spacing: 4px; color: rgb(136, 136, 136); text-transform: uppercase;">Management Committee Presentation · June 12, 2026</div><div style="font-size: 48px; font-weight: 700; color: rgb(255, 255, 255); line-height: 1.1;">CASH <span style="color: rgb(230, 51, 41);">FLOW</span></div><div style="font-size: 48px; font-weight: 700; color: rgb(255, 255, 255); line-height: 1.1;">&amp; RECEIVABLES</div><div style="font-size: 13px; color: rgb(102, 102, 102);">Weekly Cash Position · Accounts Receivable Aging · Key Actions</div><div style="border: 1px solid rgb(230, 51, 41); border-radius: 4px; padding: 8px 24px; font-size: 12px; letter-spacing: 3px; color: rgb(230, 51, 41); text-transform: uppercase;">Week 24 OF 2026 · June 12, 2026</div></div><div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 12px; border-top: 0.5px solid var(--color-border-tertiary);"><div style="font-size: 11px; color: var(--color-text-tertiary);">Mineski PH · Week 24 · June 12, 2026</div><div style="display: flex; gap: 8px;"><button disabled="" style="background: none; border: 0.5px solid var(--color-border-tertiary); border-radius: 6px; padding: 5px 14px; font-size: 12px; cursor: pointer; color: var(--color-text-secondary);">← Prev</button><button style="background: rgb(15, 15, 15); border: none; border-radius: 6px; padding: 5px 14px; font-size: 12px; cursor: pointer; color: rgb(255, 255, 255);">Next →</button></div></div></div></div>
+<script src="cashflow_data.js"></script>
+<script>
+var useState = React.useState;
+var h = React.createElement;
+
+function fmt(n, compact) {
+  if (n===null||n===undefined||isNaN(n)) return "—";
+  var abs = Math.abs(n);
+  if (compact) {
+    if (abs>=1e6) return (n<0?"(":"")+"₱"+(abs/1e6).toFixed(2)+"M"+(n<0?")":"");
+    if (abs>=1e3) return (n<0?"(":"")+"₱"+(abs/1e3).toFixed(0)+"K"+(n<0?")":"");
+    return (n<0?"(":"")+"₱"+abs.toFixed(0)+(n<0?")":"");
+  }
+  return (n<0?"(₱":"₱")+abs.toLocaleString("en-PH",{minimumFractionDigits:2,maximumFractionDigits:2})+(n<0?")":"");
+}
+
+// ── COVER ─────────────────────────────────────────────────────────────────────
+
+function Cover() {
+  return h('div',{style:{background:"#0f0f0f",borderRadius:12,padding:"60px 40px",textAlign:"center",minHeight:340,display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center",gap:16}},
+    h('div',{style:{fontSize:11,letterSpacing:4,color:"#888",textTransform:"uppercase"}},"Management Committee Presentation · "+DATE),
+    h('div',{style:{fontSize:48,fontWeight:700,color:"#fff",lineHeight:1.1}},"CASH ",h('span',{style:{color:"#e63329"}},"FLOW")),
+    h('div',{style:{fontSize:48,fontWeight:700,color:"#fff",lineHeight:1.1}},"& RECEIVABLES"),
+    h('div',{style:{fontSize:13,color:"#666"}},"Weekly Cash Position · Accounts Receivable Aging · Key Actions"),
+    h('div',{style:{border:"1px solid #e63329",borderRadius:4,padding:"8px 24px",fontSize:12,letterSpacing:3,color:"#e63329",textTransform:"uppercase"}},WEEK+" OF 2026 · "+DATE)
+  );
+}
+
+// ── OVERVIEW ──────────────────────────────────────────────────────────────────
+
+function Overview() {
+  var kpis = [
+    {label:"Cash position (W20 close)",val:fmt(4669679,true),sub:"Opening W20",col:"#c85000"},
+    {label:"This week collections due",val:fmt(thisWeekTotal,true),sub:thisWeekAR.length+" invoices",col:"#1a7a4a"},
+    {label:"Total AR open",val:fmt(totalOpen,true),sub:AR_OPEN.length+" invoices",col:"#1a5fa8"},
+    {label:"High priority AR",val:fmt(totalHigh,true),sub:highPriority.length+" accounts",col:"#c85000"},
+    {label:"Collected YTD",val:fmt(totalCollected,true),sub:COLLECTED.length+" invoices",col:"#1a7a4a"},
+    {label:"Projected W52 close",val:fmt(-67592506,true),sub:"Dec 25 year-end",col:"#c00"},
+  ];
+  return h('div',null,
+    h('div',{style:{fontSize:16,fontWeight:500,marginBottom:4}},"Overview"),
+    h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:18}},WEEK+" · "+DATE),
+    h('div',{style:{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:10,marginBottom:20}},
+      kpis.map(function(k,i){
+        return h('div',{key:i,style:{background:"var(--color-background-secondary)",borderRadius:8,padding:"12px 14px",borderLeft:"3px solid "+k.col}},
+          h('div',{style:{fontSize:11,color:"var(--color-text-secondary)",marginBottom:4}},k.label),
+          h('div',{style:{fontSize:18,fontWeight:600,color:k.col}},k.val),
+          h('div',{style:{fontSize:11,color:"var(--color-text-tertiary)",marginTop:2}},k.sub)
+        );
+      })
+    ),
+    h('div',{style:{background:"#fff8f0",border:"0.5px solid #f5c69a",borderRadius:8,padding:"12px 16px"}},
+      h('div',{style:{fontSize:12,fontWeight:500,color:"#a04000",marginBottom:6}},"⚠ Key Actions This Week"),
+      h('div',{style:{fontSize:12,color:"#6b3000",lineHeight:1.9}},
+        "· ",h('strong',null,"SMDC Heroes Clash (₱590K)")," — 3 invoices in W20; follow up for payment",h('br'),
+        "· ",h('strong',null,"SM Cyberzone TCG Addendum (₱2.96M)")," — Target W23; confirm invoice status",h('br'),
+        "· ",h('strong',null,"MCGG Rising Stars S4 (₱81K)")," — TEG billing W24; follow up",h('br'),
+        "· ",h('strong',null,"Alika/Ragnarok (₱266K)")," — 3 invoices W25; confirm payment",h('br'),
+        "· ",h('strong',null,"GG inter-co transfer (₱4.1M)")," — W21 projection; monitor GG cash position"
+      )
+    )
+  );
+}
+
+// ── CASH POSITION ─────────────────────────────────────────────────────────────
+
+function CashPosition() {
+  return h('div',null,
+    h('div',{style:{fontSize:16,fontWeight:500,marginBottom:4}},"Cash Position"),
+    h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:18}},"Actual W1–W22 · Projection W22–W52"),
+    h('div',{style:{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:8,marginBottom:20}},
+      CF.weeks.map(function(w,i){
+        var net=CF.net[i];
+        return h('div',{key:i,style:{background:net<0?"#fff5f5":"#f5fff8",borderRadius:8,padding:"10px 12px",border:"0.5px solid "+(net<0?"#fcc":"#b2e6c8")}},
+          h('div',{style:{fontSize:10,color:"var(--color-text-tertiary)",marginBottom:4,whiteSpace:"pre-line"}},w),
+          h('div',{style:{fontSize:11,color:"var(--color-text-secondary)"}},"Open: ",h('span',{style:{fontWeight:500}},fmt(CF.actBeg[i],true))),
+          h('div',{style:{fontSize:11,color:"#1a7a4a"}},"In: "+fmt(CF.totIn[i],true)),
+          h('div',{style:{fontSize:11,color:"#c00"}},"Out: "+fmt(CF.totOut[i],true)),
+          h('div',{style:{fontSize:12,fontWeight:600,color:net<0?"#c00":"#1a7a4a",marginTop:4,borderTop:"0.5px solid var(--color-border-tertiary)",paddingTop:4}},"Close: "+fmt(net,true))
+        );
+      })
+    ),
+    h('div',{style:{fontSize:12,fontWeight:500,color:"var(--color-text-secondary)",marginBottom:8}},"Projections →"),
+    h('div',{style:{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(100px,1fr))",gap:6}},
+      CF.projBeg.map(function(_,i){
+        var net=CF.projNet[i];
+        return h('div',{key:i,style:{background:net<0?"#fff5f5":"#f5fff8",borderRadius:8,padding:"8px 10px",border:"0.5px solid "+(net<0?"#fcc":"#b2e6c8")}},
+          h('div',{style:{fontSize:10,color:"var(--color-text-tertiary)",marginBottom:3,whiteSpace:"pre-line"}},CF.proj[i]),
+          h('div',{style:{fontSize:10,color:"#1a7a4a"}},"In: "+fmt(CF.projIn[i],true)),
+          h('div',{style:{fontSize:10,color:"#c00"}},"Out: "+fmt(CF.projOut[i],true)),
+          h('div',{style:{fontSize:11,fontWeight:600,color:net<0?"#c00":"#1a7a4a",marginTop:3,borderTop:"0.5px solid var(--color-border-tertiary)",paddingTop:3}},fmt(net,true))
+        );
+      })
+    ),
+    h('div',{style:{background:"#fff8f0",border:"0.5px solid #f5c69a",borderRadius:8,padding:"10px 14px",marginTop:14,fontSize:12,color:"#7a3800"}},
+      "W24 actual: ₱1.68M close. GG interco ₱4.16M + PDEI ₱2.68M in; ₱7.0M out. W25 projection: ₱400K PDEI in — net ₱(504K). Jun closes at ₱(5.6M). Jul: ₱7.98M loan repayment. Year-end (W52) projects at ₱(49.4M). Key risk: Jul loan + H2 AP obligations with near-zero H2 collection schedule."
+    )
+  );
+}
+
+// ── WEEKLY TABLE ──────────────────────────────────────────────────────────────
+
+function WeeklyTable() {
+  var _s = useState({row:-1,col:-1,colType:""});
+  var hl = _s[0], setHl = _s[1];
+
+  function setCell(row,col,colType){ setHl({row:row,col:col,colType:colType}); }
+  function clearCell(){ setHl({row:-1,col:-1,colType:""}); }
+
+  var rows = [
+    {key:"beg",    label:"Beginning",               act:CF.actBeg,   proj:CF.projBeg,  bold:true, bg:"#f2f2f2",   projBg:"#fdfbf0"},
+    {key:"hdr1",   label:"Inflow",                  isHeader:true},
+    {key:"pdeiIn", label:"PDEI Inflow",              act:WT_PDEI_IN,  proj:[2600000,9886535,489549,10029845,0,1838415,0,1348160,550000,19729422,0,3044344,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,270878],              color:"#1a7a4a", projBg:"#f8fff8", bdKey:"pdeiIn"},
+    {key:"ggIn",   label:"GG Inflow",               act:WT_GG_IN,    proj:[4100000,3833112,0,0,0,0,0,0,0,0,0,2283610,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],                                   color:"#1a7a4a", projBg:"#f8fff8", bdKey:"ggIn"},
+    {key:"totIn",  label:"Total Inflow",             act:WT_TOT_IN,   proj:CF.projIn,   bold:true, color:"#1a7a4a", bg:"#edfff4", projBg:"#edfff4"},
+    {key:"hdr2",   label:"Outflow",                 isHeader:true},
+    {key:"pdeiOut",label:"PDEI Outflow",             act:WT_PDEI_OUT, proj:[4047790,11640790,4981005,6220904,5987879,7370033,10739024,6896252,4668144,7090752,8021438,6148943,7018025,1700000,3062700,855586,1990000,952620,3549999,800000,2505586,392620,3762700,1000000,2505586,3892620,3762700,1000000,2505586],   color:"#c00",    projBg:"#fff8f8", bdKey:"pdeiOut"},
+    {key:"ggOut",  label:"GG Outflow",              act:WT_GG_OUT,   proj:[3527835,2000000,210384,200000,342861,200000,210384,400000,400000,223682,200000,210384,200000,423682,200000,210384,200000,342861,100000,100000,310384,300000,123682,100000,110384,100000,323682,0,0],      color:"#c00",    projBg:"#fff8f8", bdKey:"ggOut"},
+    {key:"totOut", label:"Total Outflow",            act:WT_TOT_OUT,  proj:CF.projOut,  bold:true, color:"#c00",    bg:"#fff0f0", projBg:"#fff0f0"},
+    {key:"forex",  label:"Forex effect",             act:CF.forex,    proj:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],          color:"#888"},
+    {key:"net",    label:"Net Cash Inflow (Outflow)",act:CF.net,      proj:CF.projNet,  bold:true, bg:"#0f0f0f", textColor:"#fff", projBg:"#3a3520", projTextColor:"#e8d88a"},
+  ];
+
+  var allRows = [];
+  rows.forEach(function(row,ri){
+    if (row.isHeader) {
+      allRows.push(h('tr',{key:"h"+ri,style:{background:"#e8e8e8"}},
+        h('td',{colSpan:CF.weeks.length+CF.proj.length+1,style:{padding:"4px 10px",fontSize:10,fontWeight:600,color:"#555",letterSpacing:1,textTransform:"uppercase"}},row.label)
+      ));
+      return;
+    }
+    var hasBd = !!row.bdKey;
+
+    allRows.push(h('tr',{key:"r"+ri,style:{borderBottom:"0.5px solid #e0e0e0"}},
+      h('td',{style:{padding:"7px 10px",fontWeight:row.bold?600:400,background:row.bg||"#fff",color:row.textColor||"var(--color-text-primary)",fontSize:11,position:"sticky",left:0,zIndex:1,borderRight:"1px solid #ddd",whiteSpace:"nowrap"}},
+        row.label,
+        hasBd&&h('span',{style:{marginLeft:5,fontSize:9,color:"#185FA5",fontWeight:400}}," [GL]")
+      ),
+      (row.act||[]).map(function(v,ci){
+        var isHL = (hl.row===ri && hl.col===ci && hl.colType==="act");
+        return h('td',{key:"a"+ci,
+          style:{textAlign:"right",padding:"7px 8px",fontWeight:row.bold?600:400,
+            background:isHL?"#FFF3B0":(row.bg||"#fff"),
+            color:row.textColor||(v<0?"#c00":(row.color||"var(--color-text-primary)")),
+            fontSize:11,cursor:hasBd?"pointer":"default",
+            outline:isHL?"2px solid #e6a800":"none",transition:"background 0.1s"},
+          onClick:hasBd?function(){ if(isHL){clearCell();}else{setCell(ri,ci,"act");} }:undefined},
+          fmt(v,false)
+        );
+      }),
+      (row.proj||[]).map(function(v,ci){
+        var isHL = (hl.row===ri && hl.col===ci && hl.colType==="proj");
+        return h('td',{key:"p"+ci,
+          style:{textAlign:"right",padding:"7px 8px",fontWeight:row.bold?600:400,
+            background:isHL?"#FFF3B0":(row.projBg||"#fdfbf0"),
+            color:row.projTextColor||(v<0?"#b05000":(row.color||"var(--color-text-secondary)")),
+            fontSize:11,cursor:hasBd?"pointer":"default",
+            outline:isHL?"2px solid #e6a800":"none",transition:"background 0.1s"},
+          onClick:hasBd?function(){ if(isHL){clearCell();}else{setCell(ri,ci,"proj");} }:undefined},
+          fmt(v,false)
+        );
+      })
+    ));
+
+    // Breakdown panel when a cell is highlighted
+    if (hasBd && hl.row===ri) {
+      var bdArr = GL_BREAKDOWN[row.bdKey];
+      var colOffset = hl.colType==="act" ? hl.col : (CF.weeks.length + hl.col);
+      var items = bdArr && bdArr[colOffset];
+      var colLabel = hl.colType==="act" ? CF.weeks[hl.col] : CF.proj[hl.col];
+      allRows.push(h('tr',{key:"bd"+ri,style:{background:"#FFFBE6",borderBottom:"2px solid #e6a800"}},
+        h('td',{colSpan:CF.weeks.length+CF.proj.length+1,style:{padding:"10px 14px"}},
+          h('div',{style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}},
+            h('div',{style:{fontSize:10,color:"#7a6000",fontWeight:600}},
+              "GL Breakdown  \u2192  "+row.label+"  \u00b7  "+(colLabel||"").replace("\n"," ")+"  \u00b7  "+(hl.colType==="act"?"Actual":"Projection")
+            ),
+            h('span',{style:{fontSize:10,color:"#aaa",cursor:"pointer"},onClick:clearCell},"\u2715 close")
+          ),
+          items && items.length
+            ? h('div',{style:{display:"flex",flexWrap:"wrap",gap:"6px 28px"}},
+                items.map(function(item,ii){
+                  return h('div',{key:ii,style:{fontSize:11,minWidth:200}},
+                    h('span',{style:{color:"#888",marginRight:4}},item.l+":"),
+                    h('span',{style:{fontWeight:600,color:item.a<0?"#a00":"#1a5a1a"}},fmt(item.a,false))
+                  );
+                })
+              )
+            : h('div',{style:{fontSize:11,color:"#aaa",fontStyle:"italic"}},"No detailed breakdown available for this period.")
+        )
+      ));
+    }
+  });
+
+  return h('div',null,
+    h('div',{style:{fontSize:16,fontWeight:500,marginBottom:4}},"Weekly Cash Flow Table"),
+    h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:4}},"Actuals W1\u2013W20 \u00b7 Projections W21\u2013W26 (Jun 26) \u00b7 All figures in \u20b1"),
+    h('div',{style:{fontSize:11,color:"#185FA5",marginBottom:14,background:"#f0f6ff",padding:"6px 10px",borderRadius:6,display:"inline-block"}},
+      "\u2139\ufe0f Click any value on rows marked [GL] to see the breakdown from the GL sheet"
+    ),
+    h('div',{style:{overflowX:"auto"}},
+      h('table',{style:{borderCollapse:"collapse",fontSize:11}},
+        h('thead',null,
+          h('tr',null,
+            h('th',{style:{textAlign:"left",padding:"8px 10px",background:"#0f0f0f",color:"#fff",fontWeight:500,fontSize:11,minWidth:190,position:"sticky",left:0,zIndex:2}},"Amount in PHP"),
+            CF.weeks.map(function(w,i){
+              return h('th',{key:"a"+i,style:{textAlign:"right",padding:"8px 8px",background:"#2a2a2a",color:"#fff",fontWeight:500,fontSize:10,whiteSpace:"pre-line",minWidth:130}},
+                h('div',{style:{fontSize:9,color:"#aaa",marginBottom:1}},"Actual"),w);
+            }),
+            CF.proj.map(function(w,i){
+              return h('th',{key:"p"+i,style:{textAlign:"right",padding:"8px 8px",background:"#3a3520",color:"#e8d88a",fontWeight:500,fontSize:10,whiteSpace:"pre-line",minWidth:130}},
+                h('div',{style:{fontSize:9,color:"#b8a860",marginBottom:1}},"Projection"),w);
+            })
+          )
+        ),
+        h('tbody',null,allRows)
+      )
+    )
+  );
+}
+
+// ── WEEKLY TABLE (LIQUIDITY FORECAST) ───────────────────────────────────────
+
+// COS Liquidity Forecast: Filed Procurement Orders + Unfiled Estimates
+// Source: Andon Board Procurement Orders + Project Approvals
+// Logic: For each project, filed PO = actual procurement payments by date.
+//        Unfiled = (PA Total Estimate Expenses) - (sum of all filed POs for that project code).
+//        Unfiled amount placed at project end date week (or W16 if already past, W21 if beyond scope).
+var COS_LIQ = {
+  // Only projects cross-referenced in BOTH Andon Board files (Project Approval + Procurement Order).
+  // Filed = actual PO payments by scheduled date.
+  // Unfiled = PA Total Estimate Expenses - all filed POs for same project code.
+  // Spread rule: project active in W19-W24 → divide evenly across those weeks.
+  //              project ended before W19 → full unfiled in W19 (late billing catch-up).
+  totals: [29112421,7977406,13025942,28240666,15018159,1647960,1000000,1489792,4495944,5356350,6527485,9939024,7053704,4328144,6448204,7021438,6306395,6678025,900000,2062700,855586,1650000,952620,2062700,0,2505586,52620,2962700,0,2505586,3552620,2962700,0,2505586],
+  bd: [
+    [{"l":"MPL PH S15 – Lights/Sounds Truss Rental","a":4389000,"t":"filed"},{"l":"GTCC Summer Showdown – Technical Svcs","a":1456000,"t":"filed"},{"l":"KIC Rebroadcast – Booth Rental/Fabrication","a":135520,"t":"filed"},{"l":"realme Cup – LED Rental/Logistics","a":127680,"t":"filed"}],
+    [{"l":"SM Cyberzone TCG – Stage/Booth Fabrication","a":400000,"t":"filed"},{"l":"KIC 2025 GS&K – GO Wifi Business OTC","a":352240,"t":"filed"},{"l":"PKL Spring – Booth & Players Area Rental","a":220000,"t":"filed"},{"l":"SM Cyberzone TCG – Tech Svcs","a":200000,"t":"filed"}],
+    [{"l":"KIC 2025 GS&K – Outsourced Tech Svcs","a":7350000,"t":"filed"},{"l":"KIC 2025 Playoffs – Asset Rental/Svcs","a":5400967,"t":"filed"},{"l":"MPL PH S17 – Outsourced Tech Svcs","a":5163200,"t":"filed"},{"l":"KIC 2025 Playoffs – Outsourced Tech Svcs","a":4900000,"t":"filed"}],
+    [{"l":"PUBG Mobile 8th Anniv – Venue Rental Ayala","a":252000,"t":"filed"},{"l":"PUBG Mobile 8th Anniv – Venue Rental Veranda","a":50400,"t":"filed"},{"l":"Sportsplus MPBL – Basketball Arcade Machine","a":40000,"t":"filed"},{"l":"PKL Spring – Logistics Associates","a":17000,"t":"filed"}],
+    [{"l":"Sportsplus MPBL FZ – Lights & Audio Rental","a":87500,"t":"filed"},{"l":"PKL Spring – Outsourced Manpower","a":73366,"t":"filed"},{"l":"PKL Spring – Photography & Videography","a":62000,"t":"filed"},{"l":"Sportsplus MPBL – Tote Bag Materials","a":60000,"t":"filed"}],
+    [{"l":"BingoPlus Music Fest – Agency Fee","a":324613,"t":"filed"},{"l":"MPL PH S17 – Direct Internet 500Mbps","a":280000,"t":"filed"},{"l":"MPL PH S17 – Show Director","a":77800,"t":"filed"},{"l":"Sportsplus MPBL FZ – Lights & Audio","a":52500,"t":"filed"},{"l":"MPL PH S17 (unfiled balance ÷6 wks)","a":3543638,"t":"unfiled"},{"l":"PKL Spring – unfiled balance (ended W13)","a":3432208,"t":"unfiled"},{"l":"PUBG 8th Anniv – unfiled balance (ended W13)","a":1716975,"t":"unfiled"},{"l":"SM Cyberzone TCG – unfiled balance (ends W16)","a":1118126,"t":"unfiled"},{"l":"Sportsplus MPBL Fan Zone – unfiled (ended W15)","a":863892,"t":"unfiled"},{"l":"Jobstreet LU v2 – unfiled balance (ended W14)","a":557006,"t":"unfiled"}],
+    [{"l":"PKL Spring – Photography & Videography","a":62000,"t":"filed"},{"l":"MPL PH S17 – API Engineer","a":33400,"t":"filed"},{"l":"PKL Spring – Outsourced Manpower","a":30350,"t":"filed"},{"l":"MPL PH S17 – Show Producer","a":30000,"t":"filed"},{"l":"MPL PH S17 (unfiled balance ÷6 wks)","a":3543638,"t":"unfiled"},{"l":"Sportsplus MPBL Roadtrip – unfiled ÷5 wks","a":407598,"t":"unfiled"}],
+    [{"l":"PKL Spring – Photography & Videography","a":62000,"t":"filed"},{"l":"PKL Addendum – Talent/Caster","a":36533,"t":"filed"},{"l":"Sportsplus MPBL FZ – Lights & Audio","a":35000,"t":"filed"},{"l":"PKL Addendum – Talent/Caster OSX","a":29166,"t":"filed"},{"l":"MPL PH S17 (unfiled balance ÷6 wks)","a":3543638,"t":"unfiled"},{"l":"Sportsplus MPBL Roadtrip – unfiled ÷5 wks","a":407598,"t":"unfiled"}],
+    [{"l":"MPL PH S17 – Safety & Security","a":176850,"t":"filed"},{"l":"MPL PH S17 – API Engineer","a":33400,"t":"filed"},{"l":"MPL PH S17 – Lighting Director","a":31333,"t":"filed"},{"l":"MPL PH S17 – Broadcast Manpower","a":28000,"t":"filed"},{"l":"MPL PH S17 (unfiled balance ÷6 wks)","a":3543638,"t":"unfiled"},{"l":"Sportsplus MPBL Roadtrip – unfiled ÷5 wks","a":407598,"t":"unfiled"}],
+    [{"l":"MPL PH S17 – HMUA (RS)","a":38400,"t":"filed"},{"l":"MPL PH S17 – Content Statistician","a":34800,"t":"filed"},{"l":"MPL PH S17 – Show Producer","a":30000,"t":"filed"},{"l":"MPL PH S17 – Stylist (2 Hosts)","a":30000,"t":"filed"},{"l":"MPL PH S17 (unfiled balance ÷6 wks)","a":3543638,"t":"unfiled"},{"l":"Sportsplus MPBL Roadtrip – unfiled ÷5 wks","a":407598,"t":"unfiled"}],
+    [{"l":"MPL PH S17 – Show Director","a":77800,"t":"filed"},{"l":"MPL PH S17 – Stylist (2 Hosts)","a":60000,"t":"filed"},{"l":"MPL PH S17 – Broadcast Manager","a":48000,"t":"filed"},{"l":"MPL PH S17 – HMUA (RS)","a":38400,"t":"filed"},{"l":"MPL PH S17 (unfiled balance ÷6 wks)","a":3543638,"t":"unfiled"}],
+    null
+  ,
+    // W27-W52 projections — from CF PDEI_OUT
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+  ]
+};
+// Non-COS projection outflows from CF for Mancom (unchanged)
+// GAE, Tax, CAPEX, Loan Repayment, Other Payment per proj week
+var NON_COS_PROJ = [
+  {gae:2200855,tax:0,capex:0,loan:500000,other:855586,cos:725000},      // W26
+  {gae:756000,tax:0,capex:0,loan:7980240,other:60000,cos:1444743},      // W27
+  {gae:1041737,tax:0,capex:0,loan:0,other:60000,cos:5026349},           // W28
+  {gae:3369422,tax:1487299,capex:0,loan:0,other:0,cos:4674437},         // W29
+  {gae:0,tax:800000,capex:0,loan:0,other:0,cos:9811488},                // W30
+  {gae:1650000,tax:0,capex:0,loan:0,other:855586,cos:4263130},          // W31
+  {gae:1252249,tax:0,capex:0,loan:52620,other:0,cos:4328814},           // W32
+  {gae:2650000,tax:800000,capex:0,loan:0,other:0,cos:3694042},          // W33
+  {gae:312700,tax:1000000,capex:0,loan:0,other:0,cos:6762028},          // W34
+  {gae:1650000,tax:0,capex:0,loan:0,other:855586,cos:3696646},          // W35
+  {gae:340000,tax:0,capex:0,loan:52620,other:0,cos:6678694},            // W36
+  {gae:900000,tax:800000,capex:0,loan:0,other:0,cos:0},                 // W37
+  {gae:2062700,tax:1000000,capex:0,loan:0,other:0,cos:0},               // W38
+  {gae:0,tax:0,capex:0,loan:0,other:855586,cos:0},                      // W39
+  {gae:1990000,tax:0,capex:0,loan:0,other:0,cos:0},                     // W40
+  {gae:900000,tax:0,capex:0,loan:52620,other:0,cos:0},                  // W41
+  {gae:2062700,tax:1487299,capex:0,loan:0,other:0,cos:0},               // W42
+  {gae:0,tax:800000,capex:0,loan:0,other:0,cos:0},                      // W43
+  {gae:1650000,tax:0,capex:0,loan:0,other:855586,cos:0},                // W44
+  {gae:340000,tax:0,capex:0,loan:52620,other:0,cos:0},                  // W45
+  {gae:2962700,tax:800000,capex:0,loan:0,other:0,cos:0},                // W46
+  {gae:0,tax:1000000,capex:0,loan:0,other:0,cos:0},                     // W47
+  {gae:1650000,tax:0,capex:0,loan:0,other:855586,cos:0},                // W48
+  {gae:3840000,tax:0,capex:0,loan:52620,other:0,cos:0},                 // W49
+  {gae:2962700,tax:800000,capex:0,loan:0,other:0,cos:0},                // W50
+  {gae:0,tax:1000000,capex:0,loan:0,other:0,cos:0},                     // W51
+  {gae:1650000,tax:0,capex:0,loan:0,other:855586,cos:0},                // W52
+];
+
+function WeeklyTableLiquidity() {
+  var _s = useState({row:-1,col:-1,colType:""});
+  var hl = _s[0], setHl = _s[1];
+  function setCell(row,col,ct){ setHl({row:row,col:col,colType:ct}); }
+  function clearCell(){ setHl({row:-1,col:-1,colType:""}); }
+
+  // Projection PDEI Outflow = COS_LIQ + non-COS (GAE, Tax, CAPEX, Loan, Other)
+  var liqProjCOS   = COS_LIQ.totals.slice(6); // W20-W25 (actuals at indices 0-4)
+  var ggProjOut    = [760384,200000,2010384,2511239,10384,0];
+  var liqProjPdeiOut = liqProjCOS.map(function(cos,i){
+    var nc = NON_COS_PROJ[i];
+    return cos + nc.gae + nc.tax + nc.capex + nc.loan + nc.other;
+  });
+  var liqProjTotOut = liqProjPdeiOut.map(function(v,i){ return v + ggProjOut[i]; });
+
+  // Recalculate Net with liquidity outflows
+  var liqProjBeg=[], liqProjNet=[];
+  var beg = CF.net[CF.net.length-1];
+  for(var i=0;i<CF.proj.length;i++){
+    liqProjBeg.push(Math.round(beg));
+    var net = beg + CF.projIn[i] - liqProjTotOut[i];
+    liqProjNet.push(Math.round(net));
+    beg = net;
+  }
+
+  var rows = [
+    {key:"beg",    label:"Beginning",                   act:CF.actBeg,   proj:liqProjBeg,      bold:true,  bg:"#f2f2f2",  projBg:"#fdfbf0"},
+    {key:"hdr1",   label:"Inflow",                      isHeader:true},
+    {key:"pdeiIn", label:"PDEI Inflow",                 act:WT_PDEI_IN,  proj:[2600000,9886535,489549,10029845,0,1838415,0,1348160,550000,19729422,0,3044344,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,270878],     color:"#1a7a4a", projBg:"#f8fff8", bdKey:"pdeiIn"},
+    {key:"ggIn",   label:"GG Inflow",                   act:WT_GG_IN,    proj:[4100000,3833112,0,0,0,0,0,0,0,0,0,2283610,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],                       color:"#1a7a4a", projBg:"#f8fff8", bdKey:"ggIn"},
+    {key:"totIn",  label:"Total Inflow",                act:WT_TOT_IN,   proj:CF.projIn,        bold:true,  color:"#1a7a4a", bg:"#edfff4",  projBg:"#edfff4"},
+    {key:"hdr2",   label:"Outflow",                     isHeader:true},
+    {key:"cosLiq", label:"COS (Liquidity Forecast)",    act:WT_PDEI_OUT, proj:liqProjCOS,       color:"#7a1fa2", projBg:"#fdf4ff", bdKey:"cosLiq",
+     note:"Proj = filed Andon POs + unfiled PA estimate balance"},
+    {key:"gae",    label:"GAE",                         act:null,        proj:NON_COS_PROJ.map(function(x){return x.gae;}), color:"#c85000", projBg:"#fff8f2"},
+    {key:"tax",    label:"Tax Payment",                 act:null,        proj:NON_COS_PROJ.map(function(x){return x.tax;}), color:"#c85000", projBg:"#fff8f2"},
+    {key:"capex",  label:"CAPEX",                       act:null,        proj:NON_COS_PROJ.map(function(x){return x.capex;}), color:"#c85000", projBg:"#fff8f2"},
+    {key:"loan",   label:"Loan Repayment",              act:null,        proj:NON_COS_PROJ.map(function(x){return x.loan;}), color:"#c85000", projBg:"#fff8f2"},
+    {key:"other",  label:"Other Payment",               act:null,        proj:NON_COS_PROJ.map(function(x){return x.other;}), color:"#c85000", projBg:"#fff8f2"},
+    {key:"pdeiOut",label:"Total PDEI Outflow",          act:WT_PDEI_OUT, proj:liqProjPdeiOut,   bold:true,  color:"#c00",  bg:"#fff0f0",  projBg:"#fff0f0"},
+    {key:"ggOut",  label:"GG Outflow",                  act:WT_GG_OUT,   proj:ggProjOut,        color:"#c00", projBg:"#fff8f8", bdKey:"ggOut"},
+    {key:"totOut", label:"Total Outflow",               act:WT_TOT_OUT,  proj:liqProjTotOut,    bold:true,  color:"#c00",  bg:"#fff0f0",  projBg:"#fff0f0"},
+    {key:"forex",  label:"Forex effect",                act:CF.forex,    proj:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],    color:"#888"},
+    {key:"net",    label:"Net Cash Inflow (Outflow)",   act:CF.net,      proj:liqProjNet,       bold:true,  bg:"#0f0f0f", textColor:"#fff", projBg:"#2a1a3a", projTextColor:"#d8b4fe"},
+  ];
+
+  var BDmap = {
+    pdeiIn:GL_BREAKDOWN.pdeiIn,
+    ggIn:GL_BREAKDOWN.ggIn,
+    cosLiq:COS_LIQ.bd,
+    ggOut:GL_BREAKDOWN.ggOut
+  };
+
+  var allRows = [];
+  rows.forEach(function(row,ri){
+    if(row.isHeader){
+      allRows.push(h('tr',{key:"h"+ri,style:{background:"#e8e8e8"}},
+        h('td',{colSpan:CF.weeks.length+CF.proj.length+1,style:{padding:"4px 10px",fontSize:10,fontWeight:600,color:"#555",letterSpacing:1,textTransform:"uppercase"}},row.label)
+      ));
+      return;
+    }
+
+    var hasBd = !!row.bdKey;
+    var isCOSrow = row.bdKey === "cosLiq";
+    // Rows with no actuals (GAE, Tax etc) — show blank for actual cols
+    var hasAct = row.act !== null && row.act !== undefined;
+
+    allRows.push(h('tr',{key:"r"+ri,style:{borderBottom:"0.5px solid #e0e0e0"}},
+      h('td',{style:{padding:"7px 10px",fontWeight:row.bold?600:400,background:row.bg||"#fff",
+          color:row.textColor||"var(--color-text-primary)",fontSize:11,position:"sticky",left:0,
+          zIndex:1,borderRight:"1px solid #ddd",whiteSpace:"nowrap"}},
+        row.label,
+        hasBd&&h('span',{style:{marginLeft:5,fontSize:9,color:isCOSrow?"#7a1fa2":"#185FA5",fontWeight:400}},
+          isCOSrow?" [Andon]":" [GL]")
+      ),
+      // Actuals
+      CF.actBeg.map(function(_,ci){
+        if(!hasAct) return h('td',{key:"a"+ci,style:{textAlign:"right",padding:"7px 8px",background:"#f7f7f7",fontSize:11,color:"#ccc"}},"\u2014");
+        var v=(row.act||[])[ci];
+        var glBd = row.bdKey && !isCOSrow;
+        var isHL = glBd && hl.row===ri && hl.col===ci && hl.colType==="act";
+        return h('td',{key:"a"+ci,
+          style:{textAlign:"right",padding:"7px 8px",fontWeight:row.bold?600:400,
+            background:isHL?"#FFF3B0":(row.bg||"#fff"),
+            color:row.textColor||(v<0?"#c00":(row.color||"var(--color-text-primary)")),
+            fontSize:11,cursor:glBd?"pointer":"default",outline:isHL?"2px solid #e6a800":"none",transition:"background 0.1s"},
+          onClick:glBd?function(){if(isHL){clearCell();}else{setCell(ri,ci,"act");}}:undefined},
+          fmt(v,false)
+        );
+      }),
+      // Projections
+      (row.proj||[]).map(function(v,ci){
+        var isHL = hasBd && hl.row===ri && hl.col===ci && hl.colType==="proj";
+        var hlColor = isCOSrow?"#EFD4FF":"#FFF3B0";
+        var outlineColor = isCOSrow?"#7a1fa2":"#e6a800";
+        var projBg = isCOSrow?"#fdf4ff":(row.projBg||"#fdfbf0");
+        return h('td',{key:"p"+ci,
+          style:{textAlign:"right",padding:"7px 8px",fontWeight:row.bold?600:400,
+            background:isHL?hlColor:projBg,
+            color:row.projTextColor||(v<0?"#b05000":(row.color||"var(--color-text-secondary)")),
+            fontSize:11,cursor:hasBd?"pointer":"default",outline:isHL?"2px solid "+outlineColor:"none",transition:"background 0.1s"},
+          onClick:hasBd?function(){if(isHL){clearCell();}else{setCell(ri,ci,"proj");}}:undefined},
+          v?fmt(v,false):"\u2014"
+        );
+      })
+    ));
+
+    // Breakdown panel
+    if(hasBd && hl.row===ri){
+      var bdArr = BDmap[row.bdKey];
+      var colOffset = hl.colType==="act" ? hl.col : (CF.weeks.length + hl.col);
+      var items = bdArr && bdArr[colOffset];
+      var colLabel = hl.colType==="act" ? CF.weeks[hl.col] : CF.proj[hl.col];
+      var isProcBd = isCOSrow && hl.colType==="proj";
+      allRows.push(h('tr',{key:"bd"+ri,style:{background:isProcBd?"#F5EEFF":"#FFFBE6",borderBottom:"2px solid "+(isProcBd?"#7a1fa2":"#e6a800")}},
+        h('td',{colSpan:CF.weeks.length+CF.proj.length+1,style:{padding:"10px 14px"}},
+          h('div',{style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}},
+            h('div',{style:{fontSize:10,color:isProcBd?"#4a0a72":"#7a6000",fontWeight:600}},
+              (isProcBd?"Andon Board Liquidity Forecast":"GL Breakdown")+" \u2192 "+row.label+" \u00b7 "+(colLabel||"").replace("\n"," ")
+            ),
+            h('span',{style:{fontSize:10,color:"#aaa",cursor:"pointer"},onClick:clearCell},"\u2715 close")
+          ),
+          isProcBd && h('div',{style:{fontSize:10,color:"#888",marginBottom:6,fontStyle:"italic"}},
+            "\u25A0 Filed = approved Andon PO payment due this period   \u25A1 Unfiled = PA budget estimate balance (not yet filed as PO)"
+          ),
+          items && items.length
+            ? h('div',{style:{display:"flex",flexDirection:"column",gap:3}},
+                items.map(function(item,ii){
+                  var isUnfiled = item.t==="unfiled";
+                  return h('div',{key:ii,style:{fontSize:11,display:"flex",alignItems:"baseline",gap:6}},
+                    h('span',{style:{color:isUnfiled?"#7a1fa2":"#888",fontSize:9,minWidth:40}},
+                      isUnfiled?"\u25A1 est.":"\u25A0 filed"),
+                    h('span',{style:{color:"#555",flex:1}},item.l),
+                    h('span',{style:{fontWeight:600,color:isUnfiled?"#7a1fa2":"#1a5a1a",minWidth:90,textAlign:"right"}},
+                      fmt(item.a,false))
+                  );
+                })
+              )
+            : h('div',{style:{fontSize:11,color:"#aaa",fontStyle:"italic"}},"No breakdown available.")
+        )
+      ));
+    }
+  });
+
+  // Delta summary strip
+  var deltaItems = CF.proj.map(function(w,i){
+    return {w:w,cf:CF.projNet[i],liq:liqProjNet[i],delta:liqProjNet[i]-CF.projNet[i]};
+  });
+
+  return h('div',null,
+    h('div',{style:{fontSize:16,fontWeight:500,marginBottom:4}},"Weekly Table \u2014 Liquidity Forecast"),
+    h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:8}},
+      "Actuals W1\u2013W20 (GL) \u00b7 COS projection = Filed Andon POs + Unfiled PA budget balance \u00b7 GAE/Tax/etc from CF for Mancom"
+    ),
+    h('div',{style:{display:"flex",gap:8,flexWrap:"wrap",marginBottom:10}},
+      h('div',{style:{fontSize:11,color:"#7a1fa2",background:"#fdf4ff",padding:"5px 10px",borderRadius:6,border:"1px solid #d4a0f0"}},
+        "\u25A0 Filed = Andon Board PO payment dates   \u25A1 Unfiled = PA budget estimate minus filed POs"
+      ),
+      h('div',{style:{fontSize:11,color:"#185FA5",background:"#f0f6ff",padding:"5px 10px",borderRadius:6,border:"1px solid #a0c4f0"}},
+        "\u2139\ufe0f Click [Andon] or [GL] rows to see item breakdown"
+      )
+    ),
+    h('div',{style:{display:"grid",gridTemplateColumns:"repeat(6,1fr)",gap:6,marginBottom:14}},
+      deltaItems.map(function(d,i){
+        var neg=d.liq<0;
+        var worse=d.delta<0;
+        return h('div',{key:i,style:{background:neg?"#fff0f0":"#f0fff8",borderRadius:6,padding:"8px 10px",border:"0.5px solid "+(neg?"#fcc":"#b2e6c8")}},
+          h('div',{style:{fontSize:9,color:"#999",marginBottom:2}},(d.w||"").replace("\n"," ")),
+          h('div',{style:{fontSize:12,fontWeight:700,color:neg?"#c00":"#1a7a4a"}},"Close: "+fmt(d.liq,true)),
+          h('div',{style:{fontSize:10,color:worse?"#c00":"#1a7a4a",marginTop:2}},
+            "vs CF: "+(d.delta>0?"+":"")+fmt(d.delta,true)
+          )
+        );
+      })
+    ),
+    h('div',{style:{overflowX:"auto"}},
+      h('table',{style:{borderCollapse:"collapse",fontSize:11}},
+        h('thead',null,
+          h('tr',null,
+            h('th',{style:{textAlign:"left",padding:"8px 10px",background:"#0f0f0f",color:"#fff",fontWeight:500,fontSize:11,minWidth:210,position:"sticky",left:0,zIndex:2}},"Amount in PHP"),
+            CF.weeks.map(function(w,i){
+              return h('th',{key:"a"+i,style:{textAlign:"right",padding:"8px 8px",background:"#2a2a2a",color:"#fff",fontWeight:500,fontSize:10,whiteSpace:"pre-line",minWidth:130}},
+                h('div',{style:{fontSize:9,color:"#aaa",marginBottom:1}},"Actual"),w);
+            }),
+            CF.proj.map(function(w,i){
+              return h('th',{key:"p"+i,style:{textAlign:"right",padding:"8px 8px",background:"#2a1a3a",color:"#d8b4fe",fontWeight:500,fontSize:10,whiteSpace:"pre-line",minWidth:130}},
+                h('div',{style:{fontSize:9,color:"#b090d0",marginBottom:1}},"Liquidity Proj."),w);
+            })
+          )
+        ),
+        h('tbody',null,allRows)
+      )
+    )
+  );
+}
+
+// ── WEEKLY TABLE (COMBINED) ───────────────────────────────────────────────────
+
+function WeeklyTableCombined() {
+  var _tab = useState(false); var showLiq=_tab[0],setShowLiq=_tab[1];
+  var _hl = useState({row:-1,col:-1,colType:"",rowDef:null}); var hl=_hl[0],setHl=_hl[1];
+  function setCell(ri,ci,ct,rd){ setHl({row:ri,col:ci,colType:ct,rowDef:rd}); }
+  function clearCell(){ setHl({row:-1,col:-1,colType:"",rowDef:null}); }
+  function switchTab(v){ setShowLiq(v); setHl({row:-1,col:-1,colType:"",rowDef:null}); }
+
+  // Shared projection arrays (from CF for Mancom)
+  var pdeiInProj=[0,9678457,12282807,0,80724,1571673,0,19416647,0,3194344,7327604,0,0,854434,0,0,0,0,0,0,0,0,0,0,0,0,1054099];
+  var ggInProj=[3779893,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2283610];
+  var pdeiOutProj=[4281441,10240983,6128087,9531157,10611488,6768716,5633683,7144042,8074728,6202232,7071315,1700000,3062700,855586,1990000,952620,3549999,800000,2505586,392620,3762700,1000000,2505586,3892620,3762700,1000000,2505586];
+  var ggOutProj=[110384,200000,342861,200000,210384,400000,400000,223682,200000,210384,200000,423682,200000,210384,200000,342861,100000,100000,310384,300000,123682,100000,110384,100000,323682,0,142861];
+
+  // Liquidity computations
+  var liqProjCOS=COS_LIQ.totals.slice(CF.weeks.length);
+  while(liqProjCOS.length<CF.proj.length) liqProjCOS.push(0);
+  var liqProjPdeiOut=CF.proj.map(function(_,i){
+    var cos=liqProjCOS[i]||0;
+    var nc=NON_COS_PROJ[i]||{gae:0,tax:0,capex:0,loan:0,other:0};
+    return cos+nc.gae+nc.tax+nc.capex+nc.loan+nc.other;
+  });
+  var liqProjTotOut=CF.proj.map(function(_,i){
+    return liqProjPdeiOut[i]+(ggOutProj[i]||0);
+  });
+  var liqProjBeg=[],liqProjNet=[];
+  (function(){
+    var b=CF.net[CF.net.length-1];
+    for(var i=0;i<CF.proj.length;i++){
+      liqProjBeg.push(Math.round(b));
+      var net=b+(CF.projIn[i]||0)-(liqProjTotOut[i]||0);
+      liqProjNet.push(Math.round(net));
+      b=net;
+    }
+  })();
+
+  var stdRows=[
+    {key:"beg",    label:"Beginning",                act:CF.actBeg,  proj:CF.projBeg,    bold:true,bg:"#f2f2f2",projBg:"#fdfbf0"},
+    {key:"hdr1",   label:"Inflow",                   isHeader:true},
+    {key:"pdeiIn", label:"PDEI Inflow",               act:WT_PDEI_IN, proj:pdeiInProj,    color:"#1a7a4a",projBg:"#f8fff8",bdKey:"pdeiIn"},
+    {key:"ggIn",   label:"GG Inflow",                act:WT_GG_IN,   proj:ggInProj,      color:"#1a7a4a",projBg:"#f8fff8",bdKey:"ggIn"},
+    {key:"totIn",  label:"Total Inflow",              act:WT_TOT_IN,  proj:CF.projIn,     bold:true,color:"#1a7a4a",bg:"#edfff4",projBg:"#edfff4"},
+    {key:"hdr2",   label:"Outflow",                  isHeader:true},
+    {key:"pdeiOut",label:"PDEI Outflow",              act:WT_PDEI_OUT,proj:pdeiOutProj,   color:"#c00",projBg:"#fff8f8",bdKey:"pdeiOut"},
+    {key:"ggOut",  label:"GG Outflow",               act:WT_GG_OUT,  proj:ggOutProj,     color:"#c00",projBg:"#fff8f8",bdKey:"ggOut"},
+    {key:"totOut", label:"Total Outflow",             act:WT_TOT_OUT, proj:CF.projOut,    bold:true,color:"#c00",bg:"#fff0f0",projBg:"#fff0f0"},
+    {key:"forex",  label:"Forex effect",              act:CF.forex,   proj:CF.proj.map(function(){return 0;}),color:"#888"},
+    {key:"net",    label:"Net Cash Inflow (Outflow)", act:CF.net,     proj:CF.projNet,    bold:true,bg:"#0f0f0f",textColor:"#fff",projBg:"#3a3520",projTextColor:"#e8d88a"},
+  ];
+
+  var liqRows=[
+    {key:"beg",       label:"Beginning",                 act:CF.actBeg,  proj:liqProjBeg,  bold:true,bg:"#f2f2f2",projBg:"#fdfbf0"},
+    {key:"hdr1",      label:"Inflow",                    isHeader:true},
+    {key:"pdeiIn",    label:"PDEI Inflow",               act:WT_PDEI_IN, proj:pdeiInProj,  color:"#1a7a4a",projBg:"#f8fff8",bdKey:"pdeiIn"},
+    {key:"ggIn",      label:"GG Inflow",                 act:WT_GG_IN,   proj:ggInProj,    color:"#1a7a4a",projBg:"#f8fff8",bdKey:"ggIn"},
+    {key:"totIn",     label:"Total Inflow",              act:WT_TOT_IN,  proj:CF.projIn,   bold:true,color:"#1a7a4a",bg:"#edfff4",projBg:"#edfff4"},
+    {key:"hdr2",      label:"Outflow",                   isHeader:true},
+    {key:"cosLiq",    label:"COS (Liquidity Forecast)",  act:WT_PDEI_OUT,proj:liqProjCOS.slice(0,CF.proj.length),color:"#7a1fa2",projBg:"#fdf4ff",bdKey:"cosLiq"},
+    {key:"gae",       label:"GAE",                       act:null,       proj:NON_COS_PROJ.map(function(x){return x.gae;}),color:"#c85000",projBg:"#fff8f2"},
+    {key:"tax",       label:"Tax Payment",               act:null,       proj:NON_COS_PROJ.map(function(x){return x.tax;}),color:"#c85000",projBg:"#fff8f2"},
+    {key:"capex",     label:"CAPEX",                     act:null,       proj:NON_COS_PROJ.map(function(x){return x.capex;}),color:"#c85000",projBg:"#fff8f2"},
+    {key:"loan",      label:"Loan Repayment",            act:null,       proj:NON_COS_PROJ.map(function(x){return x.loan;}),color:"#c85000",projBg:"#fff8f2"},
+    {key:"other",     label:"Other Payment",             act:null,       proj:NON_COS_PROJ.map(function(x){return x.other;}),color:"#c85000",projBg:"#fff8f2"},
+    {key:"pdeiOutTot",label:"Total PDEI Outflow",        act:WT_PDEI_OUT,proj:liqProjPdeiOut,bold:true,color:"#c00",bg:"#fff0f0",projBg:"#fff0f0"},
+    {key:"ggOut",     label:"GG Outflow",                act:WT_GG_OUT,  proj:ggOutProj,   color:"#c00",projBg:"#fff8f8",bdKey:"ggOut"},
+    {key:"totOut",    label:"Total Outflow",             act:WT_TOT_OUT, proj:liqProjTotOut,bold:true,color:"#c00",bg:"#fff0f0",projBg:"#fff0f0"},
+    {key:"forex",     label:"Forex effect",              act:CF.forex,   proj:CF.proj.map(function(){return 0;}),color:"#888"},
+    {key:"net",       label:"Net Cash Inflow (Outflow)", act:CF.net,     proj:liqProjNet,  bold:true,bg:"#0f0f0f",textColor:"#fff",projBg:"#2a1a3a",projTextColor:"#d8b4fe"},
+  ];
+
+  var rows=showLiq?liqRows:stdRows;
+  var BDmap=showLiq
+    ?{pdeiIn:GL_BREAKDOWN.pdeiIn,ggIn:GL_BREAKDOWN.ggIn,cosLiq:COS_LIQ.bd,ggOut:GL_BREAKDOWN.ggOut}
+    :{pdeiIn:GL_BREAKDOWN.pdeiIn,ggIn:GL_BREAKDOWN.ggIn,pdeiOut:GL_BREAKDOWN.pdeiOut,ggOut:GL_BREAKDOWN.ggOut};
+
+  var totalDataCols=CF.weeks.length+CF.proj.length;
+
+  // Build table rows — no inline breakdown row; breakdown renders outside scroll
+  var allRows=[];
+  rows.forEach(function(row,ri){
+    if(row.isHeader){
+      allRows.push(h('tr',{key:"h"+ri,style:{background:"#e8e8e8"}},
+        h('td',{style:{padding:"4px 10px",fontSize:10,fontWeight:600,color:"#555",letterSpacing:1,textTransform:"uppercase",position:"sticky",left:0,zIndex:1,background:"#e8e8e8",whiteSpace:"nowrap"}},row.label),
+        h('td',{colSpan:totalDataCols,style:{background:"#e8e8e8"}})
+      ));
+      return;
+    }
+    var hasBd=!!row.bdKey;
+    var isCOS=row.bdKey==="cosLiq";
+    var hasAct=row.act!==null&&row.act!==undefined;
+    var canClickAct=hasBd&&!isCOS;
+    allRows.push(h('tr',{key:"r"+ri,style:{borderBottom:"0.5px solid #e0e0e0"}},
+      h('td',{style:{padding:"7px 10px",fontWeight:row.bold?600:400,background:row.bg||"#fff",color:row.textColor||"var(--color-text-primary)",fontSize:11,position:"sticky",left:0,zIndex:1,borderRight:"1px solid #ddd",whiteSpace:"nowrap"}},
+        row.label,
+        hasBd&&h('span',{style:{marginLeft:5,fontSize:9,color:isCOS?"#7a1fa2":"#185FA5",fontWeight:400}},isCOS?" [Andon]":" [GL]")
+      ),
+      CF.actBeg.map(function(_,ci){
+        if(!hasAct) return h('td',{key:"a"+ci,style:{textAlign:"right",padding:"7px 8px",background:"#f7f7f7",fontSize:11,color:"#ccc"}},"—");
+        var v=(row.act||[])[ci];
+        var isHL=canClickAct&&hl.row===ri&&hl.col===ci&&hl.colType==="act";
+        return h('td',{key:"a"+ci,
+          style:{textAlign:"right",padding:"7px 8px",fontWeight:row.bold?600:400,
+            background:isHL?"#FFF3B0":(row.bg||"#fff"),
+            color:row.textColor||(v<0?"#c00":(row.color||"var(--color-text-primary)")),
+            fontSize:11,cursor:canClickAct?"pointer":"default",
+            outline:isHL?"2px solid #e6a800":"none",transition:"background 0.1s"},
+          onClick:canClickAct?function(){if(isHL)clearCell();else setCell(ri,ci,"act",row);}:undefined},
+          fmt(v,false)
+        );
+      }),
+      (row.proj||[]).map(function(v,ci){
+        var isHL=hasBd&&hl.row===ri&&hl.col===ci&&hl.colType==="proj";
+        var hlColor=isCOS?"#EFD4FF":"#FFF3B0";
+        var outlineColor=isCOS?"#7a1fa2":"#e6a800";
+        return h('td',{key:"p"+ci,
+          style:{textAlign:"right",padding:"7px 8px",fontWeight:row.bold?600:400,
+            background:isHL?hlColor:(row.projBg||"#fdfbf0"),
+            color:row.projTextColor||(v<0?"#b05000":(row.color||"var(--color-text-secondary)")),
+            fontSize:11,cursor:hasBd?"pointer":"default",
+            outline:isHL?"2px solid "+outlineColor:"none",transition:"background 0.1s"},
+          onClick:hasBd?function(){if(isHL)clearCell();else setCell(ri,ci,"proj",row);}:undefined},
+          fmt(v,false)
+        );
+      })
+    ));
+  });
+
+  // Breakdown panel — rendered outside the scrollable container so it never scrolls away
+  var breakdownPanel=null;
+  if(hl.row>=0&&hl.rowDef&&hl.rowDef.bdKey){
+    var bdRow=hl.rowDef;
+    var bdArr=BDmap[bdRow.bdKey];
+    var colOffset=hl.colType==="act"?hl.col:(CF.weeks.length+hl.col);
+    var items=bdArr&&bdArr[colOffset];
+    var colLabel=hl.colType==="act"?CF.weeks[hl.col]:CF.proj[hl.col];
+    var isCOSbd=bdRow.bdKey==="cosLiq"&&hl.colType==="proj";
+    var bdBg=isCOSbd?"#F5EEFF":"#FFFBE6";
+    var bdBorder=isCOSbd?"#7a1fa2":"#e6a800";
+    var bdTitleColor=isCOSbd?"#4a0a72":"#7a6000";
+    var bdTitle=(isCOSbd?"Andon Board Liquidity Forecast":"GL Breakdown")+" → "+bdRow.label+" · "+(colLabel||"").replace("\n"," ")+" · "+(hl.colType==="act"?"Actual":"Projection");
+    breakdownPanel=h('div',{style:{background:bdBg,border:"2px solid "+bdBorder,borderRadius:6,padding:"10px 14px",marginTop:8}},
+      h('div',{style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}},
+        h('div',{style:{fontSize:10,color:bdTitleColor,fontWeight:600}},bdTitle),
+        h('span',{style:{fontSize:10,color:"#aaa",cursor:"pointer"},onClick:clearCell},"✕ close")
+      ),
+      isCOSbd&&h('div',{style:{fontSize:10,color:"#888",marginBottom:6,fontStyle:"italic"}},
+        "■ Filed = approved Andon PO payment due this period   □ Unfiled = PA budget estimate balance (not yet filed as PO)"
+      ),
+      items&&items.length
+        ?h('div',{style:{display:"flex",flexWrap:"wrap",gap:"6px 28px"}},
+            items.map(function(item,ii){
+              var isUnfiled=item.t==="unfiled";
+              if(isCOSbd){
+                return h('div',{key:ii,style:{fontSize:11,display:"flex",alignItems:"baseline",gap:6,width:"100%"}},
+                  h('span',{style:{color:isUnfiled?"#7a1fa2":"#888",fontSize:9,minWidth:40}},isUnfiled?"□ est.":"■ filed"),
+                  h('span',{style:{color:"#555",flex:1}},item.l),
+                  h('span',{style:{fontWeight:600,color:isUnfiled?"#7a1fa2":"#1a5a1a",minWidth:90,textAlign:"right"}},fmt(item.a,false))
+                );
+              }
+              return h('div',{key:ii,style:{fontSize:11,minWidth:200}},
+                h('span',{style:{color:"#888",marginRight:4}},item.l+":"),
+                h('span',{style:{fontWeight:600,color:item.a<0?"#a00":"#1a5a1a"}},fmt(item.a,false))
+              );
+            })
+          )
+        :h('div',{style:{fontSize:11,color:"#aaa",fontStyle:"italic"}},"No detailed breakdown available for this period.")
+    );
+  }
+
+  // Delta strip — near-term liquidity vs CF comparison (liquidity mode only)
+  var deltaStrip=null;
+  if(showLiq){
+    var deltaItems=CF.proj.slice(0,8).map(function(w,i){
+      return {w:w,cf:CF.projNet[i],liq:liqProjNet[i],delta:liqProjNet[i]-CF.projNet[i]};
+    });
+    deltaStrip=h('div',{style:{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(140px,1fr))",gap:6,marginBottom:14}},
+      deltaItems.map(function(d,i){
+        var neg=d.liq<0,worse=d.delta<0;
+        return h('div',{key:i,style:{background:neg?"#fff0f0":"#f0fff8",borderRadius:6,padding:"8px 10px",border:"0.5px solid "+(neg?"#fcc":"#b2e6c8")}},
+          h('div',{style:{fontSize:9,color:"#999",marginBottom:2}},(d.w||"").replace("\n"," ")),
+          h('div',{style:{fontSize:12,fontWeight:700,color:neg?"#c00":"#1a7a4a"}},"Close: "+fmt(d.liq,true)),
+          h('div',{style:{fontSize:10,color:worse?"#c00":"#1a7a4a",marginTop:2}},"vs CF: "+(d.delta>0?"+":"")+fmt(d.delta,true))
+        );
+      })
+    );
+  }
+
+  var projBg=showLiq?"#2a1a3a":"#3a3520";
+  var projCol=showLiq?"#d8b4fe":"#e8d88a";
+  var projSub=showLiq?"Liquidity Proj.":"Projection";
+  var projSubCol=showLiq?"#b090d0":"#b8a860";
+
+  return h('div',null,
+    h('div',{style:{display:"flex",alignItems:"flex-start",gap:12,marginBottom:6,flexWrap:"wrap"}},
+      h('div',null,
+        h('div',{style:{fontSize:16,fontWeight:500}},"Weekly Cash Flow Table"),
+        h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginTop:2}},
+          showLiq
+            ?"Actuals W1–W23 · COS = Filed Andon POs + Unfiled PA estimates · GAE/Tax/etc from CF for Mancom"
+            :"Actuals W1–W23 · Projections W24–W52 · All figures in ₱"
+        )
+      ),
+      h('div',{style:{marginLeft:"auto",display:"flex",gap:4,alignItems:"center",paddingTop:2}},
+        h('button',{onClick:function(){switchTab(false);},style:{background:!showLiq?"#1a1a1a":"none",color:!showLiq?"#fff":"var(--color-text-secondary)",border:"0.5px solid",borderColor:!showLiq?"#1a1a1a":"var(--color-border-tertiary)",borderRadius:6,padding:"4px 10px",fontSize:11,cursor:"pointer",fontFamily:"inherit"}},"Standard"),
+        h('button',{onClick:function(){switchTab(true);},style:{background:showLiq?"#4a0a72":"none",color:showLiq?"#fff":"var(--color-text-secondary)",border:"0.5px solid",borderColor:showLiq?"#4a0a72":"var(--color-border-tertiary)",borderRadius:6,padding:"4px 10px",fontSize:11,cursor:"pointer",fontFamily:"inherit"}},"Liquidity")
+      )
+    ),
+    h('div',{style:{fontSize:11,color:"#185FA5",marginBottom:10,background:"#f0f6ff",padding:"6px 10px",borderRadius:6,display:"inline-block"}},
+      "ℹ️ Click any value on rows marked [GL]"+(showLiq?" or [Andon]":"")+" to see the breakdown"
+    ),
+    showLiq&&h('div',{style:{display:"flex",gap:8,flexWrap:"wrap",marginBottom:8}},
+      h('div',{style:{fontSize:11,color:"#7a1fa2",background:"#fdf4ff",padding:"5px 10px",borderRadius:6,border:"1px solid #d4a0f0"}},
+        "■ Filed = Andon Board PO payment dates   □ Unfiled = PA budget estimate minus filed POs"
+      )
+    ),
+    deltaStrip,
+    h('div',{style:{overflowX:"auto"}},
+      h('table',{style:{borderCollapse:"collapse",fontSize:11}},
+        h('thead',null,
+          h('tr',null,
+            h('th',{style:{textAlign:"left",padding:"8px 10px",background:"#0f0f0f",color:"#fff",fontWeight:500,fontSize:11,minWidth:190,position:"sticky",left:0,zIndex:2}},"Amount in PHP"),
+            CF.weeks.map(function(w,i){
+              return h('th',{key:"a"+i,style:{textAlign:"right",padding:"8px 8px",background:"#2a2a2a",color:"#fff",fontWeight:500,fontSize:10,whiteSpace:"pre-line",minWidth:130}},
+                h('div',{style:{fontSize:9,color:"#aaa",marginBottom:1}},"Actual"),w);
+            }),
+            CF.proj.map(function(w,i){
+              return h('th',{key:"p"+i,style:{textAlign:"right",padding:"8px 8px",background:projBg,color:projCol,fontWeight:500,fontSize:10,whiteSpace:"pre-line",minWidth:130}},
+                h('div',{style:{fontSize:9,color:projSubCol,marginBottom:1}},projSub),w);
+            })
+          )
+        ),
+        h('tbody',null,allRows)
+      )
+    ),
+    breakdownPanel
+  );
+}
+
+// ── AR STANDARD ───────────────────────────────────────────────────────────────
+
+function ARStandard() {
+  var _s = useState("All"); var yf=_s[0],setYf=_s[1];
+  var filtered = AR_OPEN.filter(function(r){return r.amount>0&&(yf==="All"||r.year===Number(yf));}).sort(function(a,b){return a.week-b.week;});
+  var tot = filtered.reduce(function(s,r){return s+r.amount;},0);
+  return h('div',null,
+    h('div',{style:{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:14,flexWrap:"wrap",gap:8}},
+      h('div',null,
+        h('div',{style:{fontSize:16,fontWeight:500,marginBottom:2}},"Accounts Receivable — Open"),
+        h('div',{style:{fontSize:12,color:"var(--color-text-secondary)"}},filtered.length+" invoices · Total "+fmt(tot,true))
+      ),
+      h('div',{style:{display:"flex",gap:8,alignItems:"center",flexWrap:"wrap"}},
+        h('div',{style:{display:"flex",gap:4}},
+          ["All","2025","2026"].map(function(y){
+            return h('button',{key:y,onClick:function(){setYf(y);},style:{background:yf===y?"#0f0f0f":"none",color:yf===y?"#fff":"var(--color-text-secondary)",border:"0.5px solid",borderColor:yf===y?"#0f0f0f":"var(--color-border-tertiary)",borderRadius:6,padding:"4px 12px",fontSize:12,fontWeight:yf===y?500:400,cursor:"pointer"}},y);
+          })
+        ),
+        h('div',{style:{display:"flex",gap:6}},
+          [["#e63329","High"],["#c85000","Med"],["#888","Low"]].map(function(cl){
+            return h('span',{key:cl[1],style:{fontSize:11,display:"flex",alignItems:"center",gap:4}},h('span',{style:{width:7,height:7,borderRadius:"50%",background:cl[0],display:"inline-block"}}),cl[1]);
+          })
+        )
+      )
+    ),
+    h('div',{style:{overflowX:"auto"}},
+      h('table',{style:{width:"100%",borderCollapse:"collapse",fontSize:11,minWidth:700}},
+        h('thead',null,
+          h('tr',{style:{background:"#0f0f0f"}},
+            ["","Account","Project","Year","Amount","Status","PIC","Target","Aging","Week"].map(function(hd,i){
+              return h('th',{key:i,style:{textAlign:i<=2?"left":"right",padding:"7px 8px",color:"#fff",fontWeight:500,fontSize:10}},hd);
+            })
+          )
+        ),
+        h('tbody',null,
+          filtered.map(function(r,i){
+            var pc=r.priority==="high"?"#e63329":r.priority==="medium"?"#c85000":"#aaa";
+            var sc=r.status==="Collected"?{bg:"#e8f5ee",col:"#1a7a4a"}:r.status==="For Payment Follow-Up"?{bg:"#fff0ee",col:"#c00"}:{bg:"#f0f7ff",col:"#1a5fa8"};
+            return h('tr',{key:i,style:{borderBottom:"0.5px solid var(--color-border-tertiary)",background:i%2===0?"":"var(--color-background-secondary)"}},
+              h('td',{style:{padding:"6px 8px"}},h('span',{style:{width:7,height:7,borderRadius:"50%",background:pc,display:"inline-block"}})),
+              h('td',{style:{padding:"6px 8px",fontWeight:500,fontSize:11,maxWidth:120,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},r.account),
+              h('td',{style:{padding:"6px 8px",color:"var(--color-text-secondary)",fontSize:10,maxWidth:170,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},r.project),
+              h('td',{style:{padding:"6px 8px"}},h('span',{style:{fontSize:10,padding:"2px 7px",borderRadius:4,background:r.year===2026?"#eef4ff":"#f5f0ff",color:r.year===2026?"#1a5fa8":"#6b3db5",fontWeight:500}},r.year)),
+              h('td',{style:{textAlign:"right",padding:"6px 8px",fontWeight:500}},fmt(r.amount,true)),
+              h('td',{style:{textAlign:"right",padding:"6px 8px"}},h('span',{style:{fontSize:10,padding:"2px 6px",borderRadius:4,background:sc.bg,color:sc.col}},r.status==="For Payment Follow-Up"?"Follow-Up":r.status==="Collected"?"Collected":"For Invoice")),
+              h('td',{style:{textAlign:"right",padding:"6px 8px",color:"var(--color-text-secondary)",fontSize:10}},r.pic),
+              h('td',{style:{textAlign:"right",padding:"6px 8px",fontSize:10}},r.target),
+              h('td',{style:{textAlign:"right",padding:"6px 8px",fontSize:10,color:r.aging.includes("m")&&!r.aging.includes("early")?"#c00":"var(--color-text-secondary)"}},r.aging),
+              h('td',{style:{textAlign:"right",padding:"6px 8px",fontSize:10,fontWeight:500}},"W"+r.week)
+            );
+          }),
+          h('tr',{style:{background:"#0f0f0f"}},
+            h('td',{colSpan:4,style:{padding:"8px",color:"#fff",fontWeight:600,fontSize:11}},"Total Open AR ("+yf+")"),
+            h('td',{style:{textAlign:"right",padding:"8px",color:"#fff",fontWeight:700,fontSize:12}},fmt(tot,true)),
+            h('td',{colSpan:5})
+          )
+        )
+      )
+    )
+  );
+}
+
+// ── AR SUMMARY ────────────────────────────────────────────────────────────────
+
+function ARSummary() {
+  var byAccountMap = {};
+  AR_OPEN.filter(function(r){return r.amount>0;}).forEach(function(r){
+    if (!byAccountMap[r.account]) byAccountMap[r.account]={count:0,total:0,statuses:[],pic:r.pic};
+    byAccountMap[r.account].count++;
+    byAccountMap[r.account].total+=r.amount;
+    if (byAccountMap[r.account].statuses.indexOf(r.status)===-1) byAccountMap[r.account].statuses.push(r.status);
+  });
+  var byAccount = Object.entries(byAccountMap).sort(function(a,b){return b[1].total-a[1].total;});
+
+  var kpis = [
+    {label:"Total open AR",val:fmt(totalOpen,true),sub:AR_OPEN.length+" invoices",col:"#1a5fa8"},
+    {label:"High priority",val:fmt(totalHigh,true),sub:highPriority.length+" overdue accounts",col:"#e63329"},
+    {label:"For payment follow-up",val:fmt(AR_OPEN.filter(function(r){return r.status==="For Payment Follow-Up";}).reduce(function(s,r){return s+r.amount;},0),true),sub:"Awaiting client payment",col:"#c85000"},
+    {label:"For invoicing",val:fmt(AR_OPEN.filter(function(r){return r.status==="For Invoicing";}).reduce(function(s,r){return s+r.amount;},0),true),sub:"Invoice not yet raised",col:"#1a7a4a"},
+    {label:"Collected YTD",val:fmt(totalCollected,true),sub:COLLECTED.length+" invoices closed",col:"#1a7a4a"},
+    {label:"Due this week (W20)",val:fmt(thisWeekTotal,true),sub:thisWeekAR.length+" items",col:"#7a0000"},
+  ];
+
+  return h('div',null,
+    h('div',{style:{fontSize:16,fontWeight:500,marginBottom:4}},"AR Summary"),
+    h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:16}},WEEK+" · "+DATE),
+    h('div',{style:{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:10,marginBottom:20}},
+      kpis.map(function(k,i){
+        return h('div',{key:i,style:{background:"var(--color-background-secondary)",borderRadius:8,padding:"12px 14px",borderLeft:"3px solid "+k.col}},
+          h('div',{style:{fontSize:11,color:"var(--color-text-secondary)",marginBottom:4}},k.label),
+          h('div',{style:{fontSize:17,fontWeight:600,color:k.col}},k.val),
+          h('div',{style:{fontSize:11,color:"var(--color-text-tertiary)",marginTop:2}},k.sub)
+        );
+      })
+    ),
+    h('div',{style:{fontSize:13,fontWeight:500,marginBottom:10}},"Open AR by Account"),
+    h('div',{style:{overflowX:"auto"}},
+      h('table',{style:{width:"100%",borderCollapse:"collapse",fontSize:12}},
+        h('thead',null,
+          h('tr',{style:{borderBottom:"1px solid var(--color-border-secondary)"}},
+            ["Account","Invoices","Total Open","Status","PIC"].map(function(hd,i){
+              return h('th',{key:i,style:{textAlign:i<2?"left":"right",padding:"6px 8px",fontSize:11,color:"var(--color-text-secondary)",fontWeight:500}},hd);
+            })
+          )
+        ),
+        h('tbody',null,
+          byAccount.map(function(entry,i){
+            var acct=entry[0], data=entry[1];
+            return h('tr',{key:i,style:{borderBottom:"0.5px solid var(--color-border-tertiary)",background:i%2===0?"":"var(--color-background-secondary)"}},
+              h('td',{style:{padding:"7px 8px",fontWeight:500}},acct),
+              h('td',{style:{padding:"7px 8px"}},data.count),
+              h('td',{style:{textAlign:"right",padding:"7px 8px",fontWeight:600}},fmt(data.total,true)),
+              h('td',{style:{textAlign:"right",padding:"7px 8px"}},
+                data.statuses.map(function(s,si){
+                  return h('span',{key:si,style:{fontSize:10,padding:"1px 6px",borderRadius:4,background:s==="For Payment Follow-Up"?"#fff0ee":s==="Collected"?"#e8f5ee":"#f0f7ff",color:s==="For Payment Follow-Up"?"#c00":s==="Collected"?"#1a7a4a":"#1a5fa8",marginLeft:si>0?4:0}},
+                    s==="For Payment Follow-Up"?"Follow-Up":s==="Collected"?"Collected":"Invoice");
+                })
+              ),
+              h('td',{style:{textAlign:"right",padding:"7px 8px",fontSize:11,color:"var(--color-text-secondary)"}},data.pic)
+            );
+          })
+        )
+      )
+    )
+  );
+}
+
+// ── FULL YEAR ─────────────────────────────────────────────────────────────────
+
+function FullYear() {
+  // COLUMN DEFINITIONS
+  // Jan-May  = Actual (CF for Mancom, weeks consolidated to month)
+  // Jun      = Partial actual / in-progress (CF for Mancom W23-W25, shown as single col)
+  // Jul-Dec  = Projection (AP sheet outflow; inflow from AM BD Universe Collections CSV)
+
+  var colDefs = [
+    {label:"Jan", sub:"Actual",      isAct:true,  isCur:false, isProj:false},
+    {label:"Feb", sub:"Actual",      isAct:true,  isCur:false, isProj:false},
+    {label:"Mar", sub:"Actual",      isAct:true,  isCur:false, isProj:false},
+    {label:"Apr", sub:"Actual",      isAct:true,  isCur:false, isProj:false},
+    {label:"May", sub:"Actual",      isAct:true,  isCur:false, isProj:false},
+    {label:"Jun", sub:"Partial",     isAct:false, isCur:true,  isProj:false},
+    {label:"Jul", sub:"Projection",  isAct:false, isCur:false, isProj:true},
+    {label:"Aug", sub:"Projection",  isAct:false, isCur:false, isProj:true},
+    {label:"Sep", sub:"Projection",  isAct:false, isCur:false, isProj:true},
+    {label:"Oct", sub:"Projection",  isAct:false, isCur:false, isProj:true},
+    {label:"Nov", sub:"Projection",  isAct:false, isCur:false, isProj:true},
+    {label:"Dec", sub:"Projection",  isAct:false, isCur:false, isProj:true},
+  ];
+
+  // Clone mutable FY arrays from data file globals (each render gets a fresh copy)
+  var FY_BEG        = FY_BEG_INIT.slice();
+  var FY_NET        = FY_NET_INIT.slice();
+  var FY_PDEI_IN    = FY_PDEI_IN_INIT.slice();
+  var FY_GG_IN      = FY_GG_IN_INIT.slice();
+  var FY_PDEI_IN_BD = FY_PDEI_IN_BD_INIT.slice();
+  var FY_GG_IN_BD   = FY_GG_IN_BD_INIT.slice();
+  var FY_PAY24      = FY_PAY24_INIT.slice();
+  var FY_PAY25      = FY_PAY25_INIT.slice();
+  var FY_AP_TOT     = FY_AP_TOT_INIT.slice();
+  // Non-mutable (FY_COS_CF, FY_GAE, FY_TAX, FY_CAPEX, FY_LOAN, FY_OTHER,
+  //              FY_STP, FY_FOREX, FY_GG_OUT) are globals from cashflow_data.js
+
+  var FY_PAY26  = FY_COS_CF.map(function(v,i){ return -(v + FY_AP_TOT[i]); });
+
+  // AP breakdown: seeded from AP_PAYABLES for Jul–Dec; forecast items appended below
+  var FY_AP_BD = [null,null,null,null,null,null,null,null,null,null,null,null];
+
+  // Inject AP_PAYABLES-derived values for Jul–Dec (pre-computed at global scope in _AP_*)
+  for(var i=6;i<12;i++){
+    FY_AP_TOT[i] = _AP_TOT[i];
+    FY_PAY24[i]  = _AP_PAY24[i];
+    FY_PAY25[i]  = _AP_PAY25[i];
+    FY_AP_BD[i]  = _AP_BD[i] ? _AP_BD[i].slice() : null;
+  }
+  var FY_PAY24_BD = _AP_BD24;
+  var FY_PAY25_BD = _AP_BD25;
+
+  // Apply forecast projects onto projection months
+  FORECAST_PROJECTS.forEach(function(p){
+    var cos_rate = 1 - p.gp;
+    [p.dp, p.fp].forEach(function(pmt){
+      if(!pmt) return;
+      if(p.entity==="GG"){
+        FY_GG_IN[pmt.month]    += pmt.amount;
+        FY_GG_IN_BD[pmt.month]  = (FY_GG_IN_BD[pmt.month]||[]).concat([{l:p.name,a:pmt.amount,forecast:true}]);
+      } else {
+        FY_PDEI_IN[pmt.month]     += pmt.amount;
+        FY_PDEI_IN_BD[pmt.month]   = (FY_PDEI_IN_BD[pmt.month]||[]).concat([{l:p.name,a:pmt.amount,forecast:true}]);
+      }
+      FY_AP_TOT[pmt.month] += Math.round(pmt.amount * cos_rate);
+      FY_AP_BD[pmt.month]   = (FY_AP_BD[pmt.month]||[]).concat([{l:p.name+" (COS)",a:Math.round(pmt.amount*cos_rate),c:"COS",forecast:true}]);
+    });
+  });
+  FY_PAY26 = FY_COS_CF.map(function(v,i){ return -(v + FY_AP_TOT[i]); });
+
+  // TOGGLE — include/exclude prior-year payables (2024 + 2025) in projection
+  var _t = useState(true); var inclHist=_t[0], setInclHist=_t[1];
+
+  // Recompute Jul–Dec (index 6–11) BEG/NET chain from Jun closing
+  (function(){
+    var b = FY_NET[5];
+    for(var fi=6; fi<12; fi++){
+      FY_BEG[fi] = Math.round(b);
+      b = b + FY_PDEI_IN[fi] + FY_GG_IN[fi]
+            + (inclHist ? FY_PAY24[fi] : 0)
+            + (inclHist ? FY_PAY25[fi] : 0)
+            + FY_PAY26[fi]
+            - FY_GAE[fi] - FY_TAX[fi] - FY_CAPEX[fi]
+            - FY_LOAN[fi] - FY_OTHER[fi] - FY_GG_OUT[fi]
+            + FY_STP[fi] + FY_FOREX[fi];
+      FY_NET[fi] = Math.round(b);
+    }
+  })();
+
+  // STATE — tracks which row + col is highlighted
+  var _s = useState({bdKey:"",col:-1});
+  var hlBdKey = _s[0].bdKey;
+  var hlCol   = _s[0].col;
+  var setHl   = function(k,c){ _s[1](function(prev){ return (prev.bdKey===k&&prev.col===c)?{bdKey:"",col:-1}:{bdKey:k,col:c}; }); };
+  var clearHl = function(){ _s[1]({bdKey:"",col:-1}); };
+
+  // ROW DEFINITIONS
+  var rows = [
+    {label:"Beginning",            data:FY_BEG,   bold:true, bg:"#f2f2f2", projBg:"#fdfbf0"},
+    {label:"Inflow",               isHeader:true},
+    {label:"  PDEI Inflow",        data:FY_PDEI_IN, color:"#1a7a4a", projBg:"#f8fff8", bdKey:"pdeiIn", bd:FY_PDEI_IN_BD},
+    {label:"  GG Company Inflow",  data:FY_GG_IN,   color:"#1a7a4a", projBg:"#f8fff8", bdKey:"ggIn",   bd:FY_GG_IN_BD},
+    {label:"Outflow",              isHeader:true},
+    {label:"  Payables 2024",      data:FY_PAY24,   color:"#c00", projBg:"#fff8f8", bdKey:"pay24", bd:FY_PAY24_BD},
+    {label:"  Payables 2025",      data:FY_PAY25,   color:"#c00", projBg:"#fff8f8", bdKey:"pay25", bd:FY_PAY25_BD},
+    {label:"  Payables 2026 / AP", data:FY_PAY26,   color:"#7a1fa2", projBg:"#fdf4ff", bdKey:"pay26"},
+    {label:"  GAE",                data:FY_GAE.map(function(v){return -v;}),   color:"#c00", projBg:"#fff8f8"},
+    {label:"  CAPEX",              data:FY_CAPEX.map(function(v){return -v;}), color:"#c00", projBg:"#fff8f8"},
+    {label:"  Taxes",              data:FY_TAX.map(function(v){return -v;}),   color:"#c00", projBg:"#fff8f8"},
+    {label:"  Loan Repayment",     data:FY_LOAN.map(function(v){return -v;}),  color:"#c00", projBg:"#fff8f8"},
+    {label:"  Other Payment",      data:FY_OTHER.map(function(v){return -v;}), color:"#c00", projBg:"#fff8f8"},
+    {label:"  GG Company Outflow", data:FY_GG_OUT.map(function(v){return -v;}),color:"#c00", projBg:"#fff8f8"},
+    {label:"  STP",                data:FY_STP,     color:"#c00", projBg:"#fff8f8"},
+    {label:"  Forex",              data:FY_FOREX,   color:"#888"},
+    {label:"Net Cash / Closing",   data:FY_NET,     bold:true, bg:"#0f0f0f", textColor:"#fff", projBg:"#3a3520", projTextColor:"#e8d88a"},
+  ];
+
+  var allRows = [];
+  rows.forEach(function(row,ri){
+    if(!inclHist && (row.bdKey==="pay24"||row.bdKey==="pay25")) return;
+    if(row.isHeader){
+      allRows.push(h('tr',{key:"h"+ri,style:{background:"#e8e8e8"}},
+        h('td',{style:{padding:"4px 10px",fontSize:10,fontWeight:600,color:"#555",letterSpacing:1,textTransform:"uppercase",position:"sticky",left:0,zIndex:1,background:"#e8e8e8",whiteSpace:"nowrap"}},row.label),
+        h('td',{colSpan:12,style:{background:"#e8e8e8"}})
+      ));
+      return;
+    }
+    var hasBd = !!row.bdKey;
+    var isInflow = row.bdKey==="pdeiIn"||row.bdKey==="ggIn";
+    var isApRow  = row.bdKey==="pay26";
+    allRows.push(h('tr',{key:"r"+ri,style:{borderBottom:"0.5px solid #e0e0e0"}},
+      h('td',{style:{padding:"7px 10px",fontWeight:row.bold?600:400,background:row.bg||"#fff",color:row.textColor||"var(--color-text-primary)",fontSize:11,position:"sticky",left:0,zIndex:1,borderRight:"1px solid #ddd",whiteSpace:"nowrap"}},
+        row.label,
+        isApRow&&h('span',{style:{marginLeft:5,fontSize:9,color:"#7a1fa2",fontWeight:400}}," [CF+AP]"),
+        isInflow&&h('span',{style:{marginLeft:5,fontSize:9,color:"#1a7a4a",fontWeight:400}}," [CSV]")
+      ),
+      (row.data||[]).map(function(val,i){
+        var cd = colDefs[i];
+        var isAct  = cd.isAct;
+        var isCur  = cd.isCur;
+        var isHL   = hasBd && hlBdKey===row.bdKey && hlCol===i;
+        var bdArr  = row.bd || FY_AP_BD;
+        var hasBdItem = hasBd && i>=6 && bdArr[i] !== null && bdArr[i] !== undefined && bdArr[i] !== false;
+        var baseBg = row.bg ? row.bg : (isAct?"#fff":isCur?"#f0f8ff":(row.projBg||"#fdfbf0"));
+        var col    = row.textColor ? (row.projTextColor&&!isAct?row.projTextColor:row.textColor)
+                                   : (val<0?"#c00":(row.color||"var(--color-text-primary)"));
+        if(isApRow) col = val<0?"#7a1fa2":"var(--color-text-tertiary)";
+        var isPay2x = row.bdKey==="pay24"||row.bdKey==="pay25";
+        var hlBg   = isInflow ? "#D4F5E4" : isPay2x ? "#FFEAEA" : "#EFD4FF";
+        var hlOut  = isInflow ? "#1a7a4a" : isPay2x ? "#c00000" : "#7a1fa2";
+        return h('td',{key:i,
+          style:{textAlign:"right",padding:"7px 8px",fontWeight:row.bold?600:400,
+            background:isHL?hlBg:baseBg,
+            color:val===0?"var(--color-text-tertiary)":col,
+            fontSize:11,cursor:hasBdItem?"pointer":"default",
+            outline:isHL?"2px solid "+hlOut:"none",transition:"background 0.1s"},
+          onClick:hasBdItem?function(){setHl(row.bdKey,i);}:undefined},
+          val===0?"—":fmt(val,false)
+        );
+      })
+    ));
+  });
+
+  var legend = h('div',{style:{display:"flex",gap:12,marginBottom:10,flexWrap:"wrap",fontSize:10}},
+    h('div',{style:{display:"flex",alignItems:"center",gap:4}},
+      h('div',{style:{width:10,height:10,background:"#fff",border:"1px solid #ccc"}}),
+      h('span',{style:{color:"var(--color-text-secondary)"}},"Actual (Jan–May)")),
+    h('div',{style:{display:"flex",alignItems:"center",gap:4}},
+      h('div',{style:{width:10,height:10,background:"#f0f8ff",border:"1px solid #9ad"}}),
+      h('span',{style:{color:"var(--color-text-secondary)"}},"Jun (partial, through Jun 19)")),
+    h('div',{style:{display:"flex",alignItems:"center",gap:4}},
+      h('div',{style:{width:10,height:10,background:"#fdfbf0",border:"1px solid #ccc"}}),
+      h('span',{style:{color:"var(--color-text-secondary)"}},"Projection (Jul–Dec, AP-based)")),
+    h('div',{style:{display:"flex",alignItems:"center",gap:4}},
+      h('div',{style:{width:10,height:10,background:"#fdf4ff",border:"1px solid #d4a0f0"}}),
+      h('span',{style:{color:"#7a1fa2"}},"Payables 2026/AP — click Jul–Dec to drill")),
+    h('div',{style:{display:"flex",alignItems:"center",gap:4}},
+      h('div',{style:{width:10,height:10,background:"#f8fff8",border:"1px solid #7ad4a0"}}),
+      h('span',{style:{color:"#1a7a4a"}},"Inflow (CSV) — click months with data to drill"))
+  );
+
+  return h('div',null,
+    h('div',{style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}},
+      h('div',{style:{fontSize:16,fontWeight:500}},"Full Year Cash Flow"),
+      h('button',{
+        onClick:function(){ setInclHist(function(v){return !v;}); },
+        style:{
+          background: inclHist ? "#fff4ee" : "#eef4ff",
+          color:      inclHist ? "#c85000" : "#1a5fa8",
+          border:    "1.5px solid "+(inclHist?"#e8a070":"#90b0e8"),
+          borderRadius:6, padding:"4px 12px", fontSize:11, fontWeight:500,
+          cursor:"pointer", whiteSpace:"nowrap"
+        }
+      }, inclHist ? "Hiding prior-year payables: OFF" : "Hiding prior-year payables: ON")
+    ),
+    h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:6}},
+      "Jan–Dec 2026 · All figures in ₱ · Jan–May = CF for Mancom (weeks → months) · Jun = Partial (through Jun 19) · Jul–Dec = AP payment schedule"
+      +(inclHist ? "" : " · Prior-year payables (2024/2025) excluded from projection")
+    ),
+    legend,
+    h('div',{style:{overflowX:"auto"}},
+      h('table',{style:{borderCollapse:"collapse",fontSize:11}},
+        h('thead',null,
+          h('tr',null,
+            h('th',{style:{textAlign:"left",padding:"8px 10px",background:"#0f0f0f",color:"#fff",fontWeight:500,fontSize:11,minWidth:220,position:"sticky",left:0,zIndex:2}},"Amount in PHP"),
+            colDefs.map(function(cd,i){
+              var bg  = cd.isAct?"#2a2a2a":cd.isCur?"#1a3a5a":"#3a3520";
+              var tc  = cd.isAct?"#fff":cd.isCur?"#a0d0ff":"#e8d88a";
+              var stc = cd.isAct?"#aaa":cd.isCur?"#6aabdd":"#b8a860";
+              return h('th',{key:i,style:{textAlign:"right",padding:"8px 8px",background:bg,color:tc,fontWeight:500,fontSize:10,minWidth:110}},
+                h('div',{style:{fontSize:9,color:stc,marginBottom:1}},cd.sub),
+                cd.label
+              );
+            })
+          )
+        ),
+        h('tbody',null,allRows)
+      )
+    ),
+    (function(){
+      var isApBd    = hlBdKey==="pay26" && hlCol>=6 && hlCol<=11 && FY_AP_BD[hlCol] && FY_AP_BD[hlCol].length;
+      var isPdeiBd  = hlBdKey==="pdeiIn" && hlCol>=6 && hlCol<=11 && FY_PDEI_IN_BD[hlCol] && FY_PDEI_IN_BD[hlCol].length;
+      var isGgBd    = hlBdKey==="ggIn"   && hlCol>=6 && hlCol<=11 && FY_GG_IN_BD[hlCol]   && FY_GG_IN_BD[hlCol].length;
+      var isPay24Bd = hlBdKey==="pay24" && hlCol>=6 && hlCol<=11 && FY_PAY24_BD[hlCol] && FY_PAY24_BD[hlCol].length;
+      var isPay25Bd = hlBdKey==="pay25" && hlCol>=6 && hlCol<=11 && FY_PAY25_BD[hlCol] && FY_PAY25_BD[hlCol].length;
+      if(isApBd){
+        return h('div',{style:{background:"#F5EEFF",border:"2px solid #7a1fa2",borderRadius:6,padding:"10px 14px",marginTop:8}},
+          h('div',{style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}},
+            h('div',{style:{fontSize:10,color:"#4a0a72",fontWeight:600}},
+              "AP Payment Schedule → "+colDefs[hlCol].label+" 2026 · Total: "+fmt(-FY_AP_TOT[hlCol],false)
+            ),
+            h('span',{style:{fontSize:10,color:"#aaa",cursor:"pointer"},onClick:clearHl},"✕ close")
+          ),
+          h('div',{style:{fontSize:10,color:"#888",marginBottom:6,fontStyle:"italic"}},"Top scheduled payables from AP sheet"),
+          h('div',{style:{display:"flex",flexDirection:"column",gap:3}},
+            FY_AP_BD[hlCol].map(function(item,ii){
+              var fcst = !!item.forecast;
+              var yrCol = item.yr===2024?"#c85000":item.yr===2025?"#1a5fa8":"#7a1fa2";
+              var classColor = fcst ? "#b36200" : yrCol;
+              var badge = fcst
+                ? h('span',{style:{background:"#fff3cd",color:"#856404",fontSize:9,padding:"1px 5px",borderRadius:3,fontWeight:700,whiteSpace:"nowrap",flexShrink:0}},"FORECAST")
+                : item.yr
+                  ? h('span',{style:{background:item.yr===2024?"#fff4ee":item.yr===2025?"#eef4ff":"#f5eeff",color:yrCol,fontSize:9,padding:"1px 5px",borderRadius:3,fontWeight:600,whiteSpace:"nowrap",flexShrink:0}},item.yr)
+                  : null;
+              return h('div',{key:ii,style:{fontSize:11,display:"flex",alignItems:"center",gap:6}},
+                badge,
+                h('span',{style:{color:fcst?"#b36200":"#555",flex:1}},item.l),
+                h('span',{style:{fontWeight:600,color:classColor,minWidth:110,textAlign:"right"}},fmt(item.a,false))
+              );
+            })
+          )
+        );
+      }
+      if(isPdeiBd||isGgBd){
+        var bdItems  = isPdeiBd ? FY_PDEI_IN_BD[hlCol] : FY_GG_IN_BD[hlCol];
+        var bdTotal  = bdItems.reduce(function(s,x){return s+x.a;},0);
+        var bdLabel  = isPdeiBd ? "PDEI Inflow" : "GG Company Inflow";
+        return h('div',{style:{background:"#E8FFF3",border:"2px solid #1a7a4a",borderRadius:6,padding:"10px 14px",marginTop:8}},
+          h('div',{style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}},
+            h('div',{style:{fontSize:10,color:"#0a4a2a",fontWeight:600}},
+              bdLabel+" → "+colDefs[hlCol].label+" 2026 · Total: "+fmt(bdTotal,false)
+            ),
+            h('span',{style:{fontSize:10,color:"#aaa",cursor:"pointer"},onClick:clearHl},"✕ close")
+          ),
+          h('div',{style:{fontSize:10,color:"#888",marginBottom:6,fontStyle:"italic"}},"Projected collections · Source: AM BD Universe Collections CSV"),
+          h('div',{style:{display:"flex",flexDirection:"column",gap:3}},
+            bdItems.map(function(item,ii){
+              var fcst = !!item.forecast;
+              return h('div',{key:ii,style:{fontSize:11,display:"flex",alignItems:"center",gap:6}},
+                fcst && h('span',{style:{background:"#fff3cd",color:"#856404",fontSize:9,padding:"1px 5px",borderRadius:3,fontWeight:700,whiteSpace:"nowrap",flexShrink:0}},"FORECAST"),
+                h('span',{style:{color:fcst?"#b36200":"#555",flex:1}},item.l),
+                h('span',{style:{fontWeight:600,color:fcst?"#b36200":"#1a7a4a",minWidth:110,textAlign:"right"}},fmt(item.a,false))
+              );
+            })
+          )
+        );
+      }
+      if(isPay24Bd){
+        var items24 = FY_PAY24_BD[hlCol];
+        var tot24 = -FY_PAY24[hlCol];
+        return h('div',{style:{background:"#FFF4EE",border:"2px solid #c85000",borderRadius:6,padding:"10px 14px",marginTop:8}},
+          h('div',{style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}},
+            h('div',{style:{fontSize:10,color:"#7a2800",fontWeight:600}},
+              "Payables 2024 → "+colDefs[hlCol].label+" · Total: "+fmt(tot24,false)
+            ),
+            h('span',{style:{fontSize:10,color:"#aaa",cursor:"pointer"},onClick:clearHl},"✕ close")
+          ),
+          h('div',{style:{fontSize:10,color:"#888",marginBottom:6,fontStyle:"italic"}},"Outstanding 2024 AP items scheduled for payment"),
+          h('div',{style:{display:"flex",flexDirection:"column",gap:3}},
+            items24.map(function(item,ii){
+              return h('div',{key:ii,style:{fontSize:11,display:"flex",alignItems:"center",gap:6}},
+                h('span',{style:{background:"#fff4ee",color:"#c85000",border:"0.5px solid #e8b090",fontSize:9,padding:"1px 5px",borderRadius:3,fontWeight:600,whiteSpace:"nowrap",flexShrink:0}},item.c),
+                h('span',{style:{color:"#555",flex:1}},item.l),
+                h('span',{style:{fontWeight:600,color:"#c85000",minWidth:110,textAlign:"right"}},fmt(item.a,false))
+              );
+            })
+          )
+        );
+      }
+      if(isPay25Bd){
+        var items25 = FY_PAY25_BD[hlCol];
+        var tot25 = -FY_PAY25[hlCol];
+        return h('div',{style:{background:"#EEF4FF",border:"2px solid #1a5fa8",borderRadius:6,padding:"10px 14px",marginTop:8}},
+          h('div',{style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}},
+            h('div',{style:{fontSize:10,color:"#0a2a5a",fontWeight:600}},
+              "Payables 2025 → "+colDefs[hlCol].label+" · Total: "+fmt(tot25,false)
+            ),
+            h('span',{style:{fontSize:10,color:"#aaa",cursor:"pointer"},onClick:clearHl},"✕ close")
+          ),
+          h('div',{style:{fontSize:10,color:"#888",marginBottom:6,fontStyle:"italic"}},"Outstanding 2025 AP items scheduled for payment"),
+          h('div',{style:{display:"flex",flexDirection:"column",gap:3}},
+            items25.map(function(item,ii){
+              return h('div',{key:ii,style:{fontSize:11,display:"flex",alignItems:"center",gap:6}},
+                h('span',{style:{background:"#eef4ff",color:"#1a5fa8",border:"0.5px solid #90b0e8",fontSize:9,padding:"1px 5px",borderRadius:3,fontWeight:600,whiteSpace:"nowrap",flexShrink:0}},item.c),
+                h('span',{style:{color:"#555",flex:1}},item.l),
+                h('span',{style:{fontWeight:600,color:"#1a5fa8",minWidth:110,textAlign:"right"}},fmt(item.a,false))
+              );
+            })
+          )
+        );
+      }
+      return null;
+    })(),
+    h('div',{style:{background:"#fff8f0",border:"0.5px solid #f5c69a",borderRadius:8,padding:"10px 14px",marginTop:14,fontSize:12,color:"#7a3800"}},
+      "⚠ Projected closing deteriorates to ",
+      h('strong',null,"₱(36.4M) by December"),
+      " — Jan–May actuals from CF for Mancom (weeks consolidated to months). Jun partial through W26. Jul–Dec: Payables 2026 = COS-only from AP sheet; GAE/Tax/Loan/Other from CF rows 58–62; GG Outflow from CF row 64. H2 inflows from AM BD Universe Collections CSV."
+    )
+  );
+}
+
+// ── AP COS PAYABLES COMPONENT ─────────────────────────────────────────────────
+function ArrearsTab() {
+  var fmt = function(n){ return "₱"+Math.round(n).toLocaleString(); };
+  var total = AP_COS_VENDORS.reduce(function(s,r){ return s+r.a; },0);
+
+  return h('div',null,
+    h('div',{style:{fontSize:16,fontWeight:500,marginBottom:2}},"Cost of Sales Payables"),
+    h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:14}},
+      "Source: PH Cash Flow Monitoring W24 · AP tab · Cost of Sales rows only · All figures in ₱"
+    ),
+    h('table',{style:{borderCollapse:"collapse",fontSize:12,width:"100%",maxWidth:620}},
+      h('thead',null,
+        h('tr',null,
+          h('th',{style:{textAlign:"left",padding:"7px 10px",background:"#0f0f0f",color:"#fff",fontWeight:500,fontSize:11}},"Vendor"),
+          h('th',{style:{textAlign:"right",padding:"7px 10px",background:"#0f0f0f",color:"#fff",fontWeight:500,fontSize:11}},"Amount (PHP)"),
+          h('th',{style:{textAlign:"left",padding:"7px 10px",background:"#0f0f0f",color:"#888",fontWeight:400,fontSize:10}},"Schedule")
+        )
+      ),
+      h('tbody',null,
+        AP_COS_VENDORS.map(function(r,i){
+          return h('tr',{key:i,style:{borderBottom:"0.5px solid #e0e0e0"}},
+            h('td',{style:{padding:"8px 10px",fontSize:12,color:"var(--color-text-primary)"}},[r.n]),
+            h('td',{style:{padding:"8px 10px",fontSize:12,fontWeight:600,color:"#7a1fa2",textAlign:"right"}},[fmt(r.a)]),
+            h('td',{style:{padding:"8px 10px",fontSize:11,color:"var(--color-text-tertiary)"}},[r.note])
+          );
+        }).concat([
+          h('tr',{key:"total",style:{background:"#0f0f0f",borderTop:"2px solid #333"}},
+            h('td',{style:{padding:"8px 10px",fontWeight:700,color:"#fff",fontSize:12}},"Total"),
+            h('td',{style:{padding:"8px 10px",fontWeight:700,color:"#ffd700",fontSize:13,textAlign:"right"}},[fmt(total)]),
+            h('td',null)
+          )
+        ])
+      )
+    )
+  );
+}
+
+// ── AP PAYABLES COMPONENT ─────────────────────────────────────────────────────
+function APPayables() {
+  var fmt = function(n){ return "₱"+Math.round(n).toLocaleString(); };
+  var _ye = useState("All"); var yearFilter=_ye[0], setYearFilter=_ye[1];
+  var _en = useState("All"); var entityFilter=_en[0], setEntityFilter=_en[1];
+  var _so = useState({col:"amount",dir:-1}); var sort=_so[0], setSort=_so[1];
+
+  function toggleSort(col){
+    setSort(function(s){ return {col:col, dir: s.col===col ? -s.dir : -1}; });
+  }
+
+  var filtered = AP_PAYABLES.filter(function(r){
+    if(yearFilter !== "All" && r.year !== Number(yearFilter)) return false;
+    if(entityFilter !== "All" && r.entity !== entityFilter) return false;
+    return true;
+  }).slice().sort(function(a,b){
+    var av = a[sort.col], bv = b[sort.col];
+    if(typeof av === "string") return sort.dir * av.localeCompare(bv);
+    return sort.dir * (av - bv);
+  });
+
+  var total    = filtered.reduce(function(s,r){ return s+r.amount; },0);
+  var grandTotal = AP_PAYABLES.reduce(function(s,r){ return s+r.amount; },0);
+  var byYear   = function(y){ return AP_PAYABLES.filter(function(r){ return r.year===y; }).reduce(function(s,r){ return s+r.amount; },0); };
+
+  var btnStyle = function(active){ return {
+    background: active ? "#1a1a1a" : "none",
+    color: active ? "#fff" : "var(--color-text-secondary)",
+    border: "0.5px solid", borderColor: active ? "#1a1a1a" : "var(--color-border-tertiary)",
+    borderRadius: 6, padding: "4px 11px", fontSize: 12, fontWeight: active ? 500 : 400, cursor: "pointer"
+  };};
+
+  var thSt = function(left){ return {
+    textAlign: left?"left":"right",
+    padding: "7px 8px", background: "#0f0f0f", color: "#fff", fontWeight: 500, fontSize: 10,
+    cursor: "pointer", userSelect: "none", whiteSpace: "nowrap"
+  };};
+
+  var sortArrow = function(col){ return sort.col===col ? (sort.dir===-1 ? " ↓" : " ↑") : ""; };
+
+  var yearChipCol = function(y){ return y===2024?"#c85000":y===2025?"#1a5fa8":"#1a7a4a"; };
+  var yearChipBg  = function(y){ return y===2024?"#fff4ee":y===2025?"#eef4ff":"#eefff4"; };
+  var MN = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+  return h('div',null,
+    // Header
+    h('div',{style:{marginBottom:14}},
+      h('div',{style:{fontSize:16,fontWeight:500,marginBottom:2}},"Accounts Payable"),
+      h('div',{style:{fontSize:12,color:"var(--color-text-secondary)"}},filtered.length+" line items · "+fmt(total)+" shown")
+    ),
+
+    // KPI cards
+    h('div',{style:{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(130px,1fr))",gap:8,marginBottom:16}},
+      [
+        {label:"Total Outstanding", val:fmt(grandTotal),      col:"#c00"},
+        {label:"2024 Payables",     val:fmt(byYear(2024)),    col:"#c85000"},
+        {label:"2025 Payables",     val:fmt(byYear(2025)),    col:"#1a5fa8"},
+        {label:"2026 Payables",     val:fmt(byYear(2026)),    col:"#1a7a4a"},
+      ].map(function(k,i){
+        return h('div',{key:i,style:{background:"var(--color-background-secondary)",borderRadius:8,padding:"10px 12px",borderLeft:"3px solid "+k.col}},
+          h('div',{style:{fontSize:10,color:"var(--color-text-secondary)",marginBottom:3}},k.label),
+          h('div',{style:{fontSize:14,fontWeight:600,color:k.col}},k.val)
+        );
+      })
+    ),
+
+    // Filters
+    h('div',{style:{display:"flex",gap:8,flexWrap:"wrap",marginBottom:14,alignItems:"center"}},
+      h('div',{style:{display:"flex",gap:4}},
+        ["All","2024","2025","2026"].map(function(y){
+          return h('button',{key:y,onClick:function(){setYearFilter(y);},style:btnStyle(yearFilter===y)},y);
+        })
+      ),
+      h('div',{style:{width:"0.5px",background:"var(--color-border-tertiary)",height:24}}),
+      h('div',{style:{display:"flex",gap:4}},
+        ["All","PDEI","GG"].map(function(e){
+          return h('button',{key:e,onClick:function(){setEntityFilter(e);},style:btnStyle(entityFilter===e)},e);
+        })
+      )
+    ),
+
+    // Table
+    h('div',{style:{overflowX:"auto"}},
+      h('table',{style:{width:"100%",borderCollapse:"collapse",fontSize:11,minWidth:800}},
+        h('thead',null,
+          h('tr',null,
+            h('th',{style:thSt(true), onClick:function(){toggleSort("entity");  }},"Entity"+sortArrow("entity")),
+            h('th',{style:thSt(false),onClick:function(){toggleSort("year");    }},"Year"+sortArrow("year")),
+            h('th',{style:thSt(true), onClick:function(){toggleSort("project"); }},"Project"+sortArrow("project")),
+            h('th',{style:thSt(true), onClick:function(){toggleSort("vendor");  }},"Supplier"+sortArrow("vendor")),
+            h('th',{style:{...thSt(true),color:"#aaa",fontWeight:400}},"Terms"),
+            h('th',{style:{...thSt(false),color:"#aaa",fontWeight:400}},"Orig. Due"),
+            h('th',{style:thSt(false),onClick:function(){toggleSort("dueMonth");}},"Pay Month 2026"+sortArrow("dueMonth")),
+            h('th',{style:thSt(false),onClick:function(){toggleSort("amount");  }},"Amount"+sortArrow("amount"))
+          )
+        ),
+        h('tbody',null,
+          filtered.map(function(r,i){
+            var entityCol = r.entity==="PDEI" ? "#1a5fa8" : "#7a1fa2";
+            var entityBg  = r.entity==="PDEI" ? "#eef4ff" : "#f5eeff";
+            var cosRow    = r.classification==="Cost of Sales";
+            return h('tr',{key:i,style:{borderBottom:"0.5px solid var(--color-border-tertiary)",background:i%2===0?"":"var(--color-background-secondary)"}},
+              h('td',{style:{padding:"6px 8px"}},
+                h('span',{style:{fontSize:10,padding:"2px 7px",borderRadius:4,background:entityBg,color:entityCol,fontWeight:500}},r.entity)
+              ),
+              h('td',{style:{padding:"6px 8px",textAlign:"right"}},
+                h('span',{style:{fontSize:10,padding:"2px 7px",borderRadius:4,background:yearChipBg(r.year),color:yearChipCol(r.year),fontWeight:500}},r.year)
+              ),
+              h('td',{style:{padding:"6px 8px",maxWidth:220,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",color:"var(--color-text-primary)"}},r.project||"—"),
+              h('td',{style:{padding:"6px 8px",fontWeight:500,maxWidth:200,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},r.vendor),
+              h('td',{style:{padding:"6px 8px",color:"var(--color-text-tertiary)",fontSize:10,whiteSpace:"nowrap"}},r.terms||""),
+              h('td',{style:{padding:"6px 8px",textAlign:"right",fontSize:10,color:"#aaa",whiteSpace:"nowrap"}},r.originalDue||"—"),
+              h('td',{style:{padding:"6px 8px",textAlign:"right",whiteSpace:"nowrap"}},
+                r.dueMonth !== null && r.dueMonth !== undefined
+                  ? h('span',{style:{fontSize:10,padding:"2px 7px",borderRadius:4,background:r.dueMonth>=6?"#fff8e1":"#f0f4ff",color:r.dueMonth>=6?"#856404":"#444",fontWeight:500}},MN[r.dueMonth]+" 2026")
+                  : h('span',{style:{fontSize:10,color:"#bbb",fontStyle:"italic"}},"TBD")
+              ),
+              h('td',{style:{padding:"6px 8px",textAlign:"right",fontWeight:600,color:cosRow?"#c00":"#888"}},fmt(r.amount))
+            );
+          }),
+          h('tr',{style:{background:"#0f0f0f"}},
+            h('td',{colSpan:7,style:{padding:"8px",color:"#fff",fontWeight:600,fontSize:11}},"Filtered Total — "+filtered.length+" line items"),
+            h('td',{style:{textAlign:"right",padding:"8px",color:"#ffd700",fontWeight:700,fontSize:12}},fmt(total))
+          )
+        )
+      )
+    )
+  );
+}
+
+// ── 2026 FORECAST COMPONENT ───────────────────────────────────────────────────
+function ForecastTab() {
+  var fmt = function(n){ return "₱"+Math.round(n).toLocaleString(); };
+  var pct = function(n){ return Math.round(n*100)+"%"; };
+  var MONTH_LABELS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var PROJ_MONTHS  = [6,7,8,9,10,11]; // Jul–Dec indices
+
+  // Compute per-month impact from all forecast projects
+  var impactIn  = PROJ_MONTHS.map(function(){ return 0; });
+  var impactCos = PROJ_MONTHS.map(function(){ return 0; });
+  FORECAST_PROJECTS.forEach(function(p){
+    var cos_rate = 1 - p.gp;
+    [p.dp, p.fp].forEach(function(pmt){
+      if(!pmt) return;
+      var fi = PROJ_MONTHS.indexOf(pmt.month);
+      if(fi < 0) return;
+      impactIn[fi]  += pmt.amount;
+      impactCos[fi] += Math.round(pmt.amount * cos_rate);
+    });
+  });
+
+  var thStyle = function(left){
+    return {textAlign:left?"left":"right",padding:"7px 10px",background:"#0f0f0f",color:"#fff",fontWeight:500,fontSize:10,whiteSpace:"nowrap"};
+  };
+
+  var totalFcstRevenue = FORECAST_PROJECTS.reduce(function(s,p){return s+p.total;},0);
+  var totalFcstGP      = FORECAST_PROJECTS.reduce(function(s,p){return s+Math.round(p.total*p.gp);},0);
+  var totalFcstCOS     = totalFcstRevenue - totalFcstGP;
+
+  return h('div',null,
+    // Header
+    h('div',{style:{fontSize:16,fontWeight:500,marginBottom:2}},"2026 Revenue Forecast"),
+    h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:14}},
+      "Forecasted projects included in Full Year cash flow. Inflow and COS are applied to the months below and reflected automatically in the Full Year tab."
+    ),
+
+    // Summary chips
+    h('div',{style:{display:"flex",gap:10,marginBottom:18,flexWrap:"wrap"}},
+      [
+        {label:"Projects",     val:String(FORECAST_PROJECTS.length),         col:"#0a3a7a"},
+        {label:"Total Revenue",val:fmt(totalFcstRevenue),                    col:"#1a7a4a"},
+        {label:"Total GP",     val:fmt(totalFcstGP)+" ("+pct(totalFcstGP/totalFcstRevenue)+")", col:"#1a5a1a"},
+        {label:"Total COS",    val:fmt(totalFcstCOS),                        col:"#7a1fa2"},
+      ].map(function(k,i){
+        return h('div',{key:i,style:{background:"var(--color-background-secondary)",borderRadius:8,padding:"10px 14px",borderLeft:"3px solid "+k.col}},
+          h('div',{style:{fontSize:10,color:"var(--color-text-secondary)",marginBottom:2}},k.label),
+          h('div',{style:{fontSize:14,fontWeight:600,color:k.col}},k.val)
+        );
+      })
+    ),
+
+    // Project list
+    h('div',{style:{fontSize:12,fontWeight:500,color:"var(--color-text-secondary)",marginBottom:8,textTransform:"uppercase",letterSpacing:"0.05em"}},"Projects"),
+    h('div',{style:{overflowX:"auto",marginBottom:20}},
+      h('table',{style:{borderCollapse:"collapse",fontSize:12,width:"100%"}},
+        h('thead',null,
+          h('tr',null,
+            h('th',{style:thStyle(true)},"Project"),
+            h('th',{style:thStyle(false)},"Total"),
+            h('th',{style:thStyle(false)},"GP%"),
+            h('th',{style:thStyle(false)},"GP Amount"),
+            h('th',{style:thStyle(false)},"COS"),
+            h('th',{style:thStyle(false)},"DP Month"),
+            h('th',{style:thStyle(false)},"DP Amount"),
+            h('th',{style:thStyle(false)},"FP Month"),
+            h('th',{style:thStyle(false)},"FP Amount")
+          )
+        ),
+        h('tbody',null,
+          FORECAST_PROJECTS.map(function(p,i){
+            var gp_amt  = Math.round(p.total * p.gp);
+            var cos_amt = p.total - gp_amt;
+            var border  = "0.5px solid #e0e0e0";
+            var td = function(content, right, color){
+              return h('td',{style:{padding:"9px 10px",textAlign:right?"right":"left",color:color||"var(--color-text-primary)",borderBottom:border}},content);
+            };
+            return h('tr',{key:i},
+              td(h('span',{style:{fontWeight:500}},p.name),false),
+              td(fmt(p.total),true),
+              td(h('span',{style:{background:"#e8fff3",color:"#1a7a4a",borderRadius:4,padding:"2px 6px",fontWeight:600,fontSize:11}},pct(p.gp)),false),
+              td(fmt(gp_amt),  true,"#1a7a4a"),
+              td(fmt(cos_amt), true,"#7a1fa2"),
+              td(p.dp?p.dp.label+" 2026":"—",false),
+              td(p.dp?fmt(p.dp.amount):"—",true),
+              td(p.fp?p.fp.label+" 2026":"—",false),
+              td(p.fp?fmt(p.fp.amount):"—",true)
+            );
+          })
+        )
+      )
+    ),
+
+    // Monthly impact table
+    h('div',{style:{fontSize:12,fontWeight:500,color:"var(--color-text-secondary)",marginBottom:8,textTransform:"uppercase",letterSpacing:"0.05em"}},"Full Year Impact — Jul to Dec"),
+    h('div',{style:{overflowX:"auto"}},
+      h('table',{style:{borderCollapse:"collapse",fontSize:12}},
+        h('thead',null,
+          h('tr',null,
+            h('th',{style:{textAlign:"left",padding:"7px 10px",background:"#0f0f0f",color:"#fff",fontWeight:500,fontSize:10,minWidth:160}},""),
+            PROJ_MONTHS.map(function(mi,fi){
+              return h('th',{key:fi,style:{textAlign:"right",padding:"7px 10px",background:"#3a3520",color:"#e8d88a",fontWeight:500,fontSize:10,minWidth:100}},MONTH_LABELS[mi]);
+            }),
+            h('th',{style:{textAlign:"right",padding:"7px 10px",background:"#0f0f0f",color:"#fff",fontWeight:500,fontSize:10,minWidth:110}},"Total")
+          )
+        ),
+        h('tbody',null,
+          h('tr',{style:{borderBottom:"0.5px solid #e0e0e0"}},
+            h('td',{style:{padding:"8px 10px",fontWeight:600,color:"#1a7a4a"}},"Inflow (PDEI)"),
+            impactIn.map(function(v,fi){
+              return h('td',{key:fi,style:{textAlign:"right",padding:"8px 10px",fontWeight:v?600:400,color:v?"#1a7a4a":"#ccc"}},v?fmt(v):"—");
+            }),
+            h('td',{style:{textAlign:"right",padding:"8px 10px",fontWeight:600,color:"#1a7a4a",borderLeft:"1px solid #ddd"}},fmt(impactIn.reduce(function(a,b){return a+b;},0)))
+          ),
+          h('tr',{style:{borderBottom:"0.5px solid #e0e0e0"}},
+            h('td',{style:{padding:"8px 10px",fontWeight:600,color:"#7a1fa2"}},"COS Outflow"),
+            impactCos.map(function(v,fi){
+              return h('td',{key:fi,style:{textAlign:"right",padding:"8px 10px",fontWeight:v?600:400,color:v?"#7a1fa2":"#ccc"}},v?fmt(v):"—");
+            }),
+            h('td',{style:{textAlign:"right",padding:"8px 10px",fontWeight:600,color:"#7a1fa2",borderLeft:"1px solid #ddd"}},fmt(impactCos.reduce(function(a,b){return a+b;},0)))
+          ),
+          h('tr',{style:{background:"#f0fff4",borderTop:"1.5px solid #1a7a4a"}},
+            h('td',{style:{padding:"8px 10px",fontWeight:700,color:"#1a5a1a"}},"Net GP Contribution"),
+            impactIn.map(function(v,fi){
+              var gp = v - impactCos[fi];
+              return h('td',{key:fi,style:{textAlign:"right",padding:"8px 10px",fontWeight:gp?700:400,color:gp?"#1a5a1a":"#ccc"}},gp?fmt(gp):"—");
+            }),
+            h('td',{style:{textAlign:"right",padding:"8px 10px",fontWeight:700,color:"#1a5a1a",borderLeft:"1px solid #1a7a4a"}},
+              fmt(impactIn.reduce(function(a,b){return a+b;},0) - impactCos.reduce(function(a,b){return a+b;},0))
+            )
+          )
+        )
+      )
+    ),
+    h('div',{style:{fontSize:11,color:"var(--color-text-tertiary)",marginTop:10}},
+      "To add a project, update the FORECAST_PROJECTS array in the HTML file."
+    )
+  );
+}
+
+// ── APP ───────────────────────────────────────────────────────────────────────
+
+var SLIDES = ["Cover","Weekly Table","AR Standard","AR Summary","Full Year","AP Payables","AP Arrears","2026 Forecast"];
+var COMPS  = [Cover,WeeklyTableCombined,ARStandard,ARSummary,FullYear,APPayables,ArrearsTab,ForecastTab];
+var SLIDE_HIDDEN = [false,false,true,true,false,false,true,false];
+
+function App() {
+  var _s = useState(0); var slide=_s[0],setSlide=_s[1];
+  function nav(d){ setSlide(function(s){return Math.max(0,Math.min(SLIDES.length-1,s+d));}); }
+  var SlideComp = COMPS[slide];
+  return h('div',{className:"app-wrap"},
+    h('div',{style:{display:"flex",gap:4,marginBottom:16,flexWrap:"wrap",alignItems:"center",borderBottom:"0.5px solid var(--color-border-tertiary)",paddingBottom:10}},
+      SLIDES.map(function(s,i){
+        if(SLIDE_HIDDEN[i]) return null;
+        return h('button',{key:i,onClick:function(){setSlide(i);},style:{background:slide===i?"#1a1a1a":"none",color:slide===i?"#fff":"var(--color-text-secondary)",border:"0.5px solid",borderColor:slide===i?"#1a1a1a":"var(--color-border-tertiary)",borderRadius:6,padding:"4px 11px",fontSize:12,fontWeight:slide===i?500:400,cursor:"pointer"}},s);
+      }),
+      h('div',{style:{marginLeft:"auto",display:"flex",gap:8,alignItems:"center"}},
+        h('button',{onClick:function(){nav(-1);},disabled:slide===0,style:{background:"none",border:"0.5px solid var(--color-border-tertiary)",borderRadius:6,padding:"4px 10px",fontSize:12,cursor:"pointer",color:"var(--color-text-secondary)"}},"←"),
+        h('span',{style:{fontSize:11,color:"var(--color-text-tertiary)"}},(slide+1)+" / "+SLIDES.length),
+        h('button',{onClick:function(){nav(1);},disabled:slide===SLIDES.length-1,style:{background:"none",border:"0.5px solid var(--color-border-tertiary)",borderRadius:6,padding:"4px 10px",fontSize:12,cursor:"pointer",color:"var(--color-text-secondary)"}},"→")
+      )
+    ),
+    h(SlideComp,null),
+    h('div',{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:20,paddingTop:12,borderTop:"0.5px solid var(--color-border-tertiary)"}},
+      h('div',{style:{fontSize:11,color:"var(--color-text-tertiary)"}},"Mineski PH · "+WEEK+" · "+DATE),
+      h('div',{style:{display:"flex",gap:8}},
+        h('button',{onClick:function(){nav(-1);},disabled:slide===0,style:{background:"none",border:"0.5px solid var(--color-border-tertiary)",borderRadius:6,padding:"5px 14px",fontSize:12,cursor:"pointer",color:"var(--color-text-secondary)"}},"← Prev"),
+        h('button',{onClick:function(){nav(1);},disabled:slide===SLIDES.length-1,style:{background:"#0f0f0f",border:"none",borderRadius:6,padding:"5px 14px",fontSize:12,cursor:"pointer",color:"#fff"}},"Next →")
+      )
+    )
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(h(App,null));
+</script>
+
+
+</body></html>
