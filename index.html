@@ -1411,10 +1411,11 @@ function ForecastTab(props) {
   var _modal  = useState(null); var modal=_modal[0],setModal=_modal[1];
   var _saving = useState(false); var saving=_saving[0],setSaving=_saving[1];
   var _form   = useState({}); var form=_form[0],setForm=_form[1];
+  var _errs   = useState({}); var errs=_errs[0],setErrs=_errs[1];
 
   function blankForm(){ return {name:'',entity:'PDEI',total:'',gp_pct:'25',dp_month:'6',dp_amount:'',fp_month:'11',fp_amount:'',notes:''}; }
 
-  function openAdd(){ setForm(blankForm()); setModal('add'); }
+  function openAdd(){ setForm(blankForm()); setErrs({}); setModal('add'); }
 
   function openEdit(p){
     setForm({
@@ -1424,25 +1425,39 @@ function ForecastTab(props) {
       fp_month:p.fp!=null?String(p.fp.month):'11', fp_amount:String(p.fp?p.fp.amount:''),
       notes:p.notes||''
     });
+    setErrs({});
     setModal('edit');
   }
 
-  function closeModal(){ setModal(null); setSaving(false); }
+  function closeModal(){ setModal(null); setSaving(false); setErrs({}); }
 
   function setField(k, v){
+    setErrs(function(e){ var n=Object.assign({},e); delete n[k]; return n; });
     setForm(function(prev){
       var next = Object.assign({}, prev, {[k]:v});
       var total = parseFloat(k==='total' ? v : next.total) || 0;
       var dp    = parseFloat(k==='dp_amount' ? v : next.dp_amount) || 0;
       if((k==='total'||k==='dp_amount') && total>0){
         next.fp_amount = String(dp>0 ? Math.round(total-dp) : total);
+        if(k==='dp_amount') delete (function(e){return e;})(Object.assign({},errs)).fp_amount;
       }
       return next;
     });
   }
 
+  function validate(){
+    var e = {};
+    if(!form.name.trim())                  e.name      = 'Required';
+    if(!(parseFloat(form.total)>0))        e.total     = 'Must be greater than 0';
+    if(form.gp_pct===''||form.gp_pct===null) e.gp_pct = 'Required';
+    if(!(parseFloat(form.dp_amount)>0))    e.dp_amount = 'Must be greater than 0';
+    if(!(parseFloat(form.fp_amount)>0))    e.fp_amount = 'Must be greater than 0';
+    return e;
+  }
+
   function save(){
-    if(!form.name.trim()){ alert('Project name is required.'); return; }
+    var e = validate();
+    if(Object.keys(e).length){ setErrs(e); return; }
     var row = {
       name:form.name.trim(), entity:form.entity,
       total_value:parseFloat(form.total)||0,
@@ -1493,8 +1508,9 @@ function ForecastTab(props) {
 
   var thS = function(left){ return {textAlign:left?'left':'right',padding:'7px 10px',background:'#0f0f0f',color:'#fff',fontWeight:500,fontSize:10,whiteSpace:'nowrap'}; };
   var td  = function(content,right,color){ return h('td',{style:{padding:'8px 10px',textAlign:right?'right':'left',color:color||'var(--color-text-primary)',borderBottom:'0.5px solid #e0e0e0'}},content); };
-  var iS  = {width:'100%',padding:'7px 9px',border:'1px solid #ccc',borderRadius:5,fontSize:12,fontFamily:'inherit',outline:'none'};
+  var iS  = function(field){ return {width:'100%',padding:'7px 9px',border:'1.5px solid '+(errs[field]?'#e53935':'#ccc'),borderRadius:5,fontSize:12,fontFamily:'inherit',outline:'none',background:errs[field]?'#fff8f8':'#fff'}; };
   var lS  = {display:'block',fontSize:11,color:'var(--color-text-secondary)',marginBottom:3,fontWeight:500};
+  var errMsg = function(field){ return errs[field] ? h('div',{style:{fontSize:10,color:'#e53935',marginTop:3}},errs[field]) : null; };
 
   return h('div',null,
     // Header row
@@ -1609,8 +1625,9 @@ function ForecastTab(props) {
         h('div',{style:{fontSize:15,fontWeight:600,marginBottom:20}},modal==='add'?'+ Add Project':'Edit Project'),
 
         h('div',{style:{marginBottom:14}},
-          h('label',{style:lS},'Project Name'),
-          h('input',{style:iS,value:form.name,placeholder:'e.g. MPL Season 18',onChange:function(e){setField('name',e.target.value);}})
+          h('label',{style:lS},'Project Name *'),
+          h('input',{style:iS('name'),value:form.name,placeholder:'e.g. MPL Season 18',onChange:function(e){setField('name',e.target.value);}}),
+          errMsg('name')
         ),
 
         h('div',{style:{marginBottom:14}},
@@ -1625,47 +1642,55 @@ function ForecastTab(props) {
 
         h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:14}},
           h('div',null,
-            h('label',{style:lS},'Total Contract Value (₱)'),
-            h('input',{style:iS,type:'number',value:form.total,placeholder:'32000000',onChange:function(e){setField('total',e.target.value);}})
+            h('label',{style:lS},'Total Contract Value (₱) *'),
+            h('input',{style:iS('total'),type:'number',value:form.total,placeholder:'e.g. 32000000',onChange:function(e){setField('total',e.target.value);}}),
+            errMsg('total')
           ),
           h('div',null,
-            h('label',{style:lS},'GP %'),
-            h('input',{style:iS,type:'number',min:0,max:100,value:form.gp_pct,placeholder:'25',onChange:function(e){setField('gp_pct',e.target.value);}})
+            h('label',{style:lS},'GP % *'),
+            h('input',{style:iS('gp_pct'),type:'number',min:0,max:100,value:form.gp_pct,placeholder:'e.g. 25',onChange:function(e){setField('gp_pct',e.target.value);}}),
+            errMsg('gp_pct')
           )
         ),
 
         h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:14}},
           h('div',null,
             h('label',{style:lS},'DP Month'),
-            h('select',{style:iS,value:form.dp_month,onChange:function(e){setField('dp_month',e.target.value);}},
+            h('select',{style:iS('dp_month'),value:form.dp_month,onChange:function(e){setField('dp_month',e.target.value);}},
               h('option',{value:''},'— None —'),
               PROJ_OPTS.map(function(o){return h('option',{key:o.val,value:String(o.val)},o.label+' 2026');})
             )
           ),
           h('div',null,
-            h('label',{style:lS},'DP Amount (₱)'),
-            h('input',{style:iS,type:'number',value:form.dp_amount,placeholder:'16000000',onChange:function(e){setField('dp_amount',e.target.value);}})
+            h('label',{style:lS},'DP Amount (₱) *'),
+            h('input',{style:iS('dp_amount'),type:'number',value:form.dp_amount,placeholder:'e.g. 16000000',onChange:function(e){setField('dp_amount',e.target.value);}}),
+            errMsg('dp_amount')
           )
         ),
 
         h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:14}},
           h('div',null,
             h('label',{style:lS},'FP Month'),
-            h('select',{style:iS,value:form.fp_month,onChange:function(e){setField('fp_month',e.target.value);}},
+            h('select',{style:iS('fp_month'),value:form.fp_month,onChange:function(e){setField('fp_month',e.target.value);}},
               h('option',{value:''},'— None —'),
               PROJ_OPTS.map(function(o){return h('option',{key:o.val,value:String(o.val)},o.label+' 2026');})
             )
           ),
           h('div',null,
-            h('label',{style:lS},'FP Amount (₱) — auto-fills'),
-            h('input',{style:Object.assign({},iS,{background:'#f8fff8'}),type:'number',value:form.fp_amount,placeholder:'auto',onChange:function(e){setField('fp_amount',e.target.value);}})
+            h('label',{style:lS},'FP Amount (₱) — auto-fills *'),
+            h('input',{style:Object.assign({},iS('fp_amount'),{background:errs['fp_amount']?'#fff8f8':'#f8fff8'}),type:'number',value:form.fp_amount,placeholder:'auto',onChange:function(e){setField('fp_amount',e.target.value);}}),
+            errMsg('fp_amount')
           )
         ),
 
         h('div',{style:{marginBottom:22}},
           h('label',{style:lS},'Notes (optional)'),
-          h('input',{style:iS,value:form.notes,placeholder:'Any remarks',onChange:function(e){setField('notes',e.target.value);}})
+          h('input',{style:iS('notes'),value:form.notes,placeholder:'Any remarks',onChange:function(e){setField('notes',e.target.value);}})
         ),
+
+        Object.keys(errs).length ? h('div',{style:{fontSize:11,color:'#e53935',marginBottom:12,padding:'8px 10px',background:'#fff5f5',borderRadius:5,border:'1px solid #fcc'}},
+          '⚠ Please fill in all required fields before saving.'
+        ) : null,
 
         h('div',{style:{display:'flex',gap:8,justifyContent:'flex-end'}},
           h('button',{onClick:closeModal,style:{padding:'8px 18px',border:'0.5px solid #ccc',borderRadius:6,background:'#fff',fontSize:12,cursor:'pointer',fontFamily:'inherit'}},'Cancel'),
