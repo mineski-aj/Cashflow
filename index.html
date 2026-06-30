@@ -62,12 +62,12 @@ function Cover() {
 
 function Overview() {
   var kpis = [
-    {label:"Cash position (W20 close)",val:fmt(4669679,true),sub:"Opening W20",col:"#c85000"},
+    {label:"Cash position (W26 close)",val:fmt(5360401,true),sub:"Jun 26 close",col:"#1a7a4a"},
     {label:"This week collections due",val:fmt(thisWeekTotal,true),sub:thisWeekAR.length+" invoices",col:"#1a7a4a"},
     {label:"Total AR open",val:fmt(totalOpen,true),sub:AR_OPEN.length+" invoices",col:"#1a5fa8"},
     {label:"High priority AR",val:fmt(totalHigh,true),sub:highPriority.length+" accounts",col:"#c85000"},
     {label:"Collected YTD",val:fmt(totalCollected,true),sub:COLLECTED.length+" invoices",col:"#1a7a4a"},
-    {label:"Projected W52 close",val:fmt(-67592506,true),sub:"Dec 25 year-end",col:"#c00"},
+    {label:"Projected W52 close",val:fmt(-57843607,true),sub:"Dec 25 year-end",col:"#c00"},
   ];
   return h('div',null,
     h('div',{style:{fontSize:16,fontWeight:500,marginBottom:4}},"Overview"),
@@ -84,11 +84,11 @@ function Overview() {
     h('div',{style:{background:"#fff8f0",border:"0.5px solid #f5c69a",borderRadius:8,padding:"12px 16px"}},
       h('div',{style:{fontSize:12,fontWeight:500,color:"#a04000",marginBottom:6}},"⚠ Key Actions This Week"),
       h('div',{style:{fontSize:12,color:"#6b3000",lineHeight:1.9}},
-        "· ",h('strong',null,"SMDC Heroes Clash (₱590K)")," — 3 invoices in W20; follow up for payment",h('br'),
-        "· ",h('strong',null,"SM Cyberzone TCG Addendum (₱2.96M)")," — Target W23; confirm invoice status",h('br'),
-        "· ",h('strong',null,"MCGG Rising Stars S4 (₱81K)")," — TEG billing W24; follow up",h('br'),
-        "· ",h('strong',null,"Alika/Ragnarok (₱266K)")," — 3 invoices W25; confirm payment",h('br'),
-        "· ",h('strong',null,"GG inter-co transfer (₱4.1M)")," — W21 projection; monitor GG cash position"
+        "· ",h('strong',null,"MOONTON MPL S17 FP (₱8.25M)")," — Target W27 (today); confirm receipt & filing",h('br'),
+        "· ",h('strong',null,"Gamezone Xtreme GTCC (₱9.22M)")," — W27 collection; cross-check bank deposit",h('br'),
+        "· ",h('strong',null,"INFINITECH SportsPlus MPBL FP (₱772K)")," — W28 (Jul 7); invoice follow-up",h('br'),
+        "· ",h('strong',null,"SMDC Heroes Clash (₱590K)")," — 3 invoices, 5+ months overdue; escalate",h('br'),
+        "· ",h('strong',null,"Jul loan repayments (₱11.06M)")," — W27+W28 due; ensure bank coverage"
       )
     )
   );
@@ -99,7 +99,7 @@ function Overview() {
 function CashPosition() {
   return h('div',null,
     h('div',{style:{fontSize:16,fontWeight:500,marginBottom:4}},"Cash Position"),
-    h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:18}},"Actual W1–W22 · Projection W22–W52"),
+    h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:18}},"Actual W1–W26 · Projection W27–W52"),
     h('div',{style:{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:8,marginBottom:20}},
       CF.weeks.map(function(w,i){
         var net=CF.net[i];
@@ -125,7 +125,7 @@ function CashPosition() {
       })
     ),
     h('div',{style:{background:"#fff8f0",border:"0.5px solid #f5c69a",borderRadius:8,padding:"10px 14px",marginTop:14,fontSize:12,color:"#7a3800"}},
-      "W24 actual: ₱1.68M close. GG interco ₱4.16M + PDEI ₱2.68M in; ₱7.0M out. W25 projection: ₱400K PDEI in — net ₱(504K). Jun closes at ₱(5.6M). Jul: ₱7.98M loan repayment. Year-end (W52) projects at ₱(49.4M). Key risk: Jul loan + H2 AP obligations with near-zero H2 collection schedule."
+      "W26 actual: ₱5.36M close. PDEI ₱4.68M + GG ₱3.78M in; ₱3.77M out. W27 projection: Gamezone Xtreme ₱9.22M collection — net ₱25K gain. Jul: ₱11.06M loan repayment total. Year-end (W52) projects at ₱(57.8M). Key risk: Jul–Aug loan repayments (₱11.06M) and H2 AP obligations with limited collection visibility."
     )
   );
 }
@@ -225,7 +225,7 @@ function WeeklyTable() {
 
   return h('div',null,
     h('div',{style:{fontSize:16,fontWeight:500,marginBottom:4}},"Weekly Cash Flow Table"),
-    h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:4}},"Actuals W1\u2013W20 \u00b7 Projections W21\u2013W26 (Jun 26) \u00b7 All figures in \u20b1"),
+    h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:4}},"Actuals W1\u2013W26 \u00b7 Projections W27\u2013W52 \u00b7 All figures in \u20b1"),
     h('div',{style:{fontSize:11,color:"#185FA5",marginBottom:14,background:"#f0f6ff",padding:"6px 10px",borderRadius:6,display:"inline-block"}},
       "\u2139\ufe0f Click any value on rows marked [GL] to see the breakdown from the GL sheet"
     ),
@@ -263,7 +263,7 @@ var COS_LIQ = {
   // Unfiled = PA Total Estimate Expenses - all filed POs for same project code.
   // Spread rule: project active in W19-W24 → divide evenly across those weeks.
   //              project ended before W19 → full unfiled in W19 (late billing catch-up).
-  totals: [29112421,7977406,13025942,28240666,15018159,1647960,1000000,1489792,4495944,5356350,6527485,9939024,7053704,4328144,6448204,7021438,6306395,6678025,900000,2062700,855586,1650000,952620,2062700,0,2505586,52620,2962700,0,2505586,3552620,2962700,0,2505586],
+  totals: [29112421,7977406,13025942,28240666,15018159,1647960,1000000,1489792,3662732,8996110,9931087,9602836,10611488,6768716,5641837,7144042,8419460,6202232,7071315,1700000,3062700,855586,1990000,952620,3549999,800000,2505586,392620,3762700,1000000,2505586,3892620,3762700,1000000,2505586],
   bd: [
     [{"l":"MPL PH S15 – Lights/Sounds Truss Rental","a":4389000,"t":"filed"},{"l":"GTCC Summer Showdown – Technical Svcs","a":1456000,"t":"filed"},{"l":"KIC Rebroadcast – Booth Rental/Fabrication","a":135520,"t":"filed"},{"l":"realme Cup – LED Rental/Logistics","a":127680,"t":"filed"}],
     [{"l":"SM Cyberzone TCG – Stage/Booth Fabrication","a":400000,"t":"filed"},{"l":"KIC 2025 GS&K – GO Wifi Business OTC","a":352240,"t":"filed"},{"l":"PKL Spring – Booth & Players Area Rental","a":220000,"t":"filed"},{"l":"SM Cyberzone TCG – Tech Svcs","a":200000,"t":"filed"}],
@@ -273,44 +273,14 @@ var COS_LIQ = {
     [{"l":"BingoPlus Music Fest – Agency Fee","a":324613,"t":"filed"},{"l":"MPL PH S17 – Direct Internet 500Mbps","a":280000,"t":"filed"},{"l":"MPL PH S17 – Show Director","a":77800,"t":"filed"},{"l":"Sportsplus MPBL FZ – Lights & Audio","a":52500,"t":"filed"},{"l":"MPL PH S17 (unfiled balance ÷6 wks)","a":3543638,"t":"unfiled"},{"l":"PKL Spring – unfiled balance (ended W13)","a":3432208,"t":"unfiled"},{"l":"PUBG 8th Anniv – unfiled balance (ended W13)","a":1716975,"t":"unfiled"},{"l":"SM Cyberzone TCG – unfiled balance (ends W16)","a":1118126,"t":"unfiled"},{"l":"Sportsplus MPBL Fan Zone – unfiled (ended W15)","a":863892,"t":"unfiled"},{"l":"Jobstreet LU v2 – unfiled balance (ended W14)","a":557006,"t":"unfiled"}],
     [{"l":"PKL Spring – Photography & Videography","a":62000,"t":"filed"},{"l":"MPL PH S17 – API Engineer","a":33400,"t":"filed"},{"l":"PKL Spring – Outsourced Manpower","a":30350,"t":"filed"},{"l":"MPL PH S17 – Show Producer","a":30000,"t":"filed"},{"l":"MPL PH S17 (unfiled balance ÷6 wks)","a":3543638,"t":"unfiled"},{"l":"Sportsplus MPBL Roadtrip – unfiled ÷5 wks","a":407598,"t":"unfiled"}],
     [{"l":"PKL Spring – Photography & Videography","a":62000,"t":"filed"},{"l":"PKL Addendum – Talent/Caster","a":36533,"t":"filed"},{"l":"Sportsplus MPBL FZ – Lights & Audio","a":35000,"t":"filed"},{"l":"PKL Addendum – Talent/Caster OSX","a":29166,"t":"filed"},{"l":"MPL PH S17 (unfiled balance ÷6 wks)","a":3543638,"t":"unfiled"},{"l":"Sportsplus MPBL Roadtrip – unfiled ÷5 wks","a":407598,"t":"unfiled"}],
-    [{"l":"MPL PH S17 – Safety & Security","a":176850,"t":"filed"},{"l":"MPL PH S17 – API Engineer","a":33400,"t":"filed"},{"l":"MPL PH S17 – Lighting Director","a":31333,"t":"filed"},{"l":"MPL PH S17 – Broadcast Manpower","a":28000,"t":"filed"},{"l":"MPL PH S17 (unfiled balance ÷6 wks)","a":3543638,"t":"unfiled"},{"l":"Sportsplus MPBL Roadtrip – unfiled ÷5 wks","a":407598,"t":"unfiled"}],
-    [{"l":"MPL PH S17 – HMUA (RS)","a":38400,"t":"filed"},{"l":"MPL PH S17 – Content Statistician","a":34800,"t":"filed"},{"l":"MPL PH S17 – Show Producer","a":30000,"t":"filed"},{"l":"MPL PH S17 – Stylist (2 Hosts)","a":30000,"t":"filed"},{"l":"MPL PH S17 (unfiled balance ÷6 wks)","a":3543638,"t":"unfiled"},{"l":"Sportsplus MPBL Roadtrip – unfiled ÷5 wks","a":407598,"t":"unfiled"}],
-    [{"l":"MPL PH S17 – Show Director","a":77800,"t":"filed"},{"l":"MPL PH S17 – Stylist (2 Hosts)","a":60000,"t":"filed"},{"l":"MPL PH S17 – Broadcast Manager","a":48000,"t":"filed"},{"l":"MPL PH S17 – HMUA (RS)","a":38400,"t":"filed"},{"l":"MPL PH S17 (unfiled balance ÷6 wks)","a":3543638,"t":"unfiled"}],
-    null
-  ,
-    // W27-W52 projections — from CF PDEI_OUT
     null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null
+    // W27-W52 projections — no Andon Board breakdown
+    null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
   ]
 };
 // Non-COS projection outflows from CF for Mancom (unchanged)
 // GAE, Tax, CAPEX, Loan Repayment, Other Payment per proj week
 var NON_COS_PROJ = [
-  {gae:2200855,tax:0,capex:0,loan:500000,other:855586,cos:725000},      // W26
   {gae:756000,tax:0,capex:0,loan:7980240,other:60000,cos:1444743},      // W27
   {gae:1041737,tax:0,capex:0,loan:0,other:60000,cos:5026349},           // W28
   {gae:3369422,tax:1487299,capex:0,loan:0,other:0,cos:4674437},         // W29
@@ -491,7 +461,7 @@ function WeeklyTableLiquidity() {
   return h('div',null,
     h('div',{style:{fontSize:16,fontWeight:500,marginBottom:4}},"Weekly Table \u2014 Liquidity Forecast"),
     h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:8}},
-      "Actuals W1\u2013W20 (GL) \u00b7 COS projection = Filed Andon POs + Unfiled PA budget balance \u00b7 GAE/Tax/etc from CF for Mancom"
+      "Actuals W1\u2013W26 (GL) \u00b7 COS projection = Filed Andon POs + Unfiled PA budget balance \u00b7 GAE/Tax/etc from CF for Mancom"
     ),
     h('div',{style:{display:"flex",gap:8,flexWrap:"wrap",marginBottom:10}},
       h('div',{style:{fontSize:11,color:"#7a1fa2",background:"#fdf4ff",padding:"5px 10px",borderRadius:6,border:"1px solid #d4a0f0"}},
@@ -545,10 +515,10 @@ function WeeklyTableCombined() {
   function switchTab(v){ setShowLiq(v); setHl({row:-1,col:-1,colType:"",rowDef:null}); }
 
   // Shared projection arrays (from CF for Mancom)
-  var pdeiInProj=[0,9678457,12282807,0,80724,1571673,0,19416647,0,3194344,7327604,0,0,854434,0,0,0,0,0,0,0,0,0,0,0,0,1054099];
-  var ggInProj=[3779893,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2283610];
-  var pdeiOutProj=[4281441,10240983,6128087,9531157,10611488,6768716,5633683,7144042,8074728,6202232,7071315,1700000,3062700,855586,1990000,952620,3549999,800000,2505586,392620,3762700,1000000,2505586,3892620,3762700,1000000,2505586];
-  var ggOutProj=[110384,200000,342861,200000,210384,400000,400000,223682,200000,210384,200000,423682,200000,210384,200000,342861,100000,100000,310384,300000,123682,100000,110384,100000,323682,0,142861];
+  var pdeiInProj=[9222080,11963719,0,81446,1389648,0,19420985,0,3194344,7631025,0,0,855308,0,0,0,0,0,0,0,0,0,0,0,0,1056485];
+  var ggInProj=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2283610];
+  var pdeiOutProj=[8996110,9931087,9602836,10611488,6768716,5641837,7144042,8419460,6202232,7071315,1700000,3062700,855586,1990000,952620,3549999,800000,2505586,392620,3762700,1000000,2505586,3892620,3762700,1000000,2505586];
+  var ggOutProj=[200000,342861,200000,210384,400000,400000,223682,200000,210384,200000,423682,200000,210384,200000,342861,100000,100000,310384,300000,123682,100000,110384,100000,323682,0,142861];
 
   // Liquidity computations
   var liqProjCOS=COS_LIQ.totals.slice(CF.weeks.length);
@@ -734,8 +704,8 @@ function WeeklyTableCombined() {
         h('div',{style:{fontSize:16,fontWeight:500}},"Weekly Cash Flow Table"),
         h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginTop:2}},
           showLiq
-            ?"Actuals W1–W23 · COS = Filed Andon POs + Unfiled PA estimates · GAE/Tax/etc from CF for Mancom"
-            :"Actuals W1–W23 · Projections W24–W52 · All figures in ₱"
+            ?"Actuals W1–W26 · COS = Filed Andon POs + Unfiled PA estimates · GAE/Tax/etc from CF for Mancom"
+            :"Actuals W1–W26 · Projections W27–W52 · All figures in ₱"
         )
       ),
       h('div',{style:{marginLeft:"auto",display:"flex",gap:4,alignItems:"center",paddingTop:2}},
@@ -854,7 +824,7 @@ function ARSummary() {
     {label:"For payment follow-up",val:fmt(AR_OPEN.filter(function(r){return r.status==="For Payment Follow-Up";}).reduce(function(s,r){return s+r.amount;},0),true),sub:"Awaiting client payment",col:"#c85000"},
     {label:"For invoicing",val:fmt(AR_OPEN.filter(function(r){return r.status==="For Invoicing";}).reduce(function(s,r){return s+r.amount;},0),true),sub:"Invoice not yet raised",col:"#1a7a4a"},
     {label:"Collected YTD",val:fmt(totalCollected,true),sub:COLLECTED.length+" invoices closed",col:"#1a7a4a"},
-    {label:"Due this week (W20)",val:fmt(thisWeekTotal,true),sub:thisWeekAR.length+" items",col:"#7a0000"},
+    {label:"Due this week (W27)",val:fmt(thisWeekTotal,true),sub:thisWeekAR.length+" items",col:"#7a0000"},
   ];
 
   return h('div',null,
@@ -906,7 +876,7 @@ function ARSummary() {
 function FullYear(props) {
   // COLUMN DEFINITIONS
   // Jan-May  = Actual (CF for Mancom, weeks consolidated to month)
-  // Jun      = Partial actual / in-progress (CF for Mancom W23-W25, shown as single col)
+  // Jun      = Actual (CF for Mancom W23-W26, shown as single col)
   // Jul-Dec  = Projection (AP sheet outflow; inflow from AM BD Universe Collections CSV)
 
   var colDefs = [
@@ -915,7 +885,7 @@ function FullYear(props) {
     {label:"Mar", sub:"Actual",      isAct:true,  isCur:false, isProj:false},
     {label:"Apr", sub:"Actual",      isAct:true,  isCur:false, isProj:false},
     {label:"May", sub:"Actual",      isAct:true,  isCur:false, isProj:false},
-    {label:"Jun", sub:"Partial",     isAct:false, isCur:true,  isProj:false},
+    {label:"Jun", sub:"Actual",      isAct:true,  isCur:false, isProj:false},
     {label:"Jul", sub:"Projection",  isAct:false, isCur:false, isProj:true},
     {label:"Aug", sub:"Projection",  isAct:false, isCur:false, isProj:true},
     {label:"Sep", sub:"Projection",  isAct:false, isCur:false, isProj:true},
@@ -1070,7 +1040,7 @@ function FullYear(props) {
       h('span',{style:{color:"var(--color-text-secondary)"}},"Actual (Jan–May)")),
     h('div',{style:{display:"flex",alignItems:"center",gap:4}},
       h('div',{style:{width:10,height:10,background:"#f0f8ff",border:"1px solid #9ad"}}),
-      h('span',{style:{color:"var(--color-text-secondary)"}},"Jun (partial, through Jun 19)")),
+      h('span',{style:{color:"var(--color-text-secondary)"}},"Jun (actual, through Jun 26)")),
     h('div',{style:{display:"flex",alignItems:"center",gap:4}},
       h('div',{style:{width:10,height:10,background:"#fdfbf0",border:"1px solid #ccc"}}),
       h('span',{style:{color:"var(--color-text-secondary)"}},"Projection (Jul–Dec, AP-based)")),
@@ -1097,7 +1067,7 @@ function FullYear(props) {
       }, inclHist ? "Hiding prior-year payables: OFF" : "Hiding prior-year payables: ON")
     ),
     h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:6}},
-      "Jan–Dec 2026 · All figures in ₱ · Jan–May = CF for Mancom (weeks → months) · Jun = Partial (through Jun 19) · Jul–Dec = AP payment schedule"
+      "Jan–Dec 2026 · All figures in ₱ · Jan–May = CF for Mancom (weeks → months) · Jun = Actual (through Jun 26) · Jul–Dec = AP payment schedule"
       +(inclHist ? "" : " · Prior-year payables (2024/2025) excluded from projection")
     ),
     legend,
@@ -1226,8 +1196,8 @@ function FullYear(props) {
     })(),
     h('div',{style:{background:"#fff8f0",border:"0.5px solid #f5c69a",borderRadius:8,padding:"10px 14px",marginTop:14,fontSize:12,color:"#7a3800"}},
       "⚠ Projected closing deteriorates to ",
-      h('strong',null,"₱(36.4M) by December"),
-      " — Jan–May actuals from CF for Mancom (weeks consolidated to months). Jun partial through W26. Jul–Dec: Payables 2026 = COS-only from AP sheet; GAE/Tax/Loan/Other from CF rows 58–62; GG Outflow from CF row 64. H2 inflows from AM BD Universe Collections CSV."
+      h('strong',null,"₱(33M) by December"),
+      " — Jan–Jun actuals from CF for Mancom (weeks consolidated to months). Jun complete through W26. Jul–Dec: Payables 2026 = COS-only from AP sheet; GAE/Tax/Loan/Other from CF rows 58–62; GG Outflow from CF row 64. H2 inflows from AM BD Universe Collections CSV."
     )
   );
 }
@@ -1240,7 +1210,7 @@ function ArrearsTab() {
   return h('div',null,
     h('div',{style:{fontSize:16,fontWeight:500,marginBottom:2}},"Cost of Sales Payables"),
     h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:14}},
-      "Source: PH Cash Flow Monitoring W24 · AP tab · Cost of Sales rows only · All figures in ₱"
+      "Source: PH Cash Flow Monitoring W27 · AP tab · Cost of Sales rows only · All figures in ₱"
     ),
     h('table',{style:{borderCollapse:"collapse",fontSize:12,width:"100%",maxWidth:620}},
       h('thead',null,
