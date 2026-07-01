@@ -240,7 +240,7 @@ var FY_BEG_INIT = [12652564,4697131,3367012,3925661,2108492,599016,-3607826,-861
 var FY_NET_INIT = [4697131,3367012,3925661,2108492,599016,5360401,-8610434,-13374606,-20419578,-15816036,-26926978,-36365967];
 
 // Inflow: Jan–Jun from CF rows 53/54; Jul–Dec from AM BD Universe Collections CSV
-var FY_PDEI_IN_INIT = [16323424,9067184,13219958,29063859,13433202,11449192,21267245,24004977,8486333,0,0,1056485];
+var FY_PDEI_IN_INIT = [16323424,9067184,13219958,29063859,13433202,11449192,21267245,924070,8486333,0,0,1056485];
 var FY_GG_IN_INIT   = [20799694,3302846,23568842,2001826,1950465,7942859,0,0,0,0,0,2283610];
 
 // Inflow breakdowns for projection months (Jul–Dec) — from AM BD Universe CSV
@@ -422,3 +422,60 @@ var _AP_BD25  = [null,null,null,null,null,null,null,null,null,null,null,null];
     _AP_PAY25[i] = _AP_PAY25[i]>0 ? -_AP_PAY25[i] : 0;
   }
 })();
+
+// ── WEEKLY TABLE LIQUIDITY ────────────────────────────────────────────────────
+// COS outflows per period (actuals: Andon Board filed+unfiled; projections: CF PDEI_OUT)
+// Indices 0-8 = actual periods (W1-W5 through W26); 9-34 = W27-W52 projections.
+var COS_LIQ = {
+  totals: [29112421,7977406,13025942,28240666,15018159,1647960,1000000,1489792,3662732,8996110,9931087,9602836,10611488,6768716,5641837,7144042,8419460,6202232,7071315,1700000,3062700,855586,1990000,952620,3549999,800000,2505586,392620,3762700,1000000,2505586,3892620,3762700,1000000,2505586],
+  bd: [
+    [{"l":"MPL PH S15 – Lights/Sounds Truss Rental","a":4389000,"t":"filed"},{"l":"GTCC Summer Showdown – Technical Svcs","a":1456000,"t":"filed"},{"l":"KIC Rebroadcast – Booth Rental/Fabrication","a":135520,"t":"filed"},{"l":"realme Cup – LED Rental/Logistics","a":127680,"t":"filed"}],
+    [{"l":"SM Cyberzone TCG – Stage/Booth Fabrication","a":400000,"t":"filed"},{"l":"KIC 2025 GS&K – GO Wifi Business OTC","a":352240,"t":"filed"},{"l":"PKL Spring – Booth & Players Area Rental","a":220000,"t":"filed"},{"l":"SM Cyberzone TCG – Tech Svcs","a":200000,"t":"filed"}],
+    [{"l":"KIC 2025 GS&K – Outsourced Tech Svcs","a":7350000,"t":"filed"},{"l":"KIC 2025 Playoffs – Asset Rental/Svcs","a":5400967,"t":"filed"},{"l":"MPL PH S17 – Outsourced Tech Svcs","a":5163200,"t":"filed"},{"l":"KIC 2025 Playoffs – Outsourced Tech Svcs","a":4900000,"t":"filed"}],
+    [{"l":"PUBG Mobile 8th Anniv – Venue Rental Ayala","a":252000,"t":"filed"},{"l":"PUBG Mobile 8th Anniv – Venue Rental Veranda","a":50400,"t":"filed"},{"l":"Sportsplus MPBL – Basketball Arcade Machine","a":40000,"t":"filed"},{"l":"PKL Spring – Logistics Associates","a":17000,"t":"filed"}],
+    [{"l":"Sportsplus MPBL FZ – Lights & Audio Rental","a":87500,"t":"filed"},{"l":"PKL Spring – Outsourced Manpower","a":73366,"t":"filed"},{"l":"PKL Spring – Photography & Videography","a":62000,"t":"filed"},{"l":"Sportsplus MPBL – Tote Bag Materials","a":60000,"t":"filed"}],
+    [{"l":"BingoPlus Music Fest – Agency Fee","a":324613,"t":"filed"},{"l":"MPL PH S17 – Direct Internet 500Mbps","a":280000,"t":"filed"},{"l":"MPL PH S17 – Show Director","a":77800,"t":"filed"},{"l":"Sportsplus MPBL FZ – Lights & Audio","a":52500,"t":"filed"},{"l":"MPL PH S17 (unfiled balance ÷6 wks)","a":3543638,"t":"unfiled"},{"l":"PKL Spring – unfiled balance (ended W13)","a":3432208,"t":"unfiled"},{"l":"PUBG 8th Anniv – unfiled balance (ended W13)","a":1716975,"t":"unfiled"},{"l":"SM Cyberzone TCG – unfiled balance (ends W16)","a":1118126,"t":"unfiled"},{"l":"Sportsplus MPBL Fan Zone – unfiled (ended W15)","a":863892,"t":"unfiled"},{"l":"Jobstreet LU v2 – unfiled balance (ended W14)","a":557006,"t":"unfiled"}],
+    [{"l":"PKL Spring – Photography & Videography","a":62000,"t":"filed"},{"l":"MPL PH S17 – API Engineer","a":33400,"t":"filed"},{"l":"PKL Spring – Outsourced Manpower","a":30350,"t":"filed"},{"l":"MPL PH S17 – Show Producer","a":30000,"t":"filed"},{"l":"MPL PH S17 (unfiled balance ÷6 wks)","a":3543638,"t":"unfiled"},{"l":"Sportsplus MBPL Roadtrip – unfiled ÷5 wks","a":407598,"t":"unfiled"}],
+    [{"l":"PKL Spring – Photography & Videography","a":62000,"t":"filed"},{"l":"PKL Addendum – Talent/Caster","a":36533,"t":"filed"},{"l":"Sportsplus MPBL FZ – Lights & Audio","a":35000,"t":"filed"},{"l":"PKL Addendum – Talent/Caster OSX","a":29166,"t":"filed"},{"l":"MPL PH S17 (unfiled balance ÷6 wks)","a":3543638,"t":"unfiled"},{"l":"Sportsplus MPBL Roadtrip – unfiled ÷5 wks","a":407598,"t":"unfiled"}],
+    null,
+    // W27-W52 projections — no Andon Board breakdown
+    null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+  ]
+};
+
+// Non-COS projection outflows (GAE, Tax, CAPEX, Loan, Other) — one entry per CF.proj week (W27-W52)
+var NON_COS_PROJ = [
+  {gae:756000,tax:0,capex:0,loan:7980240,other:60000,cos:1444743},      // W27
+  {gae:1041737,tax:0,capex:0,loan:0,other:60000,cos:5026349},           // W28
+  {gae:3369422,tax:1487299,capex:0,loan:0,other:0,cos:4674437},         // W29
+  {gae:0,tax:800000,capex:0,loan:0,other:0,cos:9811488},                // W30
+  {gae:1650000,tax:0,capex:0,loan:0,other:855586,cos:4263130},          // W31
+  {gae:1252249,tax:0,capex:0,loan:52620,other:0,cos:4328814},           // W32
+  {gae:2650000,tax:800000,capex:0,loan:0,other:0,cos:3694042},          // W33
+  {gae:312700,tax:1000000,capex:0,loan:0,other:0,cos:6762028},          // W34
+  {gae:1650000,tax:0,capex:0,loan:0,other:855586,cos:3696646},          // W35
+  {gae:340000,tax:0,capex:0,loan:52620,other:0,cos:6678694},            // W36
+  {gae:900000,tax:800000,capex:0,loan:0,other:0,cos:0},                 // W37
+  {gae:2062700,tax:1000000,capex:0,loan:0,other:0,cos:0},               // W38
+  {gae:0,tax:0,capex:0,loan:0,other:855586,cos:0},                      // W39
+  {gae:1990000,tax:0,capex:0,loan:0,other:0,cos:0},                     // W40
+  {gae:900000,tax:0,capex:0,loan:52620,other:0,cos:0},                  // W41
+  {gae:2062700,tax:1487299,capex:0,loan:0,other:0,cos:0},               // W42
+  {gae:0,tax:800000,capex:0,loan:0,other:0,cos:0},                      // W43
+  {gae:1650000,tax:0,capex:0,loan:0,other:855586,cos:0},                // W44
+  {gae:340000,tax:0,capex:0,loan:52620,other:0,cos:0},                  // W45
+  {gae:2962700,tax:800000,capex:0,loan:0,other:0,cos:0},                // W46
+  {gae:0,tax:1000000,capex:0,loan:0,other:0,cos:0},                     // W47
+  {gae:1650000,tax:0,capex:0,loan:0,other:855586,cos:0},                // W48
+  {gae:3840000,tax:0,capex:0,loan:52620,other:0,cos:0},                 // W49
+  {gae:2962700,tax:800000,capex:0,loan:0,other:0,cos:0},                // W50
+  {gae:0,tax:1000000,capex:0,loan:0,other:0,cos:0},                     // W51
+  {gae:1650000,tax:0,capex:0,loan:0,other:855586,cos:0},                // W52
+];
+
+// ── WEEKLY TABLE COMBINED — PROJECTION ARRAYS ─────────────────────────────────
+// One entry per CF.proj week (W27-W52). Rebuilt from CF for Mancom every week.
+var WT_PDEI_IN_PROJ  = [9222080,11963719,0,81446,1389648,0,19420985,0,3194344,7631025,0,0,855308,0,0,0,0,0,0,0,0,0,0,0,0,1056485];
+var WT_GG_IN_PROJ    = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2283610];
+var WT_PDEI_OUT_PROJ = [8996110,9931087,9602836,10611488,6768716,5641837,7144042,8419460,6202232,7071315,1700000,3062700,855586,1990000,952620,3549999,800000,2505586,392620,3762700,1000000,2505586,3892620,3762700,1000000,2505586];
+var WT_GG_OUT_PROJ   = [200000,342861,200000,210384,400000,400000,223682,200000,210384,200000,423682,200000,210384,200000,342861,100000,100000,310384,300000,123682,100000,110384,100000,323682,0,142861];
