@@ -62,12 +62,12 @@ function Cover() {
 
 function Overview() {
   var kpis = [
-    {label:"Cash position (W26 close)",val:fmt(5360401,true),sub:"Jun 26 close",col:"#1a7a4a"},
+    {label:"Cash position (W27 close)",val:fmt(935905,true),sub:"Jul 3 close",col:"#1a7a4a"},
     {label:"This week collections due",val:fmt(thisWeekTotal,true),sub:thisWeekAR.length+" invoices",col:"#1a7a4a"},
     {label:"Total AR open",val:fmt(totalOpen,true),sub:AR_OPEN.length+" invoices",col:"#1a5fa8"},
     {label:"High priority AR",val:fmt(totalHigh,true),sub:highPriority.length+" accounts",col:"#c85000"},
     {label:"Collected YTD",val:fmt(totalCollected,true),sub:COLLECTED.length+" invoices",col:"#1a7a4a"},
-    {label:"Projected W52 close",val:fmt(-57843607,true),sub:"Dec 25 year-end",col:"#c00"},
+    {label:"Projected W52 close",val:fmt(-48993184,true),sub:"Dec 25 year-end",col:"#c00"},
   ];
   return h('div',null,
     h('div',{style:{fontSize:16,fontWeight:500,marginBottom:4}},"Overview"),
@@ -84,11 +84,11 @@ function Overview() {
     h('div',{style:{background:"#fff8f0",border:"0.5px solid #f5c69a",borderRadius:8,padding:"12px 16px"}},
       h('div',{style:{fontSize:12,fontWeight:500,color:"#a04000",marginBottom:6}},"⚠ Key Actions This Week"),
       h('div',{style:{fontSize:12,color:"#6b3000",lineHeight:1.9}},
-        "· ",h('strong',null,"MOONTON MPL S17 FP (₱8.25M)")," — Target W27 (today); confirm receipt & filing",h('br'),
-        "· ",h('strong',null,"Gamezone Xtreme GTCC (₱9.22M)")," — W27 collection; cross-check bank deposit",h('br'),
-        "· ",h('strong',null,"INFINITECH SportsPlus MPBL FP (₱772K)")," — W28 (Jul 7); invoice follow-up",h('br'),
+        "· ",h('strong',null,"MOONTON MPL S17 FP (₱9.53M)")," — did not collect in W27; now scheduled W28, confirm receipt",h('br'),
+        "· ",h('strong',null,"Gamezone Xtreme GTCC (₱9.22M)")," — did not collect in W27; now scheduled W28, cross-check bank deposit",h('br'),
+        "· ",h('strong',null,"INFINITECH SportsPlus MPBL Roadtrip (₱757K)")," — AR reschedule now shows W39 (Sep 25), far later than prior estimate; follow up",h('br'),
         "· ",h('strong',null,"SMDC Heroes Clash (₱590K)")," — 3 invoices, 5+ months overdue; escalate",h('br'),
-        "· ",h('strong',null,"Jul loan repayments (₱11.06M)")," — W27+W28 due; ensure bank coverage"
+        "· ",h('strong',null,"W28 loan repayment (₱10.75M)")," — due this week; ensure bank coverage"
       )
     )
   );
@@ -99,7 +99,7 @@ function Overview() {
 function CashPosition() {
   return h('div',null,
     h('div',{style:{fontSize:16,fontWeight:500,marginBottom:4}},"Cash Position"),
-    h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:18}},"Actual W1–W26 · Projection W27–W52"),
+    h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:18}},"Actual W1–W27 · Projection W28–W52"),
     h('div',{style:{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:8,marginBottom:20}},
       CF.weeks.map(function(w,i){
         var net=CF.net[i];
@@ -125,7 +125,7 @@ function CashPosition() {
       })
     ),
     h('div',{style:{background:"#fff8f0",border:"0.5px solid #f5c69a",borderRadius:8,padding:"10px 14px",marginTop:14,fontSize:12,color:"#7a3800"}},
-      "W26 actual: ₱5.36M close. PDEI ₱4.68M + GG ₱3.78M in; ₱3.77M out. W27 projection: Gamezone Xtreme ₱9.22M collection — net ₱25K gain. Jul: ₱11.06M loan repayment total. Year-end (W52) projects at ₱(57.8M). Key risk: Jul–Aug loan repayments (₱11.06M) and H2 AP obligations with limited collection visibility."
+      "Jun (W23–W27) actual: ₱935.9K close. PDEI ₱11.50M + GG ₱7.94M in; ₱18.61M out. W28 projection: Moonton MPL S17 FP + Gamezone Xtreme GTCC collections (₱18.75M combined) expected — net +₱4.44M to ₱5.38M close. Jul: ₱10.75M loan repayment (W28). Year-end (W52) projects at ₱(49.0M). Key risk: W28 loan repayment (₱10.75M) and H2 AP obligations with limited collection visibility."
     )
   );
 }
@@ -649,8 +649,8 @@ function WeeklyTableCombined() {
         h('div',{style:{fontSize:16,fontWeight:500}},"Weekly Cash Flow Table"),
         h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginTop:2}},
           showLiq
-            ?"Actuals W1–W26 · COS = Filed Andon POs + Unfiled PA estimates · GAE/Tax/etc from CF for Mancom"
-            :"Actuals W1–W26 · Projections W27–W52 · All figures in ₱"
+            ?"Actuals W1–W27 · COS = Filed Andon POs + Unfiled PA estimates · GAE/Tax/etc from CF for Mancom"
+            :"Actuals W1–W27 · Projections W28–W52 · All figures in ₱"
         )
       ),
       h('div',{style:{marginLeft:"auto",display:"flex",gap:4,alignItems:"center",paddingTop:2}},
@@ -769,7 +769,7 @@ function ARSummary() {
     {label:"For payment follow-up",val:fmt(AR_OPEN.filter(function(r){return r.status==="For Payment Follow-Up";}).reduce(function(s,r){return s+r.amount;},0),true),sub:"Awaiting client payment",col:"#c85000"},
     {label:"For invoicing",val:fmt(AR_OPEN.filter(function(r){return r.status==="For Invoicing";}).reduce(function(s,r){return s+r.amount;},0),true),sub:"Invoice not yet raised",col:"#1a7a4a"},
     {label:"Collected YTD",val:fmt(totalCollected,true),sub:COLLECTED.length+" invoices closed",col:"#1a7a4a"},
-    {label:"Due this week (W27)",val:fmt(thisWeekTotal,true),sub:thisWeekAR.length+" items",col:"#7a0000"},
+    {label:"Due this week (W28)",val:fmt(thisWeekTotal,true),sub:thisWeekAR.length+" items",col:"#7a0000"},
   ];
 
   return h('div',null,
@@ -985,7 +985,7 @@ function FullYear(props) {
       h('span',{style:{color:"var(--color-text-secondary)"}},"Actual (Jan–May)")),
     h('div',{style:{display:"flex",alignItems:"center",gap:4}},
       h('div',{style:{width:10,height:10,background:"#f0f8ff",border:"1px solid #9ad"}}),
-      h('span',{style:{color:"var(--color-text-secondary)"}},"Jun (actual, through Jun 26)")),
+      h('span',{style:{color:"var(--color-text-secondary)"}},"Jun (actual, through W27 / Jul 3)")),
     h('div',{style:{display:"flex",alignItems:"center",gap:4}},
       h('div',{style:{width:10,height:10,background:"#fdfbf0",border:"1px solid #ccc"}}),
       h('span',{style:{color:"var(--color-text-secondary)"}},"Projection (Jul–Dec, AP-based)")),
@@ -1012,7 +1012,7 @@ function FullYear(props) {
       }, inclHist ? "Hiding prior-year payables: OFF" : "Hiding prior-year payables: ON")
     ),
     h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:6}},
-      "Jan–Dec 2026 · All figures in ₱ · Jan–May = CF for Mancom (weeks → months) · Jun = Actual (through Jun 26) · Jul–Dec = AP payment schedule"
+      "Jan–Dec 2026 · All figures in ₱ · Jan–May = CF for Mancom (weeks → months) · Jun = Actual (through W27 / Jul 3) · Jul–Dec = AP payment schedule"
       +(inclHist ? "" : " · Prior-year payables (2024/2025) excluded from projection")
     ),
     legend,
@@ -1141,8 +1141,8 @@ function FullYear(props) {
     })(),
     h('div',{style:{background:"#fff8f0",border:"0.5px solid #f5c69a",borderRadius:8,padding:"10px 14px",marginTop:14,fontSize:12,color:"#7a3800"}},
       "⚠ Projected closing deteriorates to ",
-      h('strong',null,"₱(33M) by December"),
-      " — Jan–Jun actuals from CF for Mancom (weeks consolidated to months). Jun complete through W26. Jul–Dec: Payables 2026 = COS-only from AP sheet; GAE/Tax/Loan/Other from CF rows 58–62; GG Outflow from CF row 64. H2 inflows from AM BD Universe Collections CSV."
+      h('strong',null,"₱(28.0M) by December"),
+      " — Jan–Jun actuals from CF for Mancom (weeks consolidated to months). Jun complete through W27 (Jul 3). Jul–Dec: Payables 2026 = COS-only from AP sheet; GAE/Tax/Loan/Other from CF rows 58–62; GG Outflow from CF row 64. H2 inflows from AM BD Universe Collections CSV."
     )
   );
 }
@@ -1155,7 +1155,7 @@ function ArrearsTab() {
   return h('div',null,
     h('div',{style:{fontSize:16,fontWeight:500,marginBottom:2}},"Cost of Sales Payables"),
     h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:14}},
-      "Source: PH Cash Flow Monitoring W27 · AP tab · Cost of Sales rows only · All figures in ₱"
+      "Source: PH Cash Flow Monitoring W28 · AP tab · Cost of Sales rows only · All figures in ₱"
     ),
     h('table',{style:{borderCollapse:"collapse",fontSize:12,width:"100%",maxWidth:620}},
       h('thead',null,

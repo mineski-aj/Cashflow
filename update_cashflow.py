@@ -454,25 +454,40 @@ for month, cols in month_weeks_ap.items():
 
 print("[INFO] Building Full Year arrays...", file=sys.stderr)
 
-# Fixed month-col mapping for CF (0-based, col 2 = first data col)
-# Jan=col2 Feb=col3 Mar=col4 Apr=cols5-7 May=cols8-13 Jun=cols14-16
-cf_month_cols = {
-    'jan': [2], 'feb': [3], 'mar': [4],
-    'apr': [5,6,7], 'may': [8,9,10,11,12,13], 'jun': [14,15,16]
-}
+# Dynamic month-col mapping for CF, built from row-48 labels (not fixed indices).
+# The sheet consolidates weeks into a single column per month as months complete
+# (e.g. "W1-W5 (Jan)"), but a still-in-progress month may still be split into several
+# weekly sub-columns (e.g. "W14 Apr 3", "W15 Apr 10", ...) — match on month name so
+# both layouts work regardless of how many sub-columns belong to a given month.
+_MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun']
+cf_month_cols = {m.lower(): [] for m in _MONTH_NAMES}
+for c in act_cols:
+    label = get_cf_label(c)
+    for m in _MONTH_NAMES:
+        if m in label:
+            cf_month_cols[m.lower()].append(c)
+            break
+for m in _MONTH_NAMES:
+    if not cf_month_cols[m.lower()]:
+        print(f"[WARN] No act_col matched month {m} — FY arrays for this month will be wrong", file=sys.stderr)
 
 def month_sum(row_idx, cols):
     return round(sum(cfv(row_idx, c) for c in cols), 0)
 
-# Beginning = CF row 49 at first week of month (not sum)
-beg_jan = safe_int(cfv(49, 2));  beg_feb = safe_int(cfv(49, 3))
-beg_mar = safe_int(cfv(49, 4));  beg_apr = safe_int(cfv(49, 5))
-beg_may = safe_int(cfv(49, 8));  beg_jun = safe_int(cfv(49, 14))
+# Beginning = CF row 49 at first column of month (not sum); Closing = CF row 67 at last column
+beg_jan   = safe_int(cfv(49, cf_month_cols['jan'][0]))
+beg_feb   = safe_int(cfv(49, cf_month_cols['feb'][0]))
+beg_mar   = safe_int(cfv(49, cf_month_cols['mar'][0]))
+beg_apr   = safe_int(cfv(49, cf_month_cols['apr'][0]))
+beg_may   = safe_int(cfv(49, cf_month_cols['may'][0]))
+beg_jun   = safe_int(cfv(49, cf_month_cols['jun'][0]))
 
-# Closing = CF row 67 at last week of month
-close_jan = safe_int(cfv(67, 2));  close_feb = safe_int(cfv(67, 3))
-close_mar = safe_int(cfv(67, 4));  close_apr = safe_int(cfv(67, 7))
-close_may = safe_int(cfv(67, 13)); close_jun = safe_int(cfv(67, 16))
+close_jan = safe_int(cfv(67, cf_month_cols['jan'][-1]))
+close_feb = safe_int(cfv(67, cf_month_cols['feb'][-1]))
+close_mar = safe_int(cfv(67, cf_month_cols['mar'][-1]))
+close_apr = safe_int(cfv(67, cf_month_cols['apr'][-1]))
+close_may = safe_int(cfv(67, cf_month_cols['may'][-1]))
+close_jun = safe_int(cfv(67, cf_month_cols['jun'][-1]))
 
 fy_pdei_in_act = [
     safe_int(month_sum(53, cf_month_cols['jan'])),
@@ -758,8 +773,8 @@ for i, nc in enumerate(non_cos_proj):
     label_str = str(label_row.iloc[proj_cols[i]]).strip()
     w_nums = re.findall(r'W(\d+)', label_str)
     w_tag  = f'W{w_nums[0]}' if w_nums else f'i{i}'
-    nc_parts.append(f'  {{gae:{nc["gae"]},tax:{nc["tax"]},capex:{nc["capex"]},loan:{nc["loan"]},other:{nc["other"]},cos:{nc["cos"]}}}  // {w_tag}')
-print(",\n".join(nc_parts))
+    nc_parts.append(f'  {{gae:{nc["gae"]},tax:{nc["tax"]},capex:{nc["capex"]},loan:{nc["loan"]},other:{nc["other"]},cos:{nc["cos"]}}},  // {w_tag}')
+print("\n".join(nc_parts))
 print('];')
 print()
 
