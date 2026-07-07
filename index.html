@@ -867,8 +867,9 @@ function FullYear(props) {
   var FY_PAY24_BD = _AP_BD24;
   var FY_PAY25_BD = _AP_BD25;
 
-  // Apply forecast projects onto projection months
-  var fcstProjects = (props && props.projects) || FORECAST_PROJECTS;
+  // Apply forecast projects onto projection months (skipped entirely when the toggle is off)
+  var forecastEnabled = !(props && props.forecastEnabled===false);
+  var fcstProjects = forecastEnabled ? ((props && props.projects) || FORECAST_PROJECTS) : [];
   fcstProjects.forEach(function(p){
     var cos_rate = 1 - p.gp;
     [p.dp, p.fp].forEach(function(pmt){
@@ -998,22 +999,26 @@ function FullYear(props) {
   );
 
   return h('div',null,
-    h('div',{style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}},
+    h('div',{style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4,flexWrap:"wrap",gap:8}},
       h('div',{style:{fontSize:16,fontWeight:500}},"Full Year Cash Flow"),
-      h('button',{
-        onClick:function(){ setInclHist(function(v){return !v;}); },
-        style:{
-          background: inclHist ? "#fff4ee" : "#eef4ff",
-          color:      inclHist ? "#c85000" : "#1a5fa8",
-          border:    "1.5px solid "+(inclHist?"#e8a070":"#90b0e8"),
-          borderRadius:6, padding:"4px 12px", fontSize:11, fontWeight:500,
-          cursor:"pointer", whiteSpace:"nowrap"
-        }
-      }, inclHist ? "Hiding prior-year payables: OFF" : "Hiding prior-year payables: ON")
+      h('div',{style:{display:"flex",gap:8,alignItems:"center"}},
+        !forecastEnabled && h('span',{style:{fontSize:11,fontWeight:500,color:"#856404",background:"#fff3cd",border:"1.5px solid #e8d090",borderRadius:6,padding:"4px 10px",whiteSpace:"nowrap"}},"2026 Forecast excluded — toggle it on the Forecast tab"),
+        h('button',{
+          onClick:function(){ setInclHist(function(v){return !v;}); },
+          style:{
+            background: inclHist ? "#fff4ee" : "#eef4ff",
+            color:      inclHist ? "#c85000" : "#1a5fa8",
+            border:    "1.5px solid "+(inclHist?"#e8a070":"#90b0e8"),
+            borderRadius:6, padding:"4px 12px", fontSize:11, fontWeight:500,
+            cursor:"pointer", whiteSpace:"nowrap"
+          }
+        }, inclHist ? "Hiding prior-year payables: OFF" : "Hiding prior-year payables: ON")
+      )
     ),
     h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:6}},
       "Jan–Dec 2026 · All figures in ₱ · Jan–May = CF for Mancom (weeks → months) · Jun = Actual (through W27 / Jul 3) · Jul–Dec = AP payment schedule"
       +(inclHist ? "" : " · Prior-year payables (2024/2025) excluded from projection")
+      +(forecastEnabled ? "" : " · 2026 Forecast deals excluded from projection")
     ),
     legend,
     h('div',{style:{overflowX:"auto"}},
@@ -1318,6 +1323,8 @@ function APPayables() {
 function ForecastTab(props) {
   var projects   = (props && props.projects) || [];
   var onRefresh  = (props && props.onRefresh) || function(){};
+  var forecastEnabled  = !(props && props.forecastEnabled===false);
+  var onToggleForecast = (props && props.onToggleForecast) || function(){};
 
   var MONTH_LABELS   = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   var PROJ_MONTHS    = [6,7,8,9,10,11];
@@ -1429,13 +1436,37 @@ function ForecastTab(props) {
 
   return h('div',null,
     // Header row
-    h('div',{style:{display:'flex',alignItems:'center',gap:12,marginBottom:4}},
+    h('div',{style:{display:'flex',alignItems:'center',gap:12,marginBottom:4,flexWrap:'wrap'}},
       h('div',{style:{fontSize:16,fontWeight:500,flex:1}},"2026 Revenue Forecast"),
+      h('button',{
+        onClick:onToggleForecast,
+        title:forecastEnabled?'Exclude these deals from the Full Year projection':'Include these deals in the Full Year projection',
+        style:{
+          display:'flex',alignItems:'center',gap:7,
+          background: forecastEnabled ? '#eefff4' : '#f2f2f2',
+          color:      forecastEnabled ? '#1a7a4a' : 'var(--color-text-secondary)',
+          border:    '1.5px solid '+(forecastEnabled?'#8ad4ac':'#ccc'),
+          borderRadius:20, padding:'5px 12px 5px 6px', fontSize:12, fontWeight:500,
+          cursor:'pointer', fontFamily:'inherit', whiteSpace:'nowrap'
+        }
+      },
+        h('span',{style:{
+          display:'inline-block',width:28,height:16,borderRadius:8,position:'relative',
+          background: forecastEnabled ? '#1a7a4a' : '#bbb',transition:'background 0.15s'
+        }},
+          h('span',{style:{
+            position:'absolute',top:2,left:forecastEnabled?14:2,width:12,height:12,borderRadius:'50%',
+            background:'#fff',transition:'left 0.15s'
+          }})
+        ),
+        forecastEnabled ? "Included in Full Year" : "Excluded from Full Year"
+      ),
       h('button',{onClick:openAdd,style:{background:'#0a3a7a',color:'#fff',border:'none',borderRadius:6,padding:'6px 14px',fontSize:12,cursor:'pointer',fontWeight:500,fontFamily:'inherit'}},
         "+ Add Project")
     ),
     h('div',{style:{fontSize:12,color:'var(--color-text-secondary)',marginBottom:14}},
       "DP and FP amounts feed directly into Full Year inflow and COS by month."
+      +(forecastEnabled ? "" : " · Currently excluded — Full Year is showing CF + AP only.")
     ),
 
     // Summary chips
@@ -1626,6 +1657,19 @@ function App() {
   var _s  = useState(0);    var slide=_s[0],setSlide=_s[1];
   var _p  = useState([]);   var projects=_p[0],setProjects=_p[1];
   var _rk = useState(0);    var refreshKey=_rk[0],setRefreshKey=_rk[1];
+  var _fe = useState(function(){
+    try { var v = localStorage.getItem('mineski_forecast_enabled'); return v===null ? true : v==='1'; }
+    catch(e){ return true; }
+  });
+  var forecastEnabled=_fe[0], setForecastEnabled=_fe[1];
+
+  function toggleForecast(){
+    setForecastEnabled(function(v){
+      var next = !v;
+      try { localStorage.setItem('mineski_forecast_enabled', next?'1':'0'); } catch(e){}
+      return next;
+    });
+  }
 
   var ML = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
@@ -1664,7 +1708,7 @@ function App() {
         h('button',{onClick:function(){nav(1);},disabled:slide===SLIDES.length-1,style:{background:"none",border:"0.5px solid var(--color-border-tertiary)",borderRadius:6,padding:"4px 10px",fontSize:12,cursor:"pointer",color:"var(--color-text-secondary)"}},"→")
       )
     ),
-    h(SlideComp,{projects:projects,onRefresh:loadProjects}),
+    h(SlideComp,{projects:projects,onRefresh:loadProjects,forecastEnabled:forecastEnabled,onToggleForecast:toggleForecast}),
     h('div',{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:20,paddingTop:12,borderTop:"0.5px solid var(--color-border-tertiary)"}},
       h('div',{style:{fontSize:11,color:"var(--color-text-tertiary)"}},"Mineski PH · "+WEEK+" · "+DATE),
       h('div',{style:{display:"flex",gap:8}},
