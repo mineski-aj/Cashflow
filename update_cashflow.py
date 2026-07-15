@@ -460,6 +460,7 @@ print("[INFO] Building Full Year arrays...", file=sys.stderr)
 # weekly sub-columns (e.g. "W14 Apr 3", "W15 Apr 10", ...) — match on month name so
 # both layouts work regardless of how many sub-columns belong to a given month.
 _MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun']
+_ALL_MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 cf_month_cols = {m.lower(): [] for m in _MONTH_NAMES}
 for c in act_cols:
     label = get_cf_label(c)
@@ -470,6 +471,28 @@ for c in act_cols:
 for m in _MONTH_NAMES:
     if not cf_month_cols[m.lower()]:
         print(f"[WARN] No act_col matched month {m} — FY arrays for this month will be wrong", file=sys.stderr)
+
+# Bug 7: once act_cols extends past June (i.e. the actual/projection boundary has
+# moved into a later month — "Jul", "Aug", etc.), that month is "mixed": some of its
+# weeks are already actual (in act_cols) and the rest are still projected (in
+# proj_cols). cf_month_cols above only ever looks at Jan-Jun, so any actual data
+# for the mixed month was silently dropped from the Full Year tab. Detect ALL
+# months present in act_cols (not just Jan-Jun) so the mixed month's actual-so-far
+# portion can be folded into its Full Year figures alongside its remaining
+# projected weeks (see fy_*_fut construction below).
+cf_month_cols_all = {m.lower(): [] for m in _ALL_MONTH_NAMES}
+for c in act_cols:
+    label = get_cf_label(c)
+    for m in _ALL_MONTH_NAMES:
+        if m in label:
+            cf_month_cols_all[m.lower()].append(c)
+            break
+_mixed_months = [m for m in _ALL_MONTH_NAMES[6:] if cf_month_cols_all[m.lower()]]
+if len(_mixed_months) > 1:
+    print(f"[WARN] More than one post-June month has actual columns ({_mixed_months}) — "
+          f"Full Year mixed-month logic assumes exactly one; check output carefully", file=sys.stderr)
+elif _mixed_months:
+    print(f"[INFO] Mixed month detected (actual + projected weeks both present): {_mixed_months[0]}", file=sys.stderr)
 
 def month_sum(row_idx, cols):
     return round(sum(cfv(row_idx, c) for c in cols), 0)
@@ -602,6 +625,14 @@ for month in fut_months:
         if w_str in month_weeks_ar[month]:
             p_from_cf += safe_int(pdei_in_proj[i])
             g_from_cf += safe_int(gg_in_proj[i])
+    # Bug 7: if this month also has actual (act_cols) weeks — i.e. it's the mixed
+    # month straddling the actual/projection boundary — fold those in too. Only one
+    # month should ever match here (the same one flagged by _mixed_months above).
+    act_extra_cols = cf_month_cols_all.get(month.lower(), [])
+    if act_extra_cols:
+        p_from_cf += safe_int(month_sum(53, act_extra_cols))
+        g_from_cf += safe_int(month_sum(54, act_extra_cols))
+
     fy_pdei_in_fut.append(p_from_cf)
     fy_gg_in_fut.append(g_from_cf)
 
@@ -615,6 +646,10 @@ def cf_proj_month_sum(row_idx, month):
         if not w_nums: continue
         if f'W{w_nums[0]}' in month_weeks_ar[month]:
             total += safe_int(cfv(row_idx, c))
+    # Bug 7: fold in the mixed month's actual-so-far portion (see fy_pdei_in_fut above) —
+    # cf_month_cols above only covers Jan-Jun, so any actual weeks for a later month
+    # were otherwise silently dropped from the Full Year tab.
+    total += safe_int(month_sum(row_idx, cf_month_cols_all.get(month.lower(), [])))
     return total
 
 fy_gae_fut   = [cf_proj_month_sum(58, m) for m in fut_months]
@@ -623,7 +658,7 @@ fy_capex_fut = [cf_proj_month_sum(60, m) for m in fut_months]
 fy_loan_fut  = [cf_proj_month_sum(61, m) for m in fut_months]
 fy_other_fut = [cf_proj_month_sum(62, m) for m in fut_months]
 fy_gg_out_fut= [cf_proj_month_sum(64, m) for m in fut_months]
-fy_forex_fut = [0]*6
+fy_forex_fut = [safe_int(month_sum(66, cf_month_cols_all.get(m.lower(), []))) for m in fut_months]
 
 # FY_PAY24 and FY_PAY25 remain manual — carried from data (script cannot derive)
 # Output them as zero placeholders with a comment; user pastes from prior week

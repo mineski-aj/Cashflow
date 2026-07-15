@@ -2,7 +2,7 @@
 
  
 
-**Version:** 1.7 | **Last updated:** 2026-06-17
+**Version:** 1.9 | **Last updated:** 2026-07-19
 
  
 
@@ -23,6 +23,10 @@
 - v1.7 (2026-06-17) — Bug 5: hardcoded proj arrays (`pdeiInProj`, `ggInProj`, `pdeiOutProj`, `ggOutProj`, `NON_COS_PROJ`) must mirror CF for Mancom projection cols exactly; never shift a week without rewriting all five from the xlsx.
 
 - v1.6 (2026-05-19) — Three critical bug fixes from W20 update: (1) `WT_*` arrays must always be regenerated from CF for Mancom — never carried forward; (2) `GL_BREAKDOWN` must be freshly re-derived from GL/AR every week — never patched from prior week; (3) GG split filter must check **both** `Company` column AND `Description` field. Array-count validation added to Step 7. AP subtotal-row exclusion rule added.
+
+- v1.9 (2026-07-19) — Bug 7: once `act_cols` extends past June — i.e. the actual/projection boundary moves into a later month (Jul this week, Aug next month, etc.) — that month becomes "mixed" (some weeks actual, some still projected). `update_cashflow.py`'s Full Year builder only ever looked for Jan–Jun in `act_cols`; the mixed month's actual-so-far weeks were silently dropped from `FY_PDEI_IN`, `FY_GG_IN`, `FY_GAE`, `FY_TAX`, `FY_CAPEX`, `FY_LOAN`, `FY_OTHER`, `FY_GG_OUT`, `FY_FOREX`, understating that month by the full actual amount (W28's ₱21.1M PDEI inflow showed as ₱82K). Fixed by detecting the mixed month dynamically and summing its actual (`act_cols`) columns together with its remaining projected (`proj_cols`) columns for those arrays — see Bug 7 section below. `FY_COS_CF`/`FY_AP_TOT` deliberately excluded from this fix (see Bug 7 section for why). Script also gained a `[INFO] Mixed month detected` stderr line.
+
+- v1.8 (2026-07-14) — **Architecture change:** weekly data now lives in a standalone `cashflow_data.js`, loaded by `index.html` (rendering/logic only — should not need weekly edits). `update_cashflow.py` automates Step 2–3 extraction from the xlsx and prints ready-to-paste JS blocks, replacing the old manual Python-string-replacement workflow described in Steps 6–7 below. Bug 6: the script's Full Year Jan–Jun month-column mapping must be detected dynamically from CF row-48 labels (match on month name), never hardcoded column indices — CF for Mancom progressively consolidates completed weeks into a single column per month (the same way Jan–Mar already appear as one column each), so a fixed "Apr = cols 5–7, May = cols 8–13" mapping silently sums the wrong weeks into the wrong month once Apr/May/Jun complete (discovered W28 update — Apr and May actuals were being triple-counted into each other). 2026 Forecast tab: added an Include/Exclude toggle (top of the Forecast tab, persisted in `localStorage`) so forecast deals can be excluded from the Full Year projection without deleting them from Supabase. Forecast deals are stored in Supabase (`forecast_deals` table, read/written live by `index.html` — not part of the weekly xlsx update at all); the free-tier Supabase project auto-pauses after ~1 week of API inactivity — if the Forecast tab looks empty, check the Supabase dashboard for a paused project (query returns `"Project paused"`) before assuming the data was deleted.
 
 
 
@@ -209,6 +213,58 @@ If any check fails, the display will show wrong per-entity numbers even when tot
 
 ---
 
+### Bug 6 — Full Year Jan–Jun month-column mapping must be detected dynamically, never hardcoded
+
+**What went wrong (W28 update):** `update_cashflow.py`'s Full Year section used a fixed column mapping — `'apr': [5,6,7], 'may': [8,9,10,11,12,13], 'jun': [14,15,16]` — based on the CF for Mancom layout at the time it was written, when Apr and May were still split into several weekly sub-columns. By W28, CF for Mancom had consolidated Apr, May, and Jun into single columns each (the same way Jan–Mar already were), shifting cols 5–16 to mean completely different weeks. The old fixed mapping silently summed **May's and June's actuals into April**, and **projection columns (W28 onward) into May** — Full Year showed a ₱54M April PDEI Inflow when the true figure was ₱29M, with no error or warning.
+
+**The rule:** Never hardcode which CF column belongs to which month. Detect it every week from the row-48 labels themselves:
+
+```python
+# Match each act_col's label against the month name it contains — works whether
+# that month is still split into several weekly sub-columns ("W14 Apr 3", "W15
+# Apr 10", ...) or has already collapsed into one ("W14-W18 (Apr)").
+_MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun']
+cf_month_cols = {m.lower(): [] for m in _MONTH_NAMES}
+for c in act_cols:
+    label = get_cf_label(c)
+    for m in _MONTH_NAMES:
+        if m in label:
+            cf_month_cols[m.lower()].append(c)
+            break
+```
+
+Beginning balance = `cfv(49, cf_month_cols[month][0])` (first column of that month); Closing = `cfv(67, cf_month_cols[month][-1])` (last column). `month_sum()` sums whichever columns matched — one column once the month is consolidated, several while it's still mid-progress.
+
+**Verification:** `FY_BEG_INIT[0:6]` must equal `CF.actBeg` and `FY_PDEI_IN_INIT[0:6]` must equal `CF.pdeiIn` exactly (same identity check as the Bug 1 `WT_*` arrays, just applied to the Full Year Jan–Jun actuals). If they don't match, the month-column mapping is wrong.
+
+---
+
+### Bug 7 — Full Year "current mixed month" (the month straddling the actual/projection boundary) silently dropped its actual-so-far data
+
+**What went wrong (W29 update):** Bug 6 only ever searches `act_cols` for `Jan`–`Jun`. That was fine every week through W28, because the actual/projection boundary always sat inside June or earlier. At W29, `act_cols` grew to include column 8, labeled `"W28 (Jul 10)"` — the boundary moved into **July**. Since `"Jul"` isn't in Bug 6's `_MONTH_NAMES` list, that column matched nothing, and W28's actual PDEI Inflow (₱21.1M), GAE, Tax, CAPEX, Loan, Other, GG Outflow, and Forex were all silently excluded from the Full Year Jul column — which instead only showed the *remaining projected* weeks (W29–W30 alone), understating July's true inflow by ~₱21M (₱82K shown instead of ~₱21.2M). This will recur every time the actual/projection boundary crosses into a new month (Aug next, then Sep, …) for the rest of the year, not just this once.
+
+**The rule:** Any month that has **both** actual (`act_cols`) and still-projected (`proj_cols`) weeks is "mixed." Detect it dynamically — don't assume it's always June:
+
+```python
+_ALL_MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+cf_month_cols_all = {m.lower(): [] for m in _ALL_MONTH_NAMES}
+for c in act_cols:
+    label = get_cf_label(c)
+    for m in _ALL_MONTH_NAMES:
+        if m in label:
+            cf_month_cols_all[m.lower()].append(c)
+            break
+# Whichever post-June month name has a non-empty entry here is the mixed month.
+```
+
+For that mixed month, fold its actual columns (`cf_month_cols_all[month]`) into the same fut-month totals used for projections (`fy_pdei_in_fut`, `fy_gg_in_fut`, `fy_gae_fut`, `fy_tax_fut`, `fy_capex_fut`, `fy_loan_fut`, `fy_other_fut`, `fy_gg_out_fut`, `fy_forex_fut`) — i.e. sum **both** the actual weeks and the remaining projected weeks of that month into one figure, rather than picking only one side.
+
+**Deliberately NOT touched:** `FY_COS_CF` and `FY_AP_TOT` (Cost of Sales) stay exactly as before — hardcoded `0` for Jul–Dec, driven entirely by `AP_PAYABLES`'s hand-curated `dueMonth` field. This is pre-existing, intentional design (Jan–Jun COS comes from CF; Jul–Dec COS comes from AP_PAYABLES, full stop, regardless of whether some of those weeks have since become actual). Also folding the mixed month's actual CF-row-57 COS into `FY_COS_CF` would double-count against whatever `AP_PAYABLES` already assumes for that month — nobody has verified whether `AP_PAYABLES`'s `dueMonth` entries were curated as "all of the month" or "the remainder after actuals," so don't touch it without asking the user first.
+
+**Verification:** Manually compute `act+proj` sums for the mixed month's PDEI Inflow (CF rows 53/54) and Beginning/Closing (CF rows 49/67, using the *last projected column still in that month* — e.g. `CF.projNet` at the month's last remaining proj week — as a sanity-check closing figure) and compare against the script's `FY_PDEI_IN_INIT`/`FY_GG_IN_INIT` output for that index. The script also prints `[INFO] Mixed month detected: <Month>` — if that line is missing when a new week has just crossed into a new month, the detection didn't fire and the month needs manual fixing.
+
+---
+
 ### Bug 4 — AP sheet subtotal rows must be excluded from H2 totals
 
  
@@ -269,7 +325,11 @@ Named vendor rows (col 0 has a name) and budget-estimate rows (col 0 blank but c
 
 | `PH_Cash_Flow_Monitoring___W##.xlsx` | CF for Mancom (WT source of truth), GL (breakdown only), AR (cross-check + H2 inflow detection), AP (FY Jul–Dec outflow + arrears obligations) |
 
-| `Mineski_Cashflow_Weekly.html` | Current HTML to update |
+| `index.html` | Rendering/logic only — React components (`h()`/`createElement`, no JSX). Should not need edits for a routine weekly update except the small manual items in Step 6 (KPIs, Key Actions, narrative text). |
+
+| `cashflow_data.js` | **All weekly data lives here.** `WEEK`/`DATE`, `CF`, `WT_*`, `GL_BREAKDOWN`, `COS_LIQ`, `NON_COS_PROJ`, all `FY_*` arrays, `AR_OPEN`/`COLLECTED`, `AP_PAYABLES`/`AP_COS_VENDORS`. Loaded by `index.html` via `<script src="cashflow_data.js">`. |
+
+| `update_cashflow.py` | Automates Step 2–3 extraction from the xlsx (`python3 update_cashflow.py "PH Cash Flow Monitoring - W##.xlsx"`). Prints ready-to-paste `var NAME = ...;` blocks for every mechanically-derivable variable in `cashflow_data.js` (see "Running the automation script" below). Does **not** touch `AR_OPEN`, `COLLECTED`, `AP_PAYABLES`, `AP_COS_VENDORS`, or `FORECAST_PROJECTS` — those stay hand-curated. |
 
 | `MINESKI_PH_-_Andon_Board_Procurement_Order_PH_for_Claude.xlsx` | Filed POs with payment schedules |
 
@@ -277,7 +337,7 @@ Named vendor rows (col 0 has a name) and budget-estimate rows (col 0 blank but c
 
  
 
-Andon Board files: re-read only when updating the Liquidity tab. FY Patch Mode: HTML only, no xlsx needed.
+Andon Board files: re-read only when updating the Liquidity tab. FY Patch Mode: `cashflow_data.js` only, no xlsx needed.
 
  
 
@@ -290,6 +350,18 @@ Andon Board files: re-read only when updating the Liquidity tab. FY Patch Mode: 
 > <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 
 > ```
+
+### Running the automation script
+
+```bash
+python3 update_cashflow.py "PH Cash Flow Monitoring  - W##.xlsx" > /tmp/w##_output.js
+```
+
+Stderr prints `[INFO]`/`[WARN]`/`[OK]` progress and the Bug 1/2/5/6 validation checks; stdout is the JS to paste in. The script prints one `var NAME = ...;` block per variable — splice each block into `cashflow_data.js` by replacing the old `var NAME = ...;` declaration wholesale (matching balanced brackets, since these are multi-line array/object literals — a plain string search-and-replace on a truncated snippet will corrupt the file). Do not hand-transcribe values from the script output; copy the generated blocks verbatim.
+
+`COS_LIQ.bd` (the Andon-board filed/unfiled breakdown) is **not** regenerated by the script — it's hand-curated from the Andon Board files. When two or more of the script's newly-consolidated actual columns used to be separate columns with existing `bd` entries, merge those entries into the one new column (concatenate the item lists) rather than discarding them.
+
+Known script gotcha (fixed in the current version, but check if you find an older copy): the `NON_COS_PROJ` printer must place the trailing comma *before* the `// W##` comment, not after — a comma placed after `//` lands inside the comment and silently produces a JS array with missing commas between elements (`SyntaxError` at load, easy to miss because everything above it still parses).
 
  
 
@@ -1449,6 +1521,16 @@ Check AP sheet actual columns for payments to any arrears vendor. Subtract from 
 
 If no new H2 inflow detected: "No new H2 collections entered — arrears tab pre-filled with ₱0. Enter expected collections in the AP Arrears tab to generate a recommendation."
 
+---
+
+## Step 5D — 2026 Forecast Tab & Full Year Toggle (v1.8)
+
+The "2026 Forecast" slide (`ForecastTab()`) lists upcoming signed/prospective deals — name, entity, total value, GP%, DP/FP month and amount. This is **not** part of the weekly xlsx update: deals are entered by hand through the "+ Add Project" form in the live dashboard and stored in Supabase (table `forecast_deals`), not in `cashflow_data.js`. `App()` fetches them at page load (`loadProjects()`) into `FORECAST_PROJECTS`, and `FullYear()` injects each deal's DP/FP amount into `FY_PDEI_IN`/`FY_GG_IN`/`FY_AP_TOT` for its payment month.
+
+**Include/Exclude toggle:** `App()` holds a `forecastEnabled` boolean (persisted in the browser's `localStorage` key `mineski_forecast_enabled`, defaults to `true`) and passes it plus `onToggleForecast` to every slide. The pill switch on the Forecast tab ("Included in Full Year" / "Excluded from Full Year") flips it; `FullYear()` reads `props.forecastEnabled` and skips the injection loop entirely when it's `false`, showing a yellow "2026 Forecast excluded" badge instead. This never deletes or modifies the Supabase rows — it only controls whether `FullYear()` adds them on top of the CF/AP baseline for that browser session. Nothing here needs weekly maintenance; mention it only if a Mancom member asks why Full Year projections look different from the Forecast tab's totals.
+
+> ⚠️ **Supabase free-tier auto-pause:** if the Forecast tab shows zero projects unexpectedly, the Supabase project itself may have paused (happens automatically after ~1 week without API traffic — it does **not** delete data). Confirm before assuming data loss: a direct REST call to `https://tsxeprrdzijykuwrruhg.supabase.co/rest/v1/forecast_deals` returning the plain-text body `"Project paused. Please unpause the project before proceeding."` (rather than JSON) means the project just needs to be resumed from the Supabase dashboard — the entered deals are still there.
+
  
 
 ---
@@ -1778,6 +1860,10 @@ def recompute_chain(patch_month_idx, fy_arrays):
 ## Notes
 
  
+
+- **Data lives in `cashflow_data.js`, not `index.html`.** `index.html` is rendering/logic only; every weekly-changing value is a global var loaded from `cashflow_data.js`. Use `update_cashflow.py` to generate the CF/GL/COS_LIQ/FY blocks — see "Running the automation script" above.
+
+- **`Overview()` and `CashPosition()` are dead code.** Both functions exist in `index.html` but are not in the `SLIDES`/`COMPS` arrays that drive the app — they never render. The live slide deck is exactly: Cover, Weekly Table, AR Standard, AR Summary, Full Year, AP Payables, AP Arrears, 2026 Forecast (`AR Standard`/`AR Summary`/`AP Arrears` are reachable via the ← → arrows but hidden from the tab-button row by `SLIDE_HIDDEN`). Don't spend time keeping `Overview()`/`CashPosition()` in sync with the weekly numbers unless they get wired back into `COMPS`.
 
 - **Read only GL, AR, CF for Mancom, AP.** Never read other tabs. FY patch = skip xlsx entirely.
 
