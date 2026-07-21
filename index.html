@@ -649,8 +649,8 @@ function WeeklyTableCombined() {
         h('div',{style:{fontSize:16,fontWeight:500}},"Weekly Cash Flow Table"),
         h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginTop:2}},
           showLiq
-            ?"Actuals W1–W28 · COS = Filed Andon POs + Unfiled PA estimates · GAE/Tax/etc from CF for Mancom"
-            :"Actuals W1–W28 · Projections W29–W52 · All figures in ₱"
+            ?"Actuals W1–W29 · COS = Filed Andon POs + Unfiled PA estimates · GAE/Tax/etc from CF for Mancom"
+            :"Actuals W1–W29 · Projections W30–W52 · All figures in ₱"
         )
       ),
       h('div',{style:{marginLeft:"auto",display:"flex",gap:4,alignItems:"center",paddingTop:2}},
@@ -769,7 +769,7 @@ function ARSummary() {
     {label:"For payment follow-up",val:fmt(AR_OPEN.filter(function(r){return r.status==="For Payment Follow-Up";}).reduce(function(s,r){return s+r.amount;},0),true),sub:"Awaiting client payment",col:"#c85000"},
     {label:"For invoicing",val:fmt(AR_OPEN.filter(function(r){return r.status==="For Invoicing";}).reduce(function(s,r){return s+r.amount;},0),true),sub:"Invoice not yet raised",col:"#1a7a4a"},
     {label:"Collected YTD",val:fmt(totalCollected,true),sub:COLLECTED.length+" invoices closed",col:"#1a7a4a"},
-    {label:"Due this week (W29)",val:fmt(thisWeekTotal,true),sub:thisWeekAR.length+" items",col:"#7a0000"},
+    {label:"Due this week (W30)",val:fmt(thisWeekTotal,true),sub:thisWeekAR.length+" items",col:"#7a0000"},
   ];
 
   return h('div',null,
@@ -986,7 +986,7 @@ function FullYear(props) {
       h('span',{style:{color:"var(--color-text-secondary)"}},"Actual (Jan–Jun)")),
     h('div',{style:{display:"flex",alignItems:"center",gap:4}},
       h('div',{style:{width:10,height:10,background:"#f0f8ff",border:"1px solid #9ad"}}),
-      h('span',{style:{color:"var(--color-text-secondary)"}},"Jul (partial: W28 actual + W29–W30 projected)")),
+      h('span',{style:{color:"var(--color-text-secondary)"}},"Jul (partial: W28–W29 actual + W30 projected)")),
     h('div',{style:{display:"flex",alignItems:"center",gap:4}},
       h('div',{style:{width:10,height:10,background:"#fdfbf0",border:"1px solid #ccc"}}),
       h('span',{style:{color:"var(--color-text-secondary)"}},"Projection (Aug–Dec, AP-based)")),
@@ -1016,7 +1016,7 @@ function FullYear(props) {
       )
     ),
     h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:6}},
-      "Jan–Dec 2026 · All figures in ₱ · Jan–Jun = CF for Mancom (weeks → months) · Jul = Partial (W28 actual + W29–W30 projected) · Aug–Dec = AP payment schedule"
+      "Jan–Dec 2026 · All figures in ₱ · Jan–Jun = CF for Mancom (weeks → months) · Jul = Partial (W28–W29 actual + W30 projected) · Aug–Dec = AP payment schedule"
       +(inclHist ? "" : " · Prior-year payables (2024/2025) excluded from projection")
       +(forecastEnabled ? "" : " · 2026 Forecast deals excluded from projection")
     ),
@@ -1146,8 +1146,8 @@ function FullYear(props) {
     })(),
     h('div',{style:{background:"#fff8f0",border:"0.5px solid #f5c69a",borderRadius:8,padding:"10px 14px",marginTop:14,fontSize:12,color:"#7a3800"}},
       "⚠ Projected closing deteriorates to ",
-      h('strong',null,"₱(28.4M) by December"),
-      " — Jan–Jun actuals from CF for Mancom (weeks consolidated to months). Jul partial: W28 actual + W29–W30 projected. Aug–Dec: Payables 2026 = COS-only from AP sheet; GAE/Tax/Loan/Other from CF rows 58–62; GG Outflow from CF row 64. H2 inflows from AM BD Universe Collections CSV."
+      h('strong',null,(FY_NET[11]<0?"₱(":"₱")+(Math.abs(FY_NET[11])/1e6).toFixed(1)+"M"+(FY_NET[11]<0?")":"")+" by December"),
+      " — Jan–Jun actuals from CF for Mancom (weeks consolidated to months). Jul partial: W28–W29 actual + W30 projected. Aug–Dec: Payables 2026 = COS-only from AP sheet; GAE/Tax/Loan/Other from CF rows 58–62; GG Outflow from CF row 64. H2 inflows from AM BD Universe Collections CSV."
     )
   );
 }
@@ -1160,7 +1160,7 @@ function ArrearsTab() {
   return h('div',null,
     h('div',{style:{fontSize:16,fontWeight:500,marginBottom:2}},"Cost of Sales Payables"),
     h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:14}},
-      "Source: PH Cash Flow Monitoring W29 · AP tab · Cost of Sales rows only · All figures in ₱"
+      "Source: PH Cash Flow Monitoring W30 · AP tab · Cost of Sales rows only · All figures in ₱"
     ),
     h('table',{style:{borderCollapse:"collapse",fontSize:12,width:"100%",maxWidth:620}},
       h('thead',null,
