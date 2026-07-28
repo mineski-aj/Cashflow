@@ -2,11 +2,13 @@
 
  
 
-**Version:** 1.9 | **Last updated:** 2026-07-19
+**Version:** 2.0 | **Last updated:** 2026-07-29
 
  
 
 **Changelog:**
+
+- v2.0 (2026-07-29) — Bug 8: `COS_LIQ.totals` projection entries were CF row 63 (full PDEI Outflow) while `WeeklyTableLiquidity()` adds GAE/Tax/CAPEX/Loan/Other on top — double-counting every non-COS line on the Liquidity tab (W31 showed ₱11.10M projected PDEI outflow vs CF's true ₱5.80M). Projections now come from CF row 57 (COS only); actuals stay row 63. Identity assertion added to `update_cashflow.py`. Also noted but **not** changed: the script's `month_weeks_ar` buckets W31 into **August** even though CF row 48 labels it `W31 (Jul 31)` — a fiscal-week convention (Jul = W27–W30) that disagrees with the calendar and with Bug 7's label-driven mixed-month fold. Harmless this week (conservation check confirms no double-count or gap), but it will shift ~₱5M between Jul and Aug when W31 becomes actual next week. Full Year captions reworded to state the bucketing explicitly. Needs a decision from the user before W32.
 
 - v1.0 (2026-03-25) — Initial. Weekly Table tab only.
 
@@ -262,6 +264,28 @@ For that mixed month, fold its actual columns (`cf_month_cols_all[month]`) into 
 **Deliberately NOT touched:** `FY_COS_CF` and `FY_AP_TOT` (Cost of Sales) stay exactly as before — hardcoded `0` for Jul–Dec, driven entirely by `AP_PAYABLES`'s hand-curated `dueMonth` field. This is pre-existing, intentional design (Jan–Jun COS comes from CF; Jul–Dec COS comes from AP_PAYABLES, full stop, regardless of whether some of those weeks have since become actual). Also folding the mixed month's actual CF-row-57 COS into `FY_COS_CF` would double-count against whatever `AP_PAYABLES` already assumes for that month — nobody has verified whether `AP_PAYABLES`'s `dueMonth` entries were curated as "all of the month" or "the remainder after actuals," so don't touch it without asking the user first.
 
 **Verification:** Manually compute `act+proj` sums for the mixed month's PDEI Inflow (CF rows 53/54) and Beginning/Closing (CF rows 49/67, using the *last projected column still in that month* — e.g. `CF.projNet` at the month's last remaining proj week — as a sanity-check closing figure) and compare against the script's `FY_PDEI_IN_INIT`/`FY_GG_IN_INIT` output for that index. The script also prints `[INFO] Mixed month detected: <Month>` — if that line is missing when a new week has just crossed into a new month, the detection didn't fire and the month needs manual fixing.
+
+---
+
+### Bug 8 — `COS_LIQ.totals` projection entries must be COS only, never the full PDEI Outflow
+
+**What went wrong (found W31 update, present since at least W28):** `update_cashflow.py` built `cos_liq_totals_proj` from CF **row 63** (PDEI Outflow — the total). But `WeeklyTableLiquidity()` computes
+
+```javascript
+Total PDEI Outflow = COS_LIQ.totals[i] + nc.gae + nc.tax + nc.capex + nc.loan + nc.other
+```
+
+so every non-COS line was counted twice. W31 displayed a projected PDEI outflow of ₱11,103,955 against CF's true ₱5,801,978, and the projected closing-balance chain inherited the error for all 22 projection weeks.
+
+**The rule:** projection entries in `COS_LIQ.totals` are CF **row 57** (COS) only — the same value as `NON_COS_PROJ[i].cos`. Actual entries stay CF row 63: for actual columns the component renders `COS_LIQ.totals` directly and shows `—` for the non-COS rows, so no double-count occurs there.
+
+```python
+cos_liq_totals_act  = [safe_int(v) for v in pdei_out_act]          # CF row 63 — correct
+cos_liq_totals_proj = [safe_int(cfv(57, c)) for c in proj_cols]    # CF row 57 — COS only
+```
+
+**Verification** (now asserted in the script, prints `[OK] Bug 8 liquidity identity checks passed`): for every proj col,
+`cos + gae + tax + capex + loan + other + ggOut == CF row 65`, within ₱1 of rounding.
 
 ---
 

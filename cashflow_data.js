@@ -4,38 +4,38 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ── WEEK / DATE ───────────────────────────────────────────────────────────────
-var WEEK = "Week 30";
-var DATE = "July 22, 2026";
+var WEEK = "Week 31";
+var DATE = "July 29, 2026";
 
 // ── WEEKLY CASH FLOW TABLE ────────────────────────────────────────────────────
 // Source: PH_Cash_Flow_Monitoring · CF for Mancom tab
 // Update actBeg/pdeiIn/ggIn/totIn/pdeiOut/ggOut/totOut/forex/net each week.
 // Add new projection columns to proj/projBeg/projIn/projOut/projNet arrays.
 var CF = {
-  weeks: ["W1-W5 (Jan)","W6-W9 (Feb)","W10-W13 (Mar)","W14-W18 (Apr)","W19-W22 (May)","W23 - W27 (Jun 5)","W28 (Jul 10)","W29 (Jul 17)"],
-  proj:  ["W30 (Jul 24)","W31 (Jul 31)","W32 (Aug 7)","W33 (Aug 14)","W34 (Aug 21)","W35 (Aug 28)","W36 (Sep 4)","W37 (Sep 11)","W38 (Sep 18)","W39 (Sep 25)","W40 (Oct 2)","W41 (Oct 9)","W42 (Oct 16)","W43 (Oct 23)","W44 (Oct 30)","W45 (Nov 6)","W46 (Nov 13)","W47 (Nov 20)","W48 (Nov 27)","W49 (Dec 4)","W50 (Dec 11)","W51 (Dec 18)","W52 (Dec 25)"],
-  actBeg:  [12652564,4697131,3367012,3925661,2108492,599016,935905,5970599],
-  pdeiIn:  [16323424,9067184,13219958,29063859,13433202,11501348,21115396,19690],
-  ggIn:    [20799694,3302846,23568842,2001826,1950465,7942860,1000000,0],
-  totIn:   [37123118,12370030,36788799,31065685,15383666,19444208,22115396,19690],
-  pdeiOut: [29112421,7977406,13025942,28240666,15018159,10589209,16441335,1424703],
-  ggOut:   [16398498,5723761,23187381,4650000,1883759,8019694,642275,224597],
-  totOut:  [45510920,13701167,36213323,32890666,16901918,18608904,17083610,1649300],
-  forex:   [-432368,-1019,16827,-7812,-8776,498416,-2909,0],
-  net:     [4697131,3367012,3925661,2108492,599016,935905,5970599,4340989],
-  projBeg: [4340989,1559623,1538376,55964,7845521,2932710,-820183,-99286,-8037805,-11300505,-12420531,-14610531,-15906012,-19888173,-20788173,-24514143,-24406763,-28293145,-29393145,-32919115,-36911735,-40998117,-42908117],
-  projIn:  [625574,4098508,1748727,19168046,494143,4879137,7931025,0,0,855943,0,0,0,0,0,800000,0,0,0,0,0,0,2855448],
-  projOut: [3406940,4119754,3231139,11378489,5406954,8632029,7210128,7938518,3262700,1975970,2190000,1295481,3982161,900000,3725970,692620,3886382,1100000,3525970,3992620,4086382,1910000,2648448],
-  projNet: [1559623,1538376,55964,7845521,2932710,-820183,-99286,-8037805,-11300505,-12420531,-14610531,-15906012,-19888173,-20788173,-24514143,-24406763,-28293145,-29393145,-32919115,-36911735,-40998117,-42908117,-42701117],
+  weeks: ["W1-W5 (Jan)","W6-W9 (Feb)","W10-W13 (Mar)","W14-W18 (Apr)","W19-W22 (May)","W23 - W27 (Jun)","W28 (Jul 10)","W29 (Jul 17)","W30 (Jul 24)"],
+  proj:  ["W31 (Jul 31)","W32 (Aug 7)","W33 (Aug 14)","W34 (Aug 21)","W35 (Aug 28)","W36 (Sep 4)","W37 (Sep 11)","W38 (Sep 18)","W39 (Sep 25)","W40 (Oct 2)","W41 (Oct 9)","W42 (Oct 16)","W43 (Oct 23)","W44 (Oct 30)","W45 (Nov 6)","W46 (Nov 13)","W47 (Nov 20)","W48 (Nov 27)","W49 (Dec 4)","W50 (Dec 11)","W51 (Dec 18)","W52 (Dec 25)"],
+  actBeg:  [12652564,4697131,3367012,3925661,2108492,599016,935905,5970599,4340989],
+  pdeiIn:  [16323424,9067184,13219958,29063859,13433202,11501348,21115396,19690,850349],
+  ggIn:    [20799694,3302846,23568842,2001826,1950465,7942860,1000000,0,0],
+  totIn:   [37123118,12370030,36788799,31065685,15383666,19444208,22115396,19690,850349],
+  pdeiOut: [29112421,7977406,13025942,28240666,15018159,10589209,16441335,1424703,3040277],
+  ggOut:   [16398498,5723761,23187381,4650000,1883759,8019694,642275,224597,0],
+  totOut:  [45510920,13701167,36213323,32890666,16901918,18608904,17083610,1649300,3040277],
+  forex:   [-432368,-1019,16827,-7812,-8776,498416,-2909,0,31941],
+  net:     [4697131,3367012,3925661,2108492,599016,935905,5970599,4340989,2119120],
+  projBeg: [2119120,1324776,766500,7512279,2494227,-2101585,-1380688,-9319174,-12581874,-13761777,-15852777,-17148259,-21130387,-22030387,-25717356,-25609977,-29496359,-30596359,-34083329,-38075949,-42162331,-44132331],
+  projIn:  [5053018,1050000,19210965,494143,4924683,7931025,0,0,856066,0,0,0,0,0,800000,0,0,0,0,0,0,3342162],
+  projOut: [5847362,1608276,12465186,5512195,9520495,7210128,7938485,3262700,2035970,2091000,1295481,3982128,900000,3686970,692620,3886382,1100000,3486970,3992620,4086382,1970000,2549448],
+  projNet: [1324776,766500,7512279,2494227,-2101585,-1380688,-9319174,-12581874,-13761777,-15852777,-17148259,-21130387,-22030387,-25717356,-25609977,-29496359,-30596359,-34083329,-38075949,-42162331,-44132331,-43339617],
 };
 
 // Actuals for weekly table (PDEI+GG split)
-var WT_PDEI_IN  = [16323424,9067184,13219958,29063859,13433202,11501348,21115396,19690];
-var WT_GG_IN    = [20799694,3302846,23568842,2001826,1950465,7942860,1000000,0];
-var WT_PDEI_OUT = [29112421,7977406,13025942,28240666,15018159,10589209,16441335,1424703];
-var WT_GG_OUT   = [16398498,5723761,23187381,4650000,1883759,8019694,642275,224597];
-var WT_TOT_IN   = [37123118,12370030,36788799,31065685,15383666,19444208,22115396,19690];
-var WT_TOT_OUT  = [45510920,13701167,36213323,32890666,16901918,18608904,17083610,1649300];
+var WT_PDEI_IN  = [16323424,9067184,13219958,29063859,13433202,11501348,21115396,19690,850349];
+var WT_GG_IN    = [20799694,3302846,23568842,2001826,1950465,7942860,1000000,0,0];
+var WT_PDEI_OUT = [29112421,7977406,13025942,28240666,15018159,10589209,16441335,1424703,3040277];
+var WT_GG_OUT   = [16398498,5723761,23187381,4650000,1883759,8019694,642275,224597,0];
+var WT_TOT_IN   = [37123118,12370030,36788799,31065685,15383666,19444208,22115396,19690,850349];
+var WT_TOT_OUT  = [45510920,13701167,36213323,32890666,16901918,18608904,17083610,1649300,3040277];
 
 // GL breakdown data per period & category (for click-to-expand)
 var GL_BREAKDOWN = {
@@ -48,16 +48,16 @@ var GL_BREAKDOWN = {
     [{l:"Dar Andrew Cayabyab",a:2500000},{l:"Dar Andrew Cayabyab",a:500000},{l:"Payment: Moonton Philippines Technology ",a:319088},{l:"Payment: JOBSTREET.COM PHILIPPINES INC",a:298543},{l:"Payment: PILIPINAS E-SPORTS ORGANIZATION",a:101612}],
     [{l:"Payment: Moonton Philippines Technology ",a:9531653},{l:"Payment: TOTAL GAMEZONE XTREME INCORPORA",a:9222080},{l:"Payment: Moonton Philippines Technology ",a:2225816},{l:"Bank Transfer from Security Bank  (PHP) ",a:500000},{l:"Payment: TEG HOLDING PTE. Ltd.",a:123090}],
     [{l:"Cash Advance Liquidation: Short/Over",a:7060},{l:"Cash Advance Liquidation: Short/Over",a:5932},{l:"Cash Advance Liquidation: Short/Over",a:3099},{l:"Bernadeth E. Villaflor",a:2490},{l:"Cash Advance Liquidation: Short/Over",a:1000}],
-    [{l:"PSI SPORTS INTERNATIONAL SDN. BHD.",a:487756},{l:"Mineski Global (Malaysia) SDN. BHD",a:137818}],
-    [{l:"MET - Philippines",a:3000000},{l:"SIGMA VENTURES HOLDINGS CORPORATION",a:999508},{l:"SIGMA VENTURES HOLDINGS CORPORATION",a:53510},{l:"PT Kita Mitra Indonesia",a:45490},{l:"Riviera Golf Club, Inc.",a:13786}],
-    [{l:"New Marketing",a:1050000},{l:"SIGMA VENTURES HOLDINGS CORPORATION",a:428361},{l:"SIGMA VENTURES HOLDINGS CORPORATION",a:107146},{l:"PILIPINAS E-SPORTS ORGANIZATION INC.",a:101611},{l:"TEG HOLDING PTE. Ltd.",a:61609}],
-    [{l:"MET - Philippines",a:18593204},{l:"PSI SPORTS INTERNATIONAL SDN. BHD.",a:492873},{l:"TEG HOLDING PTE. Ltd.",a:81969}],
+    [{l:"Payment: PSI SPORTS INTERNATIONAL SDN. B",a:493899},{l:"Payment: Mineski Global (Malaysia) SDN. ",a:139375},{l:"Payment: PILIPINAS E-SPORTS ORGANIZATION",a:101612},{l:"ChinaBank",a:98834},{l:"ICA GOOGLE ASIA PACIFIC PTE LTD",a:6861}],
+    [{l:"MET - Philippines",a:4000000},{l:"SIGMA VENTURES HOLDINGS CORPORATION",a:999508},{l:"SIGMA VENTURES HOLDINGS CORPORATION",a:53510}],
+    [{l:"New Marketing",a:1050000}],
+    [{l:"MET - Philippines",a:18593204},{l:"SIGMA VENTURES HOLDINGS CORPORATION",a:428361},{l:"SIGMA VENTURES HOLDINGS CORPORATION",a:107146},{l:"TEG HOLDING PTE. Ltd.",a:82071},{l:"PSI SPORTS INTERNATIONAL SDN. BHD.",a:185}],
     null,
-    [{l:"MET - Philippines",a:1512500},{l:"New Marketing",a:172292}],
+    [{l:"MET - Philippines",a:1512500},{l:"New Marketing",a:172292},{l:"PT Kita Mitra Indonesia",a:45546},{l:"Riviera Golf Club, Inc.",a:13786},{l:"SAGAEVENTS INC",a:11200}],
     [{l:"PILIPINAS E-SPORTS ORGANIZATION INC.",a:303421}],
     null,
     null,
-    [{l:"Infinitech Digital Gaming Corporation",a:756566},{l:"TEG HOLDING PTE. Ltd.",a:99377}],
+    [{l:"Infinitech Digital Gaming Corporation",a:756566},{l:"TEG HOLDING PTE. Ltd.",a:99500}],
     null,
     null,
     null,
@@ -114,29 +114,29 @@ var GL_BREAKDOWN = {
     [{l:"Payment: Payroll",a:-1529536},{l:"Payment: Payroll",a:-1513315},{l:"Payment: Lilith Network HK Limited",a:-884430},{l:"Bank Transfer from Security Bank  (PHP) ",a:-593000},{l:"Bank Transfer from Chinabank (METPH-PHP)",a:-450000}],
     [{l:"Dar Andrew Cayabyab",a:-9200000},{l:"Bank Transfer from Chinabank (METPH-PHP)",a:-8900000},{l:"Dar Andrew Cayabyab",a:-1687500},{l:"Payment: Payroll",a:-1493218},{l:"Bank Transfer from Security Bank  (PHP) ",a:-500000}],
     [{l:"Bank Transfer from Chinabank (METPH-PHP)",a:-2200000},{l:"Payment: CITY TREASURER OF SAN JUAN",a:-487299},{l:"Payment: GDV Sounds and Lights Rental",a:-196429},{l:"Payment: Jose Nemencio Lim",a:-150000},{l:"Payment: Marvin Allan Lu",a:-141737}],
-    [{l:"Loan",a:-105240},{l:"COS",a:-1000000},{l:"GAE",a:-1041700},{l:"Tax",a:-1150000},{l:"Other",a:-60000}],
-    [{l:"COS",a:-500000},{l:"GAE",a:-2668784},{l:"Other",a:-855586}],
-    [{l:"Loan",a:-105240},{l:"COS",a:-780719},{l:"GAE",a:-1931881}],
-    [{l:"Loan",a:-3000000},{l:"COS",a:-3718105},{l:"GAE",a:-2650000},{l:"Tax",a:-800000},{l:"Other",a:-1000000}],
-    [{l:"COS",a:-3894254},{l:"GAE",a:-312700},{l:"Tax",a:-1000000}],
-    [{l:"COS",a:-5006060},{l:"GAE",a:-2560000},{l:"Other",a:-855586}],
+    [{l:"Payment: Lilith Network HK Limited",a:-895766},{l:"Payment: CHINA BANKING CORPORATION FAO B",a:-734519},{l:"Bank Transfer from Security Bank  (PHP) ",a:-617300},{l:"Bank Transfer from Pillar Digital E- Com",a:-494166},{l:"Bank Transfer from Security Bank  (PHP) ",a:-452959}],
+    [{l:"COS",a:-500000},{l:"GAE",a:-4918474},{l:"Tax",a:-383503}],
+    [{l:"COS",a:-780719},{l:"GAE",a:-764259}],
+    [{l:"Loan",a:-4000000},{l:"COS",a:-3718105},{l:"GAE",a:-2736697},{l:"Tax",a:-800000},{l:"Other",a:-1000000}],
+    [{l:"Loan",a:-105240},{l:"COS",a:-3894254},{l:"GAE",a:-312700},{l:"Tax",a:-1000000}],
+    [{l:"COS",a:-5006060},{l:"GAE",a:-3448465},{l:"Other",a:-855586}],
     [{l:"Loan",a:-52620},{l:"COS",a:-6617508},{l:"GAE",a:-340000}],
-    [{l:"COS",a:-5482674},{l:"GAE",a:-1232162},{l:"Tax",a:-800000}],
+    [{l:"COS",a:-5482674},{l:"GAE",a:-1232129},{l:"Tax",a:-800000}],
     [{l:"GAE",a:-2062700},{l:"Tax",a:-1000000}],
-    [{l:"GAE",a:-910000},{l:"Other",a:-855586}],
-    [{l:"GAE",a:-1990000}],
+    [{l:"GAE",a:-970000},{l:"Other",a:-855586}],
+    [{l:"GAE",a:-1891000}],
     [{l:"Loan",a:-52620},{l:"GAE",a:-900000}],
-    [{l:"GAE",a:-2394862},{l:"Tax",a:-1487299}],
+    [{l:"GAE",a:-2394829},{l:"Tax",a:-1487299}],
     [{l:"Tax",a:-800000}],
-    [{l:"GAE",a:-2560000},{l:"Other",a:-855586}],
+    [{l:"GAE",a:-2521000},{l:"Other",a:-855586}],
     [{l:"Loan",a:-52620},{l:"GAE",a:-340000}],
     [{l:"GAE",a:-2962700},{l:"Tax",a:-800000}],
     [{l:"Tax",a:-1000000}],
-    [{l:"GAE",a:-2560000},{l:"Other",a:-855586}],
+    [{l:"GAE",a:-2521000},{l:"Other",a:-855586}],
     [{l:"Loan",a:-52620},{l:"GAE",a:-3840000}],
     [{l:"GAE",a:-2962700},{l:"Tax",a:-800000}],
-    [{l:"GAE",a:-910000},{l:"Tax",a:-1000000}],
-    [{l:"GAE",a:-1650000},{l:"Other",a:-855586}]
+    [{l:"GAE",a:-970000},{l:"Tax",a:-1000000}],
+    [{l:"GAE",a:-1551000},{l:"Other",a:-855586}]
   ],
   ggOut: [
     [{l:"GG Company Inc.",a:-10072},{l:"GG Company Inc.",a:-9527}],
@@ -147,9 +147,9 @@ var GL_BREAKDOWN = {
     [{l:"GG Company Inc.",a:-15351},{l:"GG Company Inc.",a:-12937}],
     [{l:"GG Company Inc.",a:-1000000},{l:"GG Company Inc.",a:-12698}],
     null,
-    [{l:"GG liquidity outflow",a:-50000}],
-    [{l:"GG liquidity outflow",a:-95384}],
-    [{l:"GG liquidity outflow",a:-413299}],
+    null,
+    [{l:"GG liquidity outflow",a:-45384}],
+    [{l:"GG liquidity outflow",a:-63299}],
     [{l:"GG liquidity outflow",a:-210384}],
     [{l:"GG liquidity outflow",a:-200000}],
     [{l:"GG liquidity outflow",a:-210384}],
@@ -181,7 +181,7 @@ var AR_OPEN = [
   {account:"SM Prime Holdings",project:"SMDC Heroes Clash Mania 3 [Light Mall]",amount:197000,status:"For Payment Follow-Up",pic:"CC",target:"05.15",aging:"5m 4d",week:20,priority:"medium",year:2025},
   {account:"SM Prime Holdings",project:"SMDC Heroes Clash Mania 3 [MPlace]",amount:196000,status:"For Payment Follow-Up",pic:"CC",target:"05.15",aging:"5m 4d",week:20,priority:"medium",year:2025},
   {account:"SM Prime Holdings",project:"SMDC Heroes Clash Mania 3 Addendum",amount:20547.30,status:"For Payment Follow-Up",pic:"CC",target:"06.05",aging:"on time",week:23,priority:"medium",year:2025},
-  {account:"GAMEMASTER (GTCC)",project:"GTCC September Arena",amount:8734964.30,status:"For Invoicing",pic:"Iggy",target:"03.30",aging:"4m 27d",week:14,priority:"high",year:2025},
+  {account:"GAMEMASTER (GTCC)",project:"GTCC September Arena",amount:8734964.30,status:"Collected",pic:"Iggy",target:"03.30",aging:"Collected W28",week:14,priority:"high",year:2025},
   {account:"MOONTON",project:"MPL S17 DP",amount:19260517.86,status:"Collected",pic:"Marcus",target:"04.10",aging:"Collected W16",week:15,priority:"high",year:2026},
   {account:"TENCENT",project:"KIC Profit Sharing",amount:2136930,status:"For Invoicing",pic:"Carla",target:"04.13",aging:"13 days",week:16,priority:"high",year:2025},
   {account:"TENCENT",project:"KIS4 IT",amount:1232352,status:"For Invoicing",pic:"Carla",target:"04.13",aging:"1m 16d",week:16,priority:"medium",year:2025},
@@ -194,9 +194,9 @@ var AR_OPEN = [
   {account:"GLOBE",project:"Globe x GG Truck KOW DP",amount:783936.24,status:"For Payment Follow-Up",pic:"Shanna",target:"05.25",aging:"6m 11d",week:22,priority:"high",year:2025},
   {account:"GLOBE",project:"Globe x GG Truck KOW FP",amount:335972.67,status:"For Invoicing",pic:"Shanna",target:"05.25",aging:"5m 13d",week:22,priority:"medium",year:2025},
   {account:"TENCENT",project:"PUBGM 8th Anniv. Offline Event FP",amount:948000,status:"For Invoicing",pic:"Shanna",target:"06.26",aging:"on time",week:26,priority:"low",year:2026},
-  {account:"MOONTON",project:"MPL S17 FP",amount:8254507.65,status:"For Invoicing",pic:"Marcus",target:"07.10",aging:"slipped from W27",week:28,priority:"high",year:2026},
+  {account:"MOONTON",project:"MPL S17 FP",amount:8254507.65,status:"Collected",pic:"Marcus",target:"07.10",aging:"Collected W28",week:28,priority:"high",year:2026},
   {account:"TENCENT",project:"PKL Spring Season Addendum",amount:0,status:"For Invoicing",pic:"Iggy",target:"06.30",aging:"on time",week:27,priority:"low",year:2025},
-  {account:"MOONTON",project:"MPL S18",amount:24598214.29,status:"For Invoicing",pic:"Marcus",target:"12.07",aging:"on time",week:50,priority:"low",year:2026},
+  {account:"MOONTON",project:"MPL S18",amount:24598214.29,status:"For Invoicing",pic:"Marcus",target:"08.14",aging:"on time",week:33,priority:"high",year:2026},
   {account:"Alika Company",project:"Jaseem - Ragnarok Phase 8",amount:133249,status:"For Payment Follow-Up",pic:"Shanna",target:"06.19",aging:"10m 14d",week:25,priority:"high",year:2025},
   {account:"Alika Company",project:"Jaseem - Ragnarok V Phase 2",amount:30284,status:"For Payment Follow-Up",pic:"Shanna",target:"06.19",aging:"10m 14d",week:25,priority:"high",year:2025},
   {account:"Alika Company",project:"Jaseem - Ragnarok Phase 9",amount:98600,status:"For Payment Follow-Up",pic:"Shanna",target:"05.04",aging:"9m 27d",week:19,priority:"high",year:2025},
@@ -232,6 +232,11 @@ var COLLECTED = [
   {account:"Land Registration Systems",project:"LARES Video Production DP",amount:243873},
   {account:"DIGITAL TRIGGER",project:"BuzzOne PH (C-vitt Activation) partial",amount:597827.43},
   {account:"TOTAL GAMEZONE XTREME INCORPORATED",project:"GTCC 2025: September Arena",amount:9222080},
+  {account:"MOONTON",project:"MPL S17 FP",amount:9531653},
+  {account:"MOONTON",project:"MPL S17 Addendum 2",amount:2225816},
+  {account:"PSI SPORTS INTERNATIONAL",project:"GOSH Live Streamers",amount:493899},
+  {account:"Mineski Global (Malaysia)",project:"Inter-company receipt",amount:139375},
+  {account:"PILIPINAS E-SPORTS ORGANIZATION",project:"PESO ENC Social Media Campaign",amount:101612},
 ];
 
 // Derived AR totals (auto-computed from arrays above)
@@ -239,7 +244,7 @@ var totalOpen      = AR_OPEN.reduce(function(s,r){return s+(r.amount||0);},0);
 var totalCollected = COLLECTED.reduce(function(s,r){return s+r.amount;},0);
 var highPriority   = AR_OPEN.filter(function(r){return r.priority==="high";});
 var totalHigh      = highPriority.reduce(function(s,r){return s+r.amount;},0);
-var thisWeekAR     = AR_OPEN.filter(function(r){return r.week<=30;});
+var thisWeekAR     = AR_OPEN.filter(function(r){return r.week<=31;});
 var thisWeekTotal  = thisWeekAR.reduce(function(s,r){return s+r.amount;},0);
 
 // ── FULL YEAR PROJECTION DATA ─────────────────────────────────────────────────
@@ -248,50 +253,55 @@ var thisWeekTotal  = thisWeekAR.reduce(function(s,r){return s+r.amount;},0);
 // Source: CF for Mancom (Jan–Jun actuals) + AP sheet (Jul–Dec projections)
 
 // Jan–Dec opening balance and closing net (months 6–11 overwritten by chain IIFE)
-var FY_BEG_INIT = [12652564,4697131,3367012,3925661,2108492,599016,935905,46680995,119136118,148983962,165052385,190883819];
-var FY_NET_INIT = [4697131,3367012,3925661,2108492,599016,935905,46680995,119136118,148983962,165052385,190883819,218523622];
+var FY_BEG_INIT    = [12652564,4697131,3367012,3925661,2108492,599016,935905,43107381,120677047,150644949,166515306,192190740];
+var FY_NET_INIT    = [4697131,3367012,3925661,2108492,599016,935905,43107381,120677047,150644949,166515306,192190740,220239257];
 
 // Inflow: Jan–Jun from CF rows 53/54; Jul–Dec from AM BD Universe Collections CSV
-var FY_PDEI_IN_INIT = [16323424,9067184,13219958,29063859,13433202,11501348,21760660,30388561,8786968,0,800000,571838];
-var FY_GG_IN_INIT = [20799694,3302846,23568842,2001826,1950465,7942860,1000000,0,0,0,0,2283610];
+var FY_PDEI_IN_INIT = [16323424,9067184,13219958,29063859,13433202,11501348,21985435,30732809,8787091,0,800000,1058552];
+var FY_GG_IN_INIT   = [20799694,3302846,23568842,2001826,1950465,7942860,1000000,0,0,0,0,2283610];
 
 // Inflow breakdowns for projection months (Jul–Dec) — from AM BD Universe CSV
 var FY_PDEI_IN_BD_INIT = [
   null,null,null,null,null,
   [{l:"W23 Jun 5 (Dar/TEG/misc)",a:2556563},{l:"W24 Jun 12 (GG interco/Bounce/Jobstreet)",a:2677734},{l:"W25 Jun 19 (Dar/GG/CA Liq.)",a:1532148},{l:"W26 Jun 26 (Jobstreet/Moonton/PESO/misc)",a:4682747}],  // Jun
-  [{l:"Gamezone Xtreme – GTCC S9 Arena (W28)",a:9222080},{l:"Moonton Phil. – MPL S17 FP (W28)",a:9531653},{l:"Moonton Phil. – MPL S17 Add.2 (W28)",a:2225816},{l:"Moonton Phil. – TTRacing x MPL (W28)",a:206250},{l:"TEG Holdings – MCGG Rising Stars S4 (W30)",a:81446}],  // Jul
-  [{l:"W31 scheduled AR collections",a:434347},{l:"PSI Sports – GOSH Live Streamers / FIFA WC (W33)",a:489723}],  // Aug
-  [{l:"PESO – ENC Social Media Campaign (W36)",a:303421},{l:"Infinitech – SportsPlus MPBL Roadtrip (W39)",a:756566},{l:"TEG – MCGG S6 Crew Clash (W39)",a:98742}],  // Sep
+  // Jul = W28–W30 actual (GL). Jul total 21,985,435.
+  [{l:"Moonton Phil. – MPL S17 FP (W28)",a:9531653},{l:"Gamezone Xtreme – GTCC S9 Arena (W28)",a:9222080},{l:"Moonton Phil. – MPL S17 Add.2 (W28)",a:2225816},{l:"PSI Sports – GOSH Live Streamers (W30)",a:493899},{l:"Mineski Global (Malaysia) (W30)",a:139375},{l:"TEG Holding Pte. Ltd. (W28)",a:123090},{l:"PESO – ENC Social Media (W30)",a:101612},{l:"ChinaBank (W30)",a:98834},{l:"Other receipts / CA liquidations (W29–W30)",a:49076}],  // Jul
+  // Aug = W31–W35 projection (AR schedule). Aug total 30,732,809.
+  [{l:"Moonton – MPL S18 (W33)",a:18593204},{l:"Other Receipt / Loan (W31)",a:4000000},{l:"Moonton – MPL S18 Media Day (W35)",a:1512500},{l:"SIGMA Ventures – Sportsplus FanZone (W31/W33)",a:1535015},{l:"Monster (W32)",a:1050000},{l:"Lapak (W35)",a:172292},{l:"TEG – MCGG Rising Stars S4 (W33)",a:82071},{l:"SIGMA Ventures – MPBL Roadtrip (W31)",a:53510},{l:"SAGA / Riviera / PT Kita Mitra (W35)",a:70532},{l:"CF collection forecast not yet in AR (W34–W35)",a:3663685}],  // Aug
+  // Sep = W36–W39 projection. Sep total 8,787,091.
+  [{l:"PESO – ENC Social Media Campaign (W36)",a:303421},{l:"Infinitech – SportsPlus MPBL Roadtrip (W39)",a:756566},{l:"TEG – MCGG S6 Crew Clash (W39)",a:99500},{l:"CF collection forecast not yet in AR (W36)",a:7627604}],  // Sep
   null,  // Oct
-  null,  // Nov
-  [{l:"V5 Technologies Inc.",a:1843551},{l:"Minotaur Advertising (Cobra Core)",a:920158},{l:"Alika Company (Ragnarok Phase 8)",a:134674}],  // Dec
+  [{l:"Sandisk (W45)",a:800000}],  // Nov
+  // Dec = W52 AR rows booked under New Marketing. Total 1,058,552.
+  [{l:"Minotaur Advertising – Cobra Core Event (W52)",a:787137},{l:"Alika Company – Ragnarok Ph.9 (W52)",a:104865},{l:"Alika Company – Ragnarok Ph.8 (W52)",a:135708},{l:"Alika Company – Ragnarok V Ph.2 (W52)",a:30843}],  // Dec
 ];
 var FY_GG_IN_BD_INIT = [
   null,null,null,null,null,
   [{l:"W24 Jun 12: GG Company Inc. (inter-company)",a:4162966},{l:"W26 Jun 26: GG Company Inc. (inter-company)",a:3779893}],  // Jun
-  null,  // Jul
+  [{l:"GG Company Inc. (inter-company, W28)",a:1000000}],  // Jul
   null,  // Aug
   null,  // Sep
   null,  // Oct
   null,  // Nov
-  [{l:"GG Company Inc. (inter-company est.)",a:2283610}],  // Dec
+  // Dec = W52 AR rows booked under MET - Philippines. Total 2,283,610.
+  [{l:"V5 Technologies Inc. (W52)",a:1843551},{l:"Minotaur Advertising (W52)",a:220202},{l:"GG inter-company balance (est.)",a:219857}],  // Dec
 ];
 
 // Outflow: Jan–Jun from CF rows 57–62; Jul–Dec base (overwritten by AP injection)
 var FY_PAY24_INIT  = [0,0,0,0,0,0,0,0,0,0,0,-9374560];
 var FY_PAY25_INIT  = [-7099389,0,0,-3662227,0,0,0,0,0,0,0,0];
 var FY_COS_CF      = [702891,1667769,6495491,6928066,7391448,3786585,0,0,0,0,0,0];
-var FY_AP_TOT_INIT = [0,0,0,0,0,0,3541137,23197334,12773742,7700781,12100492,12146906];
+var FY_AP_TOT_INIT = [0,0,0,0,0,0,0,25782482,12833710,7601748,12022492,12107906];
 
 // Non-mutated outflow arrays (used directly as globals inside FullYear)
-var FY_GAE    = [6381246,5101931,4530559,7365918,5298788,5393572,4115833,10123365,4544862,5284862,8422700,9362700];
-var FY_TAX    = [1333356,147567,107781,1683897,652788,430449,1638299,1800000,1800000,2287299,1800000,1800000];
-var FY_CAPEX    = [0,154206,38400,0,0,31050,53349,0,0,0,0,0];
-var FY_LOAN    = [10000000,0,0,9270000,0,0,10992740,3105240,52620,52620,52620,52620];
-var FY_OTHER    = [10694928,905934,1853711,2992785,1675135,947554,1726200,2711172,855586,0,1711172,855586];
+var FY_GAE    = [6381246,5101931,4530559,7365918,5298788,5393572,3428227,12180595,4604829,5185829,8344700,9323700];
+var FY_TAX    = [1333356,147567,107781,1683897,652788,430449,1222818,2183503,1800000,2287299,1800000,1800000];
+var FY_CAPEX  = [0,154206,38400,0,0,31050,53349,0,0,0,0,0];
+var FY_LOAN   = [10000000,0,0,9270000,0,0,10992809,4105240,52620,52620,52620,52620];
+var FY_OTHER  = [10694928,905934,1853711,2992785,1675135,947554,2621966,1855586,855586,0,1711172,855586];
 var FY_STP    = [-4393741,3017213,0,0,0,0,0,0,0,0,0,0];
-var FY_FOREX    = [-432368,-1019,16827,-7812,-8776,498416,-2909,0,0,0,0,0];
-var FY_GG_OUT    = [16398498,5723761,23187381,4650000,1883759,8019694,916872,1129451,1034066,742861,944450,566543];
+var FY_FOREX  = [-432368,-1019,16827,-7812,-8776,498416,29032,0,0,0,0,0];
+var FY_GG_OUT = [16398498,5723761,23187381,4650000,1883759,8019694,866872,729451,1034066,742861,944450,566543];
 
 // ── FORECAST PROJECTS ─────────────────────────────────────────────────────────
 // Add upcoming signed deals here; they auto-inject into Full Year inflow + COS.
@@ -299,12 +309,10 @@ var FORECAST_PROJECTS = []; // populated from Supabase at runtime
 
 // ── AP COS VENDORS (Arrears Tab) ──────────────────────────────────────────────
 var AP_COS_VENDORS = [
-  {n:"APEX Franchise Ventures OPC",     a:8085146, note:"W12 overdue + W30 scheduled"},
-  {n:"Procurement Budget",              a:3785237, note:"W24–W27 scheduled"},
-  {n:"STAGE ONE Event Services Corp.",  a:344732,  note:"W27 scheduled"},
-  {n:"Innove Communications Inc.",      a:210568,  note:"W24 current"},
-  {n:"Ziegfred Perez Domingo",          a:21600,   note:"W12 overdue"},
-  {n:"Sharon Robins",                   a:4195,    note:"W24 current"},
+  {n:"APEX Franchise Ventures OPC",     a:5482674, note:"W37 scheduled"},
+  {n:"Procurement Budget",              a:4987210, note:"W31–W33 scheduled"},
+  {n:"STAGE ONE Event Services Corp.",  a:344732,  note:"W34 scheduled"},
+  {n:"Innove Communications Inc.",      a:11614,   note:"W32 current"},
 ];
 
 // ── AP PAYABLES ───────────────────────────────────────────────────────────────
@@ -439,50 +447,48 @@ var _AP_BD25  = [null,null,null,null,null,null,null,null,null,null,null,null];
 // COS outflows per period (actuals: Andon Board filed+unfiled; projections: CF PDEI_OUT)
 // Indices 0-8 = actual periods (W1-W5 through W26); 9-34 = W27-W52 projections.
 var COS_LIQ = {
-  totals: [29112421,7977406,13025942,28240666,15018159,10589209,16441335,1424703,3356940,4024370,2817841,11168105,5206954,8421646,7010128,7514836,3062700,1765586,1990000,952620,3882161,800000,3415586,392620,3762700,1000000,3415586,3892620,3762700,1910000,2505586],
+  totals: [29112421,7977406,13025942,28240666,15018159,10589209,16441335,1424703,3040277,500000,780719,3718105,3894254,5006060,6617508,5482674,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
   bd: [
     [{"l":"MPL PH S15 – Lights/Sounds Truss Rental","a":4389000,"t":"filed"},{"l":"GTCC Summer Showdown – Technical Svcs","a":1456000,"t":"filed"},{"l":"KIC Rebroadcast – Booth Rental/Fabrication","a":135520,"t":"filed"},{"l":"realme Cup – LED Rental/Logistics","a":127680,"t":"filed"}],
     [{"l":"SM Cyberzone TCG – Stage/Booth Fabrication","a":400000,"t":"filed"},{"l":"KIC 2025 GS&K – GO Wifi Business OTC","a":352240,"t":"filed"},{"l":"PKL Spring – Booth & Players Area Rental","a":220000,"t":"filed"},{"l":"SM Cyberzone TCG – Tech Svcs","a":200000,"t":"filed"}],
     [{"l":"KIC 2025 GS&K – Outsourced Tech Svcs","a":7350000,"t":"filed"},{"l":"KIC 2025 Playoffs – Asset Rental/Svcs","a":5400967,"t":"filed"},{"l":"MPL PH S17 – Outsourced Tech Svcs","a":5163200,"t":"filed"},{"l":"KIC 2025 Playoffs – Outsourced Tech Svcs","a":4900000,"t":"filed"}],
     [{"l":"PUBG Mobile 8th Anniv – Venue Rental Ayala","a":252000,"t":"filed"},{"l":"PUBG Mobile 8th Anniv – Venue Rental Veranda","a":50400,"t":"filed"},{"l":"Sportsplus MPBL – Basketball Arcade Machine","a":40000,"t":"filed"},{"l":"PKL Spring – Logistics Associates","a":17000,"t":"filed"}],
     [{"l":"Sportsplus MPBL FZ – Lights & Audio Rental","a":87500,"t":"filed"},{"l":"PKL Spring – Outsourced Manpower","a":73366,"t":"filed"},{"l":"PKL Spring – Photography & Videography","a":62000,"t":"filed"},{"l":"Sportsplus MPBL – Tote Bag Materials","a":60000,"t":"filed"}],
-    // Jun (W23–W27 merged) — union of the last-filed Andon breakdown for W23/W24/W25 (no fresher Andon Board file provided this week; W26/W27 detail not available)
     [{"l":"BingoPlus Music Fest – Agency Fee","a":324613,"t":"filed"},{"l":"MPL PH S17 – Direct Internet 500Mbps","a":280000,"t":"filed"},{"l":"MPL PH S17 – Show Director","a":77800,"t":"filed"},{"l":"Sportsplus MPBL FZ – Lights & Audio","a":52500,"t":"filed"},{"l":"MPL PH S17 (unfiled balance ÷6 wks)","a":3543638,"t":"unfiled"},{"l":"PKL Spring – unfiled balance (ended W13)","a":3432208,"t":"unfiled"},{"l":"PUBG 8th Anniv – unfiled balance (ended W13)","a":1716975,"t":"unfiled"},{"l":"SM Cyberzone TCG – unfiled balance (ends W16)","a":1118126,"t":"unfiled"},{"l":"Sportsplus MPBL Fan Zone – unfiled (ended W15)","a":863892,"t":"unfiled"},{"l":"Jobstreet LU v2 – unfiled balance (ended W14)","a":557006,"t":"unfiled"},{"l":"PKL Spring – Photography & Videography","a":62000,"t":"filed"},{"l":"MPL PH S17 – API Engineer","a":33400,"t":"filed"},{"l":"PKL Spring – Outsourced Manpower","a":30350,"t":"filed"},{"l":"MPL PH S17 – Show Producer","a":30000,"t":"filed"},{"l":"Sportsplus MBPL Roadtrip – unfiled ÷5 wks","a":407598,"t":"unfiled"},{"l":"PKL Addendum – Talent/Caster","a":36533,"t":"filed"},{"l":"PKL Addendum – Talent/Caster OSX","a":29166,"t":"filed"}],
-    // W28 (now actual) through W52 projections — no fresher Andon Board file provided this week
+    // W28-W30 (now actual) through W52 projections — no fresher Andon Board file provided this week
     null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
   ]
 };
 
 // Non-COS projection outflows (GAE, Tax, CAPEX, Loan, Other) — one entry per CF.proj week (W27-W52)
 var NON_COS_PROJ = [
-  {gae:1041700,tax:1150000,capex:0,loan:105240,other:60000,cos:1000000},  // W30
-  {gae:2668784,tax:0,capex:0,loan:0,other:855586,cos:500000},  // W31
-  {gae:1931881,tax:0,capex:0,loan:105240,other:0,cos:780719},  // W32
-  {gae:2650000,tax:800000,capex:0,loan:3000000,other:1000000,cos:3718105},  // W33
-  {gae:312700,tax:1000000,capex:0,loan:0,other:0,cos:3894254},  // W34
-  {gae:2560000,tax:0,capex:0,loan:0,other:855586,cos:5006060},  // W35
+  {gae:4918474,tax:383503,capex:0,loan:0,other:0,cos:500000},  // W31
+  {gae:764259,tax:0,capex:0,loan:0,other:0,cos:780719},  // W32
+  {gae:2736697,tax:800000,capex:0,loan:4000000,other:1000000,cos:3718105},  // W33
+  {gae:312700,tax:1000000,capex:0,loan:105240,other:0,cos:3894254},  // W34
+  {gae:3448465,tax:0,capex:0,loan:0,other:855586,cos:5006060},  // W35
   {gae:340000,tax:0,capex:0,loan:52620,other:0,cos:6617508},  // W36
-  {gae:1232162,tax:800000,capex:0,loan:0,other:0,cos:5482674},  // W37
+  {gae:1232129,tax:800000,capex:0,loan:0,other:0,cos:5482674},  // W37
   {gae:2062700,tax:1000000,capex:0,loan:0,other:0,cos:0},  // W38
-  {gae:910000,tax:0,capex:0,loan:0,other:855586,cos:0},  // W39
-  {gae:1990000,tax:0,capex:0,loan:0,other:0,cos:0},  // W40
+  {gae:970000,tax:0,capex:0,loan:0,other:855586,cos:0},  // W39
+  {gae:1891000,tax:0,capex:0,loan:0,other:0,cos:0},  // W40
   {gae:900000,tax:0,capex:0,loan:52620,other:0,cos:0},  // W41
-  {gae:2394862,tax:1487299,capex:0,loan:0,other:0,cos:0},  // W42
+  {gae:2394829,tax:1487299,capex:0,loan:0,other:0,cos:0},  // W42
   {gae:0,tax:800000,capex:0,loan:0,other:0,cos:0},  // W43
-  {gae:2560000,tax:0,capex:0,loan:0,other:855586,cos:0},  // W44
+  {gae:2521000,tax:0,capex:0,loan:0,other:855586,cos:0},  // W44
   {gae:340000,tax:0,capex:0,loan:52620,other:0,cos:0},  // W45
   {gae:2962700,tax:800000,capex:0,loan:0,other:0,cos:0},  // W46
   {gae:0,tax:1000000,capex:0,loan:0,other:0,cos:0},  // W47
-  {gae:2560000,tax:0,capex:0,loan:0,other:855586,cos:0},  // W48
+  {gae:2521000,tax:0,capex:0,loan:0,other:855586,cos:0},  // W48
   {gae:3840000,tax:0,capex:0,loan:52620,other:0,cos:0},  // W49
   {gae:2962700,tax:800000,capex:0,loan:0,other:0,cos:0},  // W50
-  {gae:910000,tax:1000000,capex:0,loan:0,other:0,cos:0},  // W51
-  {gae:1650000,tax:0,capex:0,loan:0,other:855586,cos:0},  // W52
+  {gae:970000,tax:1000000,capex:0,loan:0,other:0,cos:0},  // W51
+  {gae:1551000,tax:0,capex:0,loan:0,other:855586,cos:0},  // W52
 ];
 
 // ── WEEKLY TABLE COMBINED — PROJECTION ARRAYS ─────────────────────────────────
 // One entry per CF.proj week (W27-W52). Rebuilt from CF for Mancom every week.
-var WT_PDEI_IN_PROJ  = [625574,4098508,1748727,19168046,494143,4879137,7931025,0,0,855943,0,0,0,0,0,800000,0,0,0,0,0,0,571838];
-var WT_GG_IN_PROJ    = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2283610];
-var WT_PDEI_OUT_PROJ = [3356940,4024370,2817841,11168105,5206954,8421646,7010128,7514836,3062700,1765586,1990000,952620,3882161,800000,3415586,392620,3762700,1000000,3415586,3892620,3762700,1910000,2505586];
-var WT_GG_OUT_PROJ   = [50000,95384,413299,210384,200000,210384,200000,423682,200000,210384,200000,342861,100000,100000,310384,300000,123682,100000,110384,100000,323682,0,142861];
+var WT_PDEI_IN_PROJ  = [5053018,1050000,19210965,494143,4924683,7931025,0,0,856066,0,0,0,0,0,800000,0,0,0,0,0,0,1058552];
+var WT_GG_IN_PROJ    = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2283610];
+var WT_PDEI_OUT_PROJ = [5801978,1544978,12254802,5312195,9310111,7010128,7514803,3062700,1825586,1891000,952620,3882128,800000,3376586,392620,3762700,1000000,3376586,3892620,3762700,1970000,2406586];
+var WT_GG_OUT_PROJ   = [45384,63299,210384,200000,210384,200000,423682,200000,210384,200000,342861,100000,100000,310384,300000,123682,100000,110384,100000,323682,0,142861];

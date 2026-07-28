@@ -701,12 +701,30 @@ fy_ap_tot_full  = [0]*6           + fy_ap_tot_arr
 fy_ap_bd = [None]*6 + [fy_ap_bd_h2[m] for m in fut_months]
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 6. COS_LIQ TOTALS  (actuals = pdeiOut, projections = pdeiOutProj)
+# 6. COS_LIQ TOTALS  (actuals = pdeiOut, projections = COS only)
 # ─────────────────────────────────────────────────────────────────────────────
+# Bug 8: projections must be the COS component alone (CF row 57), NOT the full
+# PDEI Outflow (row 63). WeeklyTableLiquidity() computes
+#   Total PDEI Outflow = COS_LIQ.totals[i] + gae + tax + capex + loan + other
+# so feeding it row 63 double-counts every non-COS line. W31 showed a projected
+# PDEI outflow of P11.10M against CF's true P5.80M. Actuals are unaffected: for
+# actual columns the component displays COS_LIQ.totals directly and shows "-"
+# for the non-COS rows, so row 63 remains correct there.
+# Invariant (asserted below): cos + gae + tax + capex + loan + other + ggOut
+#                             == CF row 65 (Total Outflow), per proj col.
 
 cos_liq_totals_act  = [safe_int(v) for v in pdei_out_act]
-cos_liq_totals_proj = [safe_int(v) for v in pdei_out_proj]
+cos_liq_totals_proj = [safe_int(cfv(57, c)) for c in proj_cols]
 cos_liq_totals = cos_liq_totals_act + cos_liq_totals_proj
+
+for _i, _c in enumerate(proj_cols):
+    _sum = (cos_liq_totals_proj[_i] + safe_int(cfv(58,_c)) + safe_int(cfv(59,_c))
+            + safe_int(cfv(60,_c)) + safe_int(cfv(61,_c)) + safe_int(cfv(62,_c))
+            + safe_int(cfv(64,_c)))
+    assert abs(_sum - safe_int(cfv(65,_c))) <= 1, (
+        f"Bug8: liquidity identity failed at proj col {_c} "
+        f"({get_cf_label(_c)}): {_sum} vs CF row65 {safe_int(cfv(65,_c))}")
+print("[OK] Bug 8 liquidity identity checks passed", file=sys.stderr)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 7. VALIDATION  (Bug 1)
