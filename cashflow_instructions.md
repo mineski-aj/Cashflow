@@ -2,11 +2,13 @@
 
  
 
-**Version:** 2.0 | **Last updated:** 2026-07-29
+**Version:** 2.1 | **Last updated:** 2026-08-05
 
  
 
 **Changelog:**
+
+- v2.1 (2026-08-05) — **The v2.0 W31/August bucketing question is closed**: CF for Mancom consolidated W28–W31 into a single `W28-W31 (July)` actual column at W32, so the workbook itself settled it — W31 is July. No convention change was needed, and a conservation check confirms every CF column is still counted exactly once. Two new fixes, both triggered by July becoming the first fully-actual post-June month: **Bug 9** — `FY_COS_CF` hardcoded `0` for Jul–Dec, so July's real ₱3.15M COS was dropped from the Full Year while `AP_PAYABLES` still carried July-dated 2025 arrears the AP sheet had already rescheduled to W34/W37; the July column closed at ₱1.73M against CF's actual ₱4.49M. `update_cashflow.py` now emits CF row 57 for any month that is fully actual and prints an `[INFO] … is fully actual` line naming the month. **Bug 10** — `FullYear()`'s forecast injection had no month guard, so ₱9.23M of Supabase forecast DPs still dated July were being added on top of CF's July actual; injection is now restricted to projection months and stranded deals surface in a red badge instead of vanishing. Also: `colDefs` Jul → `Actual`, and the orphaned "Jul" legend swatch merged into "Actual (Jan–Jul)".
 
 - v2.0 (2026-07-29) — Bug 8: `COS_LIQ.totals` projection entries were CF row 63 (full PDEI Outflow) while `WeeklyTableLiquidity()` adds GAE/Tax/CAPEX/Loan/Other on top — double-counting every non-COS line on the Liquidity tab (W31 showed ₱11.10M projected PDEI outflow vs CF's true ₱5.80M). Projections now come from CF row 57 (COS only); actuals stay row 63. Identity assertion added to `update_cashflow.py`. Also noted but **not** changed: the script's `month_weeks_ar` buckets W31 into **August** even though CF row 48 labels it `W31 (Jul 31)` — a fiscal-week convention (Jul = W27–W30) that disagrees with the calendar and with Bug 7's label-driven mixed-month fold. Harmless this week (conservation check confirms no double-count or gap), but it will shift ~₱5M between Jul and Aug when W31 becomes actual next week. Full Year captions reworded to state the bucketing explicitly. Needs a decision from the user before W32.
 
@@ -264,6 +266,50 @@ For that mixed month, fold its actual columns (`cf_month_cols_all[month]`) into 
 **Deliberately NOT touched:** `FY_COS_CF` and `FY_AP_TOT` (Cost of Sales) stay exactly as before — hardcoded `0` for Jul–Dec, driven entirely by `AP_PAYABLES`'s hand-curated `dueMonth` field. This is pre-existing, intentional design (Jan–Jun COS comes from CF; Jul–Dec COS comes from AP_PAYABLES, full stop, regardless of whether some of those weeks have since become actual). Also folding the mixed month's actual CF-row-57 COS into `FY_COS_CF` would double-count against whatever `AP_PAYABLES` already assumes for that month — nobody has verified whether `AP_PAYABLES`'s `dueMonth` entries were curated as "all of the month" or "the remainder after actuals," so don't touch it without asking the user first.
 
 **Verification:** Manually compute `act+proj` sums for the mixed month's PDEI Inflow (CF rows 53/54) and Beginning/Closing (CF rows 49/67, using the *last projected column still in that month* — e.g. `CF.projNet` at the month's last remaining proj week — as a sanity-check closing figure) and compare against the script's `FY_PDEI_IN_INIT`/`FY_GG_IN_INIT` output for that index. The script also prints `[INFO] Mixed month detected: <Month>` — if that line is missing when a new week has just crossed into a new month, the detection didn't fire and the month needs manual fixing.
+
+---
+
+### Bug 9 — When a post-June month closes to actual, `FY_COS_CF` must pick it up and its `AP_PAYABLES` rows must be re-dated
+
+**What went wrong (W32 update):** `FY_COS_CF` was built as `Jan–Jun from CF row 57` + a hardcoded `[0]*6`, on the assumption that every post-June month is still projected and therefore sourced entirely from `AP_PAYABLES`. At W32 CF for Mancom consolidated W28–W31 into a single `W28-W31 (July)` **actual** column. Two things then went wrong at once:
+
+1. July's real COS (₱3,151,064, CF row 57) was dropped from the Full Year — `FY_COS_CF[6]` stayed `0`.
+2. `AP_PAYABLES` still carried three 2025 arrears rows at `dueMonth:6` (₱5,972,268 total) that the **AP sheet had already rescheduled** — STAGE ONE ₱344,732 → W34 (Aug), APEX ₱5,482,674 → W37 (Sep, and consolidated from two rows into one, PRF BRF-0426-170).
+
+Net effect: the Full Year July column closed at ₱1,728,337 against CF's actual ₱4,491,514.
+
+**The rule:** a post-June month is sourced from CF row 57 **iff it is fully actual** — it appears in `act_cols` *and* has no remaining weeks in `proj_cols`. Still-projected and mixed months stay `0` and remain `AP_PAYABLES`-driven, which preserves the original no-double-count guarantee that Bug 7 was protecting.
+
+```python
+_proj_month_names = {m.lower() for c in proj_cols for m in _ALL_MONTH_NAMES if m in get_cf_label(c)}
+for _m in _ALL_MONTH_NAMES[6:]:
+    _act = cf_month_cols_all.get(_m.lower(), [])
+    fy_cos_cf.append(safe_int(month_sum(57, _act))
+                     if _act and _m.lower() not in _proj_month_names else 0)
+```
+
+**Every time the script prints `[INFO] <Month> is fully actual — FY_COS_CF[<Month>] = …`, you must also check `AP_PAYABLES` for rows still dated that month.** Cross-reference the AP sheet's week columns: if the obligation was rescheduled, update `dueMonth` (and the amount — the AP sheet often revises it and sometimes merges rows); if it was genuinely paid, CF row 57 already captures it and the row should be removed. Leaving a row dated a closed month double-counts it against CF row 57.
+
+**Verification:** for the newly-actual month M, `FY_BEG[M] + inflow + outflow` as the `FullYear()` chain computes it should equal `cfv(49,M) + cfv(55,M) − cfv(65,M) + cfv(66,M)` within ₱1. It will **not** equal CF row 67 exactly — every CF month carries an unlabelled reconciling residual (Jan −₱864,737, Jun +₱996,831, Jul +₱58,028), so row 67 differs from the sum of its own component rows. That gap is pre-existing and is not something the update introduced.
+
+---
+
+### Bug 10 — `FullYear()` forecast injection must skip months that have closed to actual
+
+**What went wrong (W32 update):** the injection loop applied every `FORECAST_PROJECTS` DP/FP to `FY_PDEI_IN`/`FY_GG_IN`/`FY_AP_TOT` at `pmt.month` with no guard. Its comment claimed "projection months" but nothing enforced it. When July closed to actual, ₱9,232,994 of Supabase forecast DPs still dated July (MEGAFUNALO ₱7.0M, SM Gamefest ₱1.35M, Monster Energy ₱750K, SM Gamefest PC ₱75K, WoT HEAT ₱57,994) were added **on top of** CF's actual July inflow, inflating July by ₱9.23M and its COS by ₱7.15M.
+
+**The rule:** derive the first projection month from `colDefs` and skip anything earlier. Never hardcode the boundary — it moves every time a month closes.
+
+```javascript
+var firstProjMonth = 0;
+for(var _m=0; _m<12; _m++){ if(!colDefs[_m].isProj){ firstProjMonth = _m + 1; } }
+// inside the DP/FP loop:
+if(pmt.month < firstProjMonth){ if(pmt.amount) fcstStranded.push({...}); return; }
+```
+
+Skipped deals are collected into `fcstStranded` and rendered as a red badge on the Full Year tab (hover shows name/month/amount) so they get re-dated on the Forecast tab rather than silently disappearing. This never mutates Supabase — re-dating is a manual edit in the dashboard.
+
+> ⚠️ Report the stranded list in the weekly chat summary. A deal dated in a closed month is either (a) collected — already inside CF actuals, so delete or re-date it, or (b) slipped — needs a new DP/FP month. Only the user can say which.
 
 ---
 
@@ -1816,6 +1862,10 @@ def recompute_chain(patch_month_idx, fy_arrays):
 - [ ] Update Full Year tab: recompute all FY_ arrays (CF Jan–Jun, AP Jul–Dec); exclude AP subtotal rows (both col 0 and col 1 blank)
 
 - [ ] Check if CF extends further than prior week → update `colDefs` zone boundary and `proj` week label array length
+
+- [ ] **If the script prints `[INFO] <Month> is fully actual`** (Bug 9): move that month's `colDefs` entry to `isAct:true`, fix the Full Year legend/captions, and re-date or remove every `AP_PAYABLES` row still dated that month — cross-check the AP sheet's week columns for the new schedule and revised amount
+
+- [ ] **Check the Full Year tab for the red stranded-forecast badge** (Bug 10) → report the deals in the chat summary so they get re-dated on the Forecast tab
 
 - [ ] Update `WEEK`, `DATE`, Overview KPIs, Cash Position narrative
 

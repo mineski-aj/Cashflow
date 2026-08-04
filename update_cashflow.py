@@ -528,6 +528,28 @@ fy_gg_in_act = [
     safe_int(month_sum(54, cf_month_cols['may'])),
     safe_int(month_sum(54, cf_month_cols['jun'])),
 ]
+# Bug 9: FY_COS_CF used to be `Jan-Jun from CF row 57` + a hardcoded [0]*6, on the
+# assumption that every post-June month is still projected and therefore sourced
+# entirely from AP_PAYABLES. That broke at W32, when CF for Mancom consolidated
+# W28-W31 into a single "W28-W31 (July)" actual column: July's real COS (P3.15M)
+# was dropped from the Full Year while AP_PAYABLES still carried July-dated 2025
+# arrears that the AP sheet had already rescheduled to W34/W37 — so the July
+# column showed a P1.73M close against CF's actual P4.49M.
+#
+# Rule: a post-June month sourced from CF row 57 iff it is fully actual, i.e. it
+# appears in act_cols (cf_month_cols_all) and has no remaining projected weeks.
+# Still-projected and mixed months stay 0 and remain AP_PAYABLES-driven, so the
+# original no-double-count guarantee holds. When a month flips to fully actual,
+# its AP_PAYABLES rows must be re-dated or cleared — see the Bug 9 section of
+# cashflow_instructions.md.
+_proj_month_names = set()
+for _c in proj_cols:
+    _lbl = get_cf_label(_c)
+    for _m in _ALL_MONTH_NAMES:
+        if _m in _lbl:
+            _proj_month_names.add(_m.lower())
+            break
+
 fy_cos_cf = [
     safe_int(month_sum(57, cf_month_cols['jan'])),
     safe_int(month_sum(57, cf_month_cols['feb'])),
@@ -535,7 +557,18 @@ fy_cos_cf = [
     safe_int(month_sum(57, cf_month_cols['apr'])),
     safe_int(month_sum(57, cf_month_cols['may'])),
     safe_int(month_sum(57, cf_month_cols['jun'])),
-] + [0]*6
+]
+for _m in _ALL_MONTH_NAMES[6:]:
+    _key = _m.lower()
+    _act = cf_month_cols_all.get(_key, [])
+    if _act and _key not in _proj_month_names:
+        fy_cos_cf.append(safe_int(month_sum(57, _act)))
+        print(f"[INFO] {_m} is fully actual — FY_COS_CF[{_m}] = CF row 57 "
+              f"({fy_cos_cf[-1]:,}). Re-date/clear any AP_PAYABLES rows dated "
+              f"{_m} or they will double-count (Bug 9).", file=sys.stderr)
+    else:
+        fy_cos_cf.append(0)
+assert len(fy_cos_cf) == 12, f"FY_COS_CF must have 12 entries, got {len(fy_cos_cf)}"
 
 fy_gae = [
     safe_int(month_sum(58, cf_month_cols['jan'])),
