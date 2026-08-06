@@ -5,7 +5,7 @@
 
 // ── WEEK / DATE ───────────────────────────────────────────────────────────────
 var WEEK = "Week 32";
-var DATE = "August 5, 2026";
+var DATE = "August 6, 2026";
 
 // ── WEEKLY CASH FLOW TABLE ────────────────────────────────────────────────────
 // Source: PH_Cash_Flow_Monitoring · CF for Mancom tab
@@ -23,10 +23,10 @@ var CF = {
   totOut:  [45510920,13701167,36213323,32890666,16901918,18608904,24456744],
   forex:   [-432368,-1019,16827,-7812,-8776,498416,29014],
   net:     [4697131,3367012,3925661,2108492,599016,935905,4491514],
-  projBeg: [4491514,723768,-1698616,-7216668,-13285849,-539142,-8976263,-12738963,-13919275,-16010275,-17305756,-21286519,-22186519,-25873489,-25766109,-29652492,-30752492,-34239461,-38232082,-42318464,-44288464],
+  projBeg: [4491514,723768,-1698616,-3322413,-4385535,8361172,-75948,-4183381,-5363693,-7454693,-8750174,-12730937,-13630937,-17317907,-17210527,-21096910,-22196910,-25683879,-29676500,-33762882,-35732882],
   projIn:  [3500000,0,494143,3947502,29818462,0,0,855657,0,0,0,0,0,800000,0,0,0,0,0,0,3341046],
-  projOut: [7267746,2422384,6012195,10016683,17071754,8437120,3762700,2035970,2091000,1295481,3980763,900000,3686970,692620,3886382,1100000,3486970,3992620,4086382,1970000,2549448],
-  projNet: [723768,-1698616,-7216668,-13285849,-539142,-8976263,-12738963,-13919275,-16010275,-17305756,-21286519,-22186519,-25873489,-25766109,-29652492,-30752492,-34239461,-38232082,-42318464,-44288464,-43496865],
+  projOut: [7267746,2422384,2117940,5010623,17071754,8437120,4107432,2035970,2091000,1295481,3980763,900000,3686970,692620,3886382,1100000,3486970,3992620,4086382,1970000,2549448],
+  projNet: [723768,-1698616,-3322413,-4385535,8361172,-75948,-4183381,-5363693,-7454693,-8750174,-12730937,-13630937,-17317907,-17210527,-21096910,-22196910,-25683879,-29676500,-33762882,-35732882,-34941283],
 };
 
 // Actuals for weekly table (PDEI+GG split)
@@ -109,11 +109,11 @@ var GL_BREAKDOWN = {
     [{l:"Dar Andrew Cayabyab",a:-9200000},{l:"Bank Transfer from Chinabank (METPH-PHP)",a:-8900000},{l:"Bank Transfer from Chinabank (METPH-PHP)",a:-2200000},{l:"Dar Andrew Cayabyab",a:-1687500},{l:"Payment: Payroll",a:-1538100}],
     [{l:"COS",a:-2711614},{l:"GAE",a:-4192834},{l:"Tax",a:-300000}],
     [{l:"COS",a:-750000},{l:"GAE",a:-1462000}],
-    [{l:"Loan",a:-105240},{l:"COS",a:-4394254},{l:"GAE",a:-312700},{l:"Tax",a:-1000000}],
-    [{l:"COS",a:-5506060},{l:"GAE",a:-3444654},{l:"Other",a:-855586}],
+    [{l:"Loan",a:-105240},{l:"COS",a:-500000},{l:"GAE",a:-312700},{l:"Tax",a:-1000000}],
+    [{l:"COS",a:-500000},{l:"GAE",a:-3444654},{l:"Other",a:-855586}],
     [{l:"Loan",a:-7652620},{l:"COS",a:-7117508},{l:"GAE",a:-1101626},{l:"Other",a:-1000000}],
     [{l:"COS",a:-5982674},{l:"GAE",a:-1230764},{l:"Tax",a:-800000}],
-    [{l:"COS",a:-500000},{l:"GAE",a:-2062700},{l:"Tax",a:-1000000}],
+    [{l:"COS",a:-844732},{l:"GAE",a:-2062700},{l:"Tax",a:-1000000}],
     [{l:"GAE",a:-970000},{l:"Other",a:-855586}],
     [{l:"GAE",a:-1891000}],
     [{l:"Loan",a:-52620},{l:"GAE",a:-900000}],
@@ -243,8 +243,8 @@ var thisWeekTotal  = thisWeekAR.reduce(function(s,r){return s+r.amount;},0);
 // Source: CF for Mancom (Jan–Jun actuals) + AP sheet (Jul–Dec projections)
 
 // Jan–Dec opening balance and closing net (months 6–11 overwritten by chain IIFE)
-var FY_BEG_INIT    = [12652564,4697131,3367012,3925661,2108492,599016,935905,50282953,87137039,159212491,175080118,200755552];
-var FY_NET_INIT    = [4697131,3367012,3925661,2108492,599016,935905,50282953,87137039,159212491,175080118,200755552,228802953];
+var FY_BEG_INIT    = [12652564,4697131,3367012,3925661,2108492,599016,935905,50282953,86792307,159212491,175080118,200755552];
+var FY_NET_INIT    = [4697131,3367012,3925661,2108492,599016,935905,50282953,86792307,159212491,175080118,200755552,228802953];
 
 // Inflow: Jan–Jun from CF rows 53/54; Jul–Dec from AM BD Universe Collections CSV
 var FY_PDEI_IN_INIT = [16323424,9067184,13219958,29063859,13433202,11501348,27041367,7941645,30674119,0,800000,1057436];
@@ -282,7 +282,7 @@ var FY_GG_IN_BD_INIT = [
 var FY_PAY24_INIT  = [0,0,0,0,0,0,0,0,0,0,0,-9374560];
 var FY_PAY25_INIT  = [-7099389,0,0,-3662227,0,0,0,0,0,0,0,0];
 var FY_COS_CF      = [702891,1667769,6495491,6928066,7391448,3786585,3151064,0,0,0,0,0];
-var FY_AP_TOT_INIT = [0,0,0,0,0,0,0,16555360,23693971,7600383,12022492,12107906];
+var FY_AP_TOT_INIT = [0,0,0,0,0,0,0,16210628,24038703,7600383,12022492,12107906];
 
 // Non-mutated outflow arrays (used directly as globals inside FullYear)
 var FY_GAE    = [6381246,5101931,4530559,7365918,5298788,5393572,5060441,9412188,5365090,5184464,8344700,9323700];
@@ -302,7 +302,7 @@ var FORECAST_PROJECTS = []; // populated from Supabase at runtime
 var AP_COS_VENDORS = [
   {n:"Procurement Budget",              a:5950000, note:"W32–W38 scheduled"},
   {n:"APEX Franchise Ventures OPC",     a:5482674, note:"W37 scheduled"},
-  {n:"STAGE ONE Event Services Corp.",  a:344732,  note:"W34 scheduled"},
+  {n:"STAGE ONE Event Services Corp.",  a:344732,  note:"W38 scheduled"},
   {n:"Innove Communications Inc.",      a:11614,   note:"W32 current"},
 ];
 
@@ -352,8 +352,9 @@ var AP_PAYABLES = [
   {entity:"PDEI",year:2025,project:"MPL PH S15",                             vendor:"Inex Stagesystems Corp.",                  amount:601520,   terms:"Final Term (50%)",      dueMonth:null, classification:"Cost of Sales"},
   {entity:"PDEI",year:2025,project:"MPL PH S15",                             vendor:"XSTATIC Event System Inc.",                amount:3360000,  terms:"Final Term (30%)",      dueMonth:null, classification:"Cost of Sales"},
   {entity:"PDEI",year:2025,project:"MPL PH S16 Playoffs",                    vendor:"JEROME T. Capoquian",                      amount:230000,   terms:"One-Time + Final",      dueMonth:null, classification:"Cost of Sales"},
-  // W32: AP sheet reschedules this to W34 (Aug) at ₱344,732 — PRF BRF-0126-019. Was dueMonth:6 / ₱351,000.
-  {entity:"PDEI",year:2025,project:"MPL PH S16 Playoffs",                    vendor:"STAGE ONE Event Services Corp.",           amount:344732,   terms:"Final Term (30%)",      dueMonth:7,    classification:"Cost of Sales"},
+  // W32 (revised xlsx): AP sheet now schedules this at W38 (Sep) — PRF BRF-0126-019.
+  // Originally dueMonth:6 / ₱351,000; briefly W34 (Aug) in the earlier W32 file.
+  {entity:"PDEI",year:2025,project:"MPL PH S16 Playoffs",                    vendor:"STAGE ONE Event Services Corp.",           amount:344732,   terms:"Final Term (30%)",      dueMonth:8,    classification:"Cost of Sales"},
   {entity:"PDEI",year:2025,project:"MPL PH S16 Regular Season",              vendor:"APEX Franchise Ventures OPC",              amount:10286195, terms:"3 BRFs",                dueMonth:null, classification:"Cost of Sales"},
   {entity:"PDEI",year:2025,project:"MPL PH S16 Regular Season",              vendor:"JEROME T. Capoquian",                      amount:46000,    terms:"Final Term (50%)",      dueMonth:null, classification:"Cost of Sales"},
   {entity:"PDEI",year:2025,project:"MPL PH S16 Addendum",                    vendor:"Power Plant Generator Rentals",            amount:185440,   terms:"One-Time",              dueMonth:null, classification:"Cost of Sales"},
@@ -440,7 +441,7 @@ var _AP_BD25  = [null,null,null,null,null,null,null,null,null,null,null,null];
 // COS outflows per period (actuals: Andon Board filed+unfiled; projections: CF PDEI_OUT)
 // Indices 0-8 = actual periods (W1-W5 through W26); 9-34 = W27-W52 projections.
 var COS_LIQ = {
-  totals: [29112421,7977406,13025942,28240666,15018159,10589209,23537741,2711614,750000,4394254,5506060,7117508,5982674,500000,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  totals: [29112421,7977406,13025942,28240666,15018159,10589209,23537741,2711614,750000,500000,500000,7117508,5982674,844732,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
   bd: [
     [{"l":"MPL PH S15 – Lights/Sounds Truss Rental","a":4389000,"t":"filed"},{"l":"GTCC Summer Showdown – Technical Svcs","a":1456000,"t":"filed"},{"l":"KIC Rebroadcast – Booth Rental/Fabrication","a":135520,"t":"filed"},{"l":"realme Cup – LED Rental/Logistics","a":127680,"t":"filed"}],
     [{"l":"SM Cyberzone TCG – Stage/Booth Fabrication","a":400000,"t":"filed"},{"l":"KIC 2025 GS&K – GO Wifi Business OTC","a":352240,"t":"filed"},{"l":"PKL Spring – Booth & Players Area Rental","a":220000,"t":"filed"},{"l":"SM Cyberzone TCG – Tech Svcs","a":200000,"t":"filed"}],
@@ -458,11 +459,11 @@ var COS_LIQ = {
 var NON_COS_PROJ = [
   {gae:4192834,tax:300000,capex:0,loan:0,other:0,cos:2711614},  // W32
   {gae:1462000,tax:0,capex:0,loan:0,other:0,cos:750000},  // W33
-  {gae:312700,tax:1000000,capex:0,loan:105240,other:0,cos:4394254},  // W34
-  {gae:3444654,tax:0,capex:0,loan:0,other:855586,cos:5506060},  // W35
+  {gae:312700,tax:1000000,capex:0,loan:105240,other:0,cos:500000},  // W34
+  {gae:3444654,tax:0,capex:0,loan:0,other:855586,cos:500000},  // W35
   {gae:1101626,tax:0,capex:0,loan:7652620,other:1000000,cos:7117508},  // W36
   {gae:1230764,tax:800000,capex:0,loan:0,other:0,cos:5982674},  // W37
-  {gae:2062700,tax:1000000,capex:0,loan:0,other:0,cos:500000},  // W38
+  {gae:2062700,tax:1000000,capex:0,loan:0,other:0,cos:844732},  // W38
   {gae:970000,tax:0,capex:0,loan:0,other:855586,cos:0},  // W39
   {gae:1891000,tax:0,capex:0,loan:0,other:0,cos:0},  // W40
   {gae:900000,tax:0,capex:0,loan:52620,other:0,cos:0},  // W41
@@ -483,5 +484,5 @@ var NON_COS_PROJ = [
 // One entry per CF.proj week (W27-W52). Rebuilt from CF for Mancom every week.
 var WT_PDEI_IN_PROJ  = [3500000,0,494143,3947502,29818462,0,0,855657,0,0,0,0,0,800000,0,0,0,0,0,0,1057436];
 var WT_GG_IN_PROJ    = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2283610];
-var WT_PDEI_OUT_PROJ = [7204447,2212000,5812195,9806300,16871754,8013438,3562700,1825586,1891000,952620,3880763,800000,3376586,392620,3762700,1000000,3376586,3892620,3762700,1970000,2406586];
+var WT_PDEI_OUT_PROJ = [7204447,2212000,1917940,4800240,16871754,8013438,3907432,1825586,1891000,952620,3880763,800000,3376586,392620,3762700,1000000,3376586,3892620,3762700,1970000,2406586];
 var WT_GG_OUT_PROJ   = [63299,210384,200000,210384,200000,423682,200000,210384,200000,342861,100000,100000,310384,300000,123682,100000,110384,100000,323682,0,142861];

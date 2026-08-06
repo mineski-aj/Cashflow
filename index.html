@@ -1672,6 +1672,7 @@ function App() {
   var _s  = useState(0);    var slide=_s[0],setSlide=_s[1];
   var _p  = useState([]);   var projects=_p[0],setProjects=_p[1];
   var _rk = useState(0);    var refreshKey=_rk[0],setRefreshKey=_rk[1];
+  var _fx = useState(null); var fcstError=_fx[0],setFcstError=_fx[1];
   var _fe = useState(function(){
     try { var v = localStorage.getItem('mineski_forecast_enabled'); return v===null ? true : v==='1'; }
     catch(e){ return true; }
@@ -1698,11 +1699,32 @@ function App() {
     };
   }
 
+  // A failed fetch must never look like "no deals". Silently rendering zero projects
+  // hides ~₱47M of forecast revenue and quietly changes the Full Year closing — the
+  // worst possible failure mode to discover mid-meeting. Surface it instead.
+  // Common causes: Supabase free-tier auto-pause (~1 week idle; data is NOT deleted,
+  // just resume it from the dashboard), or no network on the machine viewing the file.
   function loadProjects(){
+    setFcstError(null);
     _sb.from('forecast_deals').select('*').order('created_at',{ascending:true}).then(function(res){
-      var p = res.data ? res.data.map(rowToProject) : [];
+      if(res.error || !res.data){
+        var m = (res.error && res.error.message) || 'no data returned';
+        setFcstError(/Failed to fetch|NetworkError|load failed/i.test(m)
+          ? "Couldn't reach Supabase — check this machine's network, or whether the free-tier project has auto-paused (resume it in the Supabase dashboard; no data is lost)."
+          : m);
+        FORECAST_PROJECTS = [];
+        setProjects([]);
+        setRefreshKey(function(k){return k+1;});
+        return;
+      }
+      var p = res.data.map(rowToProject);
       FORECAST_PROJECTS = p;
       setProjects(p);
+      setRefreshKey(function(k){return k+1;});
+    }, function(err){
+      setFcstError(String((err && err.message) || err));
+      FORECAST_PROJECTS = [];
+      setProjects([]);
       setRefreshKey(function(k){return k+1;});
     });
   }
@@ -1722,6 +1744,15 @@ function App() {
         h('span',{style:{fontSize:11,color:"var(--color-text-tertiary)"}},(slide+1)+" / "+SLIDES.length),
         h('button',{onClick:function(){nav(1);},disabled:slide===SLIDES.length-1,style:{background:"none",border:"0.5px solid var(--color-border-tertiary)",borderRadius:6,padding:"4px 10px",fontSize:12,cursor:"pointer",color:"var(--color-text-secondary)"}},"→")
       )
+    ),
+    // Only on the slides whose numbers actually change when the forecast is missing —
+    // Full Year (injection target) and 2026 Forecast (the list itself). Keeps the
+    // cover and the weekly tables clean for presenting.
+    fcstError && (SLIDES[slide]==="Full Year" || SLIDES[slide]==="2026 Forecast") &&
+    h('div',{style:{display:"flex",gap:8,alignItems:"flex-start",background:"#fdeaea",border:"1.5px solid #e8a0a0",borderRadius:8,padding:"10px 14px",marginBottom:14,fontSize:12,color:"#8a1f1f",lineHeight:1.5}},
+      h('span',{style:{fontWeight:600,whiteSpace:"nowrap"}},"⚠ 2026 Forecast not loaded —"),
+      h('span',null,fcstError+" Full Year currently shows the CF/AP baseline only, with no forecast deals injected."),
+      h('button',{onClick:loadProjects,style:{marginLeft:"auto",background:"#fff",border:"1px solid #e8a0a0",borderRadius:6,padding:"3px 10px",fontSize:11,cursor:"pointer",color:"#8a1f1f",whiteSpace:"nowrap"}},"Retry")
     ),
     h(SlideComp,{projects:projects,onRefresh:loadProjects,forecastEnabled:forecastEnabled,onToggleForecast:toggleForecast}),
     h('div',{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:20,paddingTop:12,borderTop:"0.5px solid var(--color-border-tertiary)"}},
