@@ -649,8 +649,8 @@ function WeeklyTableCombined() {
         h('div',{style:{fontSize:16,fontWeight:500}},"Weekly Cash Flow Table"),
         h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginTop:2}},
           showLiq
-            ?"Actuals W1–W34 · COS = Filed Andon POs + Unfiled PA estimates · GAE/Tax/etc from CF for Mancom"
-            :"Actuals W1–W34 · Projections W35–W52 · All figures in ₱"
+            ?"Actuals W1–W35 · COS = Filed Andon POs + Unfiled PA estimates · GAE/Tax/etc from CF for Mancom"
+            :"Actuals W1–W35 · Projections W36–W52 · All figures in ₱"
         )
       ),
       h('div',{style:{marginLeft:"auto",display:"flex",gap:4,alignItems:"center",paddingTop:2}},
@@ -769,7 +769,7 @@ function ARSummary() {
     {label:"For payment follow-up",val:fmt(AR_OPEN.filter(function(r){return r.status==="For Payment Follow-Up";}).reduce(function(s,r){return s+r.amount;},0),true),sub:"Awaiting client payment",col:"#c85000"},
     {label:"For invoicing",val:fmt(AR_OPEN.filter(function(r){return r.status==="For Invoicing";}).reduce(function(s,r){return s+r.amount;},0),true),sub:"Invoice not yet raised",col:"#1a7a4a"},
     {label:"Collected YTD",val:fmt(totalCollected,true),sub:COLLECTED.length+" invoices closed",col:"#1a7a4a"},
-    {label:"Due this week (W35)",val:fmt(thisWeekTotal,true),sub:thisWeekAR.length+" items",col:"#7a0000"},
+    {label:"Due this week (W36)",val:fmt(thisWeekTotal,true),sub:thisWeekAR.length+" items",col:"#7a0000"},
   ];
 
   return h('div',null,
@@ -832,7 +832,7 @@ function FullYear(props) {
     {label:"May", sub:"Actual",      isAct:true,  isCur:false, isProj:false},
     {label:"Jun", sub:"Actual",      isAct:true,  isCur:false, isProj:false},
     {label:"Jul", sub:"Actual",      isAct:true,  isCur:false, isProj:false},
-    {label:"Aug", sub:"Projection",  isAct:false, isCur:false, isProj:true},
+    {label:"Aug", sub:"Actual",      isAct:true,  isCur:false, isProj:false},
     {label:"Sep", sub:"Projection",  isAct:false, isCur:false, isProj:true},
     {label:"Oct", sub:"Projection",  isAct:false, isCur:false, isProj:true},
     {label:"Nov", sub:"Projection",  isAct:false, isCur:false, isProj:true},
@@ -852,9 +852,15 @@ function FullYear(props) {
   // Non-mutable (FY_COS_CF, FY_GAE, FY_TAX, FY_CAPEX, FY_LOAN, FY_OTHER,
   //              FY_STP, FY_FOREX, FY_GG_OUT) are globals from cashflow_data.js
 
-  var FY_PAY26  = FY_COS_CF.map(function(v,i){ return -(v + FY_AP_TOT[i]); });
+  // TOGGLE — include/exclude AP_PAYABLES' 2026-dated Cost of Sales rows (APEX, STAGE
+  // ONE, Procurement Budget, ...) on top of CF for Mancom's own projected COS
+  // (FY_COS_CF, row 57 — the same source Weekly Table's Liquidity view uses). These
+  // AP_PAYABLES rows may already be reflected inside CF's own weekly projection for
+  // that month, so whether to add them on top is a user call, not an assumption.
+  // Defaults ON to match prior behavior.
+  var _ap2026 = useState(true); var inclAP2026=_ap2026[0], setInclAP2026=_ap2026[1];
 
-  // AP breakdown: seeded from AP_PAYABLES for Jul–Dec; forecast items appended below
+  // AP breakdown: CF row-57 baseline (always) + AP_PAYABLES items (when toggled on)
   var FY_AP_BD = [null,null,null,null,null,null,null,null,null,null,null,null];
 
   // Inject AP_PAYABLES-derived values for Jul–Dec (pre-computed at global scope in _AP_*)
@@ -862,19 +868,21 @@ function FullYear(props) {
     FY_AP_TOT[i] = _AP_TOT[i];
     FY_PAY24[i]  = _AP_PAY24[i];
     FY_PAY25[i]  = _AP_PAY25[i];
-    FY_AP_BD[i]  = _AP_BD[i] ? _AP_BD[i].slice() : null;
+    var bdItems = [];
+    if(FY_COS_CF[i]) bdItems.push({l:"CF for Mancom — projected COS (row 57)", a:-FY_COS_CF[i]});
+    if(inclAP2026 && _AP_BD[i]) bdItems = bdItems.concat(_AP_BD[i]);
+    FY_AP_BD[i] = bdItems.length ? bdItems : null;
   }
   var FY_PAY24_BD = _AP_BD24;
   var FY_PAY25_BD = _AP_BD25;
 
-  // Apply forecast projects onto projection months (skipped entirely when the toggle is off)
+  var FY_PAY26 = FY_COS_CF.map(function(v,i){ return -(v + (inclAP2026 ? FY_AP_TOT[i] : 0)); });
+
+  // 2026 Forecast no longer feeds Full Year (tab hidden, deals tracked in Supabase only —
+  // see ForecastTab()). fcstProjects is forced empty so the injection loop below never
+  // fires; left in place rather than deleted in case Forecast is reinstated later.
   var forecastEnabled = !(props && props.forecastEnabled===false);
-  var fcstProjects = forecastEnabled ? ((props && props.projects) || FORECAST_PROJECTS) : [];
-  // A forecast payment dated in a month that has since closed to actual must NOT be
-  // injected: that month's figure already comes from CF for Mancom, so adding the
-  // forecast on top double-counts it. (W32: ₱9.23M of DPs were still dated Jul after
-  // CF consolidated W28–W31 into an actual July column.) Stranded deals are listed
-  // in a badge so they can be re-dated on the Forecast tab rather than lost silently.
+  var fcstProjects = [];
   var firstProjMonth = 0;
   for(var _m=0; _m<12; _m++){ if(!colDefs[_m].isProj){ firstProjMonth = _m + 1; } }
   var fcstStranded = [];
@@ -897,7 +905,6 @@ function FullYear(props) {
       FY_AP_BD[pmt.month]   = (FY_AP_BD[pmt.month]||[]).concat([{l:p.name+" (COS)",a:Math.round(pmt.amount*cos_rate),c:"COS",forecast:true}]);
     });
   });
-  FY_PAY26 = FY_COS_CF.map(function(v,i){ return -(v + FY_AP_TOT[i]); });
 
   // TOGGLE — include/exclude prior-year payables (2024 + 2025) in projection
   var _t = useState(true); var inclHist=_t[0], setInclHist=_t[1];
@@ -995,10 +1002,10 @@ function FullYear(props) {
   var legend = h('div',{style:{display:"flex",gap:12,marginBottom:10,flexWrap:"wrap",fontSize:10}},
     h('div',{style:{display:"flex",alignItems:"center",gap:4}},
       h('div',{style:{width:10,height:10,background:"#fff",border:"1px solid #ccc"}}),
-      h('span',{style:{color:"var(--color-text-secondary)"}},"Actual (Jan–Jul, CF for Mancom)")),
+      h('span',{style:{color:"var(--color-text-secondary)"}},"Actual (Jan–Aug, CF for Mancom)")),
     h('div',{style:{display:"flex",alignItems:"center",gap:4}},
       h('div',{style:{width:10,height:10,background:"#fdfbf0",border:"1px solid #ccc"}}),
-      h('span',{style:{color:"var(--color-text-secondary)"}},"Projection (Aug–Dec, AP-based)")),
+      h('span',{style:{color:"var(--color-text-secondary)"}},"Projection (Aug–Dec, CF for Mancom)")),
     h('div',{style:{display:"flex",alignItems:"center",gap:4}},
       h('div',{style:{width:10,height:10,background:"#fdf4ff",border:"1px solid #d4a0f0"}}),
       h('span',{style:{color:"#7a1fa2"}},"Payables 2026/AP — click Jul–Dec to drill")),
@@ -1011,13 +1018,17 @@ function FullYear(props) {
     h('div',{style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4,flexWrap:"wrap",gap:8}},
       h('div',{style:{fontSize:16,fontWeight:500}},"Full Year Cash Flow"),
       h('div',{style:{display:"flex",gap:8,alignItems:"center"}},
-        !forecastEnabled && h('span',{style:{fontSize:11,fontWeight:500,color:"#856404",background:"#fff3cd",border:"1.5px solid #e8d090",borderRadius:6,padding:"4px 10px",whiteSpace:"nowrap"}},"2026 Forecast excluded — toggle it on the Forecast tab"),
-        fcstStranded.length>0 && h('span',{
-          title:fcstStranded.map(function(s){return s.name+" — "+s.month+" ₱"+Math.round(s.amount).toLocaleString();}).join("\n"),
-          style:{fontSize:11,fontWeight:500,color:"#8a1f1f",background:"#fdeaea",border:"1.5px solid #e8a0a0",borderRadius:6,padding:"4px 10px",whiteSpace:"nowrap",cursor:"help"}},
-          "⚠ "+fcstStranded.length+" forecast deal"+(fcstStranded.length>1?"s":"")+" dated in a closed month (₱"
-          +Math.round(fcstStranded.reduce(function(s,x){return s+x.amount;},0)).toLocaleString()
-          +") — re-date on the Forecast tab"),
+        h('button',{
+          onClick:function(){ setInclAP2026(function(v){return !v;}); },
+          title:"AP_PAYABLES' 2026-dated Cost of Sales rows (APEX, STAGE ONE, Procurement Budget, ...) may already be reflected inside CF for Mancom's own weekly COS projection — toggle to see Full Year with or without them added on top.",
+          style:{
+            background: inclAP2026 ? "#f5eeff" : "#f2f2f2",
+            color:      inclAP2026 ? "#7a1fa2" : "var(--color-text-secondary)",
+            border:    "1.5px solid "+(inclAP2026?"#d4a0f0":"#ccc"),
+            borderRadius:6, padding:"4px 12px", fontSize:11, fontWeight:500,
+            cursor:"pointer", whiteSpace:"nowrap"
+          }
+        }, inclAP2026 ? "AP 2026 schedule: ON" : "AP 2026 schedule: OFF"),
         h('button',{
           onClick:function(){ setInclHist(function(v){return !v;}); },
           style:{
@@ -1031,9 +1042,9 @@ function FullYear(props) {
       )
     ),
     h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:6}},
-      "Jan–Dec 2026 · All figures in ₱ · Jan–Jun = CF for Mancom (weeks → months) · Jul = W28–W31 actual (complete) · Aug–Dec = AP payment schedule"
+      "Jan–Dec 2026 · All figures in ₱ · Jan–Jun = CF for Mancom (weeks → months) · Jul–Aug = W28–W35 actual (complete) · Sep–Dec = CF for Mancom projection (COS/GAE/Tax/CAPEX/Loan/Other/GG Outflow)"
       +(inclHist ? "" : " · Prior-year payables (2024/2025) excluded from projection")
-      +(forecastEnabled ? "" : " · 2026 Forecast deals excluded from projection")
+      +(inclAP2026 ? " · AP 2026 schedule added on top of CF COS" : " · AP 2026 schedule excluded — COS is CF for Mancom projection only")
     ),
     legend,
     h('div',{style:{overflowX:"auto"}},
@@ -1065,11 +1076,11 @@ function FullYear(props) {
         return h('div',{style:{background:"#F5EEFF",border:"2px solid #7a1fa2",borderRadius:6,padding:"10px 14px",marginTop:8}},
           h('div',{style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}},
             h('div',{style:{fontSize:10,color:"#4a0a72",fontWeight:600}},
-              "AP Payment Schedule → "+colDefs[hlCol].label+" 2026 · Total: "+fmt(-FY_AP_TOT[hlCol],false)
+              "Payables 2026 / AP → "+colDefs[hlCol].label+" 2026 · Total: "+fmt(-FY_PAY26[hlCol],false)
             ),
             h('span',{style:{fontSize:10,color:"#aaa",cursor:"pointer"},onClick:clearHl},"✕ close")
           ),
-          h('div',{style:{fontSize:10,color:"#888",marginBottom:6,fontStyle:"italic"}},"Top scheduled payables from AP sheet"),
+          h('div',{style:{fontSize:10,color:"#888",marginBottom:6,fontStyle:"italic"}},"CF for Mancom projected COS (row 57)"+(inclAP2026?" + AP sheet scheduled payables":"")),
           h('div',{style:{display:"flex",flexDirection:"column",gap:3}},
             FY_AP_BD[hlCol].map(function(item,ii){
               var fcst = !!item.forecast;
@@ -1162,7 +1173,7 @@ function FullYear(props) {
     h('div',{style:{background:"#fff8f0",border:"0.5px solid #f5c69a",borderRadius:8,padding:"10px 14px",marginTop:14,fontSize:12,color:"#7a3800"}},
       "⚠ Projected closing deteriorates to ",
       h('strong',null,(FY_NET[11]<0?"₱(":"₱")+(Math.abs(FY_NET[11])/1e6).toFixed(1)+"M"+(FY_NET[11]<0?")":"")+" by December"),
-      " — Jan–Jun actuals from CF for Mancom (weeks consolidated to months). Jul is now a complete actual month (W28–W31, consolidated by CF for Mancom into one column). Aug–Dec: Payables 2026 = COS-only from AP sheet; GAE/Tax/Loan/Other from CF rows 58–62; GG Outflow from CF row 64. H2 inflows from AM BD Universe Collections CSV."
+      " — Jan–Jun actuals from CF for Mancom (weeks consolidated to months). Jul and Aug are now complete actual months (W28–W31 and W32–W35, each consolidated by CF for Mancom into one column). Sep–Dec: Payables 2026 = CF row 57 projected COS (actual + projected weeks folded together, same source Weekly Table uses)"+(inclAP2026?" + AP sheet 2026 schedule added on top":"")+"; GAE/Tax/Loan/Other from CF rows 58–62; GG Outflow from CF row 64. H2 inflows from AM BD Universe Collections CSV."
     )
   );
 }
@@ -1175,7 +1186,7 @@ function ArrearsTab() {
   return h('div',null,
     h('div',{style:{fontSize:16,fontWeight:500,marginBottom:2}},"Cost of Sales Payables"),
     h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:14}},
-      "Source: PH Cash Flow Monitoring W35 · AP tab · Cost of Sales rows only · All figures in ₱"
+      "Source: PH Cash Flow Monitoring W36 · AP tab · Cost of Sales rows only · All figures in ₱"
     ),
     h('table',{style:{borderCollapse:"collapse",fontSize:12,width:"100%",maxWidth:620}},
       h('thead',null,
@@ -1664,9 +1675,12 @@ function ForecastTab(props) {
 
 // ── APP ───────────────────────────────────────────────────────────────────────
 
-var SLIDES = ["Cover","Weekly Table","AR Standard","AR Summary","Full Year","AP Payables","AP Arrears","2026 Forecast"];
-var COMPS  = [Cover,WeeklyTableCombined,ARStandard,ARSummary,FullYear,APPayables,ArrearsTab,ForecastTab];
-var SLIDE_HIDDEN = [false,false,true,true,false,false,true,false];
+// "2026 Forecast" is intentionally left out of SLIDES/COMPS — no longer used, per user
+// request. ForecastTab() and its Supabase loading code (App()'s loadProjects/FORECAST_PROJECTS)
+// are kept intact below in case it's reinstated; Full Year no longer injects its data either.
+var SLIDES = ["Cover","Weekly Table","AR Standard","AR Summary","Full Year","AP Payables","AP Arrears"];
+var COMPS  = [Cover,WeeklyTableCombined,ARStandard,ARSummary,FullYear,APPayables,ArrearsTab];
+var SLIDE_HIDDEN = [false,false,true,true,false,false,true];
 
 function App() {
   var _s  = useState(0);    var slide=_s[0],setSlide=_s[1];
@@ -1745,10 +1759,11 @@ function App() {
         h('button',{onClick:function(){nav(1);},disabled:slide===SLIDES.length-1,style:{background:"none",border:"0.5px solid var(--color-border-tertiary)",borderRadius:6,padding:"4px 10px",fontSize:12,cursor:"pointer",color:"var(--color-text-secondary)"}},"→")
       )
     ),
-    // Only on the slides whose numbers actually change when the forecast is missing —
-    // Full Year (injection target) and 2026 Forecast (the list itself). Keeps the
-    // cover and the weekly tables clean for presenting.
-    fcstError && (SLIDES[slide]==="Full Year" || SLIDES[slide]==="2026 Forecast") &&
+    // 2026 Forecast tab is hidden and no longer injects into Full Year (see FullYear()
+    // and the SLIDES/COMPS comment above), so this error banner has no slide left to
+    // attach to and never renders. Left in place — not deleted — along with the
+    // loadProjects()/FORECAST_PROJECTS fetch it reports on, in case Forecast comes back.
+    fcstError && (false) &&
     h('div',{style:{display:"flex",gap:8,alignItems:"flex-start",background:"#fdeaea",border:"1.5px solid #e8a0a0",borderRadius:8,padding:"10px 14px",marginBottom:14,fontSize:12,color:"#8a1f1f",lineHeight:1.5}},
       h('span',{style:{fontWeight:600,whiteSpace:"nowrap"}},"⚠ 2026 Forecast not loaded —"),
       h('span',null,fcstError+" Full Year currently shows the CF/AP baseline only, with no forecast deals injected."),

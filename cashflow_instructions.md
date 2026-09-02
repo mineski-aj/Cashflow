@@ -2,11 +2,15 @@
 
  
 
-**Version:** 2.1 | **Last updated:** 2026-08-05
+**Version:** 2.2 | **Last updated:** 2026-08-30
 
  
 
 **Changelog:**
+
+- v2.2 (2026-08-30) — **Full Year didn't reflect Weekly Table for any month that wasn't fully actual** — `FY_COS_CF` (Bug 9's rule) stayed `0` for every month still partly or fully projected, even though Weekly Table's own Liquidity view (`NON_COS_PROJ`/`COS_LIQ`, sourced from CF row 57) showed real COS spend those same weeks (Aug W35 alone: ₱3.04M silently missing from Full Year). **Bug 9 is now superseded**: `FY_COS_CF` is built the same way as GAE/Tax/CAPEX/Loan/Other/GG Outflow already were — CF row 57, actual weeks folded with remaining projected weeks, for *every* month, all year (see `update_cashflow.py`, `fy_cos_fut` next to `fy_gae_fut` etc.). The old "fully actual only, else 0, fall back to AP_PAYABLES" rule and its `[INFO] <Month> is fully actual` print are gone — nothing to check for that anymore. `AP_PAYABLES`'s 2026-dated Cost of Sales rows (APEX, STAGE ONE, Procurement Budget) are **no longer the fallback source** — they're an optional add-on the user toggles on/off in `FullYear()` ("AP 2026 schedule: ON/OFF"), since they may already be reflected inside CF's own weekly COS projection for that month. Also: **2026 Forecast tab removed from `SLIDES`/`COMPS`** (per user request — "we don't use this anymore") and its injection into Full Year permanently disabled (`fcstProjects` forced to `[]` in `FullYear()`); `ForecastTab()` and the Supabase-loading code in `App()` are untouched, just unreachable — nothing about the Forecast tab needs weekly maintenance anymore, and Step 5D below is now historical.
+
+ 
 
 - v2.1 (2026-08-05) — **The v2.0 W31/August bucketing question is closed**: CF for Mancom consolidated W28–W31 into a single `W28-W31 (July)` actual column at W32, so the workbook itself settled it — W31 is July. No convention change was needed, and a conservation check confirms every CF column is still counted exactly once. Two new fixes, both triggered by July becoming the first fully-actual post-June month: **Bug 9** — `FY_COS_CF` hardcoded `0` for Jul–Dec, so July's real ₱3.15M COS was dropped from the Full Year while `AP_PAYABLES` still carried July-dated 2025 arrears the AP sheet had already rescheduled to W34/W37; the July column closed at ₱1.73M against CF's actual ₱4.49M. `update_cashflow.py` now emits CF row 57 for any month that is fully actual and prints an `[INFO] … is fully actual` line naming the month. **Bug 10** — `FullYear()`'s forecast injection had no month guard, so ₱9.23M of Supabase forecast DPs still dated July were being added on top of CF's July actual; injection is now restricted to projection months and stranded deals surface in a red badge instead of vanishing. Also: `colDefs` Jul → `Actual`, and the orphaned "Jul" legend swatch merged into "Actual (Jan–Jul)".
 
@@ -269,7 +273,7 @@ For that mixed month, fold its actual columns (`cf_month_cols_all[month]`) into 
 
 ---
 
-### Bug 9 — When a post-June month closes to actual, `FY_COS_CF` must pick it up and its `AP_PAYABLES` rows must be re-dated
+### Bug 9 — When a post-June month closes to actual, `FY_COS_CF` must pick it up and its `AP_PAYABLES` rows must be re-dated (SUPERSEDED v2.2 — see changelog; `FY_COS_CF` now folds actual+projected CF row 57 for every month unconditionally, kept below for history)
 
 **What went wrong (W32 update):** `FY_COS_CF` was built as `Jan–Jun from CF row 57` + a hardcoded `[0]*6`, on the assumption that every post-June month is still projected and therefore sourced entirely from `AP_PAYABLES`. At W32 CF for Mancom consolidated W28–W31 into a single `W28-W31 (July)` **actual** column. Two things then went wrong at once:
 
@@ -1593,7 +1597,7 @@ If no new H2 inflow detected: "No new H2 collections entered — arrears tab pre
 
 ---
 
-## Step 5D — 2026 Forecast Tab & Full Year Toggle (v1.8)
+## Step 5D — 2026 Forecast Tab & Full Year Toggle (v1.8) — HISTORICAL, tab hidden as of v2.2, no longer applies
 
 The "2026 Forecast" slide (`ForecastTab()`) lists upcoming signed/prospective deals — name, entity, total value, GP%, DP/FP month and amount. This is **not** part of the weekly xlsx update: deals are entered by hand through the "+ Add Project" form in the live dashboard and stored in Supabase (table `forecast_deals`), not in `cashflow_data.js`. `App()` fetches them at page load (`loadProjects()`) into `FORECAST_PROJECTS`, and `FullYear()` injects each deal's DP/FP amount into `FY_PDEI_IN`/`FY_GG_IN`/`FY_AP_TOT` for its payment month.
 
@@ -1863,7 +1867,7 @@ def recompute_chain(patch_month_idx, fy_arrays):
 
 - [ ] Check if CF extends further than prior week → update `colDefs` zone boundary and `proj` week label array length
 
-- [ ] **If the script prints `[INFO] <Month> is fully actual`** (Bug 9): move that month's `colDefs` entry to `isAct:true`, fix the Full Year legend/captions, and re-date or remove every `AP_PAYABLES` row still dated that month — cross-check the AP sheet's week columns for the new schedule and revised amount
+- [ ] **(Historical — Bug 9 superseded v2.2)** `FY_COS_CF` no longer needs a "fully actual" check; it folds actual+projected CF row 57 for every month automatically. Still update `colDefs` to `isAct:true` for any month that has fully closed, for the header coloring/legend.
 
 - [ ] **Check the Full Year tab for the red stranded-forecast badge** (Bug 10) → report the deals in the chat summary so they get re-dated on the Forecast tab
 
@@ -1937,7 +1941,7 @@ def recompute_chain(patch_month_idx, fy_arrays):
 
 - **Data lives in `cashflow_data.js`, not `index.html`.** `index.html` is rendering/logic only; every weekly-changing value is a global var loaded from `cashflow_data.js`. Use `update_cashflow.py` to generate the CF/GL/COS_LIQ/FY blocks — see "Running the automation script" above.
 
-- **`Overview()` and `CashPosition()` are dead code.** Both functions exist in `index.html` but are not in the `SLIDES`/`COMPS` arrays that drive the app — they never render. The live slide deck is exactly: Cover, Weekly Table, AR Standard, AR Summary, Full Year, AP Payables, AP Arrears, 2026 Forecast (`AR Standard`/`AR Summary`/`AP Arrears` are reachable via the ← → arrows but hidden from the tab-button row by `SLIDE_HIDDEN`). Don't spend time keeping `Overview()`/`CashPosition()` in sync with the weekly numbers unless they get wired back into `COMPS`.
+- **`Overview()` and `CashPosition()` are dead code.** Both functions exist in `index.html` but are not in the `SLIDES`/`COMPS` arrays that drive the app — they never render. The live slide deck is exactly: Cover, Weekly Table, AR Standard, AR Summary, Full Year, AP Payables, AP Arrears (`AR Standard`/`AR Summary`/`AP Arrears` are reachable via the ← → arrows but hidden from the tab-button row by `SLIDE_HIDDEN`). **2026 Forecast is deliberately left out of `SLIDES`/`COMPS` as of v2.2** — unreachable in the UI, `ForecastTab()` and the Supabase-loading code in `App()` are kept but dormant, and `FullYear()` never injects forecast data anymore. Don't spend time keeping `Overview()`/`CashPosition()` in sync with the weekly numbers unless they get wired back into `COMPS`.
 
 - **Read only GL, AR, CF for Mancom, AP.** Never read other tabs. FY patch = skip xlsx entirely.
 

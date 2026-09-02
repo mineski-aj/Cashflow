@@ -528,28 +528,19 @@ fy_gg_in_act = [
     safe_int(month_sum(54, cf_month_cols['may'])),
     safe_int(month_sum(54, cf_month_cols['jun'])),
 ]
-# Bug 9: FY_COS_CF used to be `Jan-Jun from CF row 57` + a hardcoded [0]*6, on the
-# assumption that every post-June month is still projected and therefore sourced
-# entirely from AP_PAYABLES. That broke at W32, when CF for Mancom consolidated
-# W28-W31 into a single "W28-W31 (July)" actual column: July's real COS (P3.15M)
-# was dropped from the Full Year while AP_PAYABLES still carried July-dated 2025
-# arrears that the AP sheet had already rescheduled to W34/W37 — so the July
-# column showed a P1.73M close against CF's actual P4.49M.
+# Bug 9 (superseded — see below): FY_COS_CF used to be `Jan-Jun from CF row 57` +
+# a hardcoded [0]*6, sourced entirely from AP_PAYABLES for any post-June month
+# that wasn't yet fully actual. That silently dropped real CF-projected COS for
+# every month except the currently-closing one (e.g. Aug showed P0 COS while
+# Weekly Table's own Liquidity view showed P3M+ from CF row 57's projection).
 #
-# Rule: a post-June month sourced from CF row 57 iff it is fully actual, i.e. it
-# appears in act_cols (cf_month_cols_all) and has no remaining projected weeks.
-# Still-projected and mixed months stay 0 and remain AP_PAYABLES-driven, so the
-# original no-double-count guarantee holds. When a month flips to fully actual,
-# its AP_PAYABLES rows must be re-dated or cleared — see the Bug 9 section of
-# cashflow_instructions.md.
-_proj_month_names = set()
-for _c in proj_cols:
-    _lbl = get_cf_label(_c)
-    for _m in _ALL_MONTH_NAMES:
-        if _m in _lbl:
-            _proj_month_names.add(_m.lower())
-            break
-
+# Current rule: FY_COS_CF is built the same way as GAE/Tax/CAPEX/Loan/Other/GG
+# Outflow below — CF row 57, actual weeks (cf_month_cols) folded with remaining
+# projected weeks (cf_proj_month_sum) for every month, all year. This makes it
+# track Weekly Table exactly. AP_PAYABLES's 2026-dated Cost of Sales rows are no
+# longer treated as the fallback source — they're an optional, user-toggled
+# addition on top in index.html (FullYear()'s "AP 2026 schedule" toggle), since
+# they may already be reflected inside CF's own weekly COS projection.
 fy_cos_cf = [
     safe_int(month_sum(57, cf_month_cols['jan'])),
     safe_int(month_sum(57, cf_month_cols['feb'])),
@@ -558,17 +549,6 @@ fy_cos_cf = [
     safe_int(month_sum(57, cf_month_cols['may'])),
     safe_int(month_sum(57, cf_month_cols['jun'])),
 ]
-for _m in _ALL_MONTH_NAMES[6:]:
-    _key = _m.lower()
-    _act = cf_month_cols_all.get(_key, [])
-    if _act and _key not in _proj_month_names:
-        fy_cos_cf.append(safe_int(month_sum(57, _act)))
-        print(f"[INFO] {_m} is fully actual — FY_COS_CF[{_m}] = CF row 57 "
-              f"({fy_cos_cf[-1]:,}). Re-date/clear any AP_PAYABLES rows dated "
-              f"{_m} or they will double-count (Bug 9).", file=sys.stderr)
-    else:
-        fy_cos_cf.append(0)
-assert len(fy_cos_cf) == 12, f"FY_COS_CF must have 12 entries, got {len(fy_cos_cf)}"
 
 fy_gae = [
     safe_int(month_sum(58, cf_month_cols['jan'])),
@@ -685,6 +665,7 @@ def cf_proj_month_sum(row_idx, month):
     total += safe_int(month_sum(row_idx, cf_month_cols_all.get(month.lower(), [])))
     return total
 
+fy_cos_fut   = [cf_proj_month_sum(57, m) for m in fut_months]
 fy_gae_fut   = [cf_proj_month_sum(58, m) for m in fut_months]
 fy_tax_fut   = [cf_proj_month_sum(59, m) for m in fut_months]
 fy_capex_fut = [cf_proj_month_sum(60, m) for m in fut_months]
@@ -692,6 +673,9 @@ fy_loan_fut  = [cf_proj_month_sum(61, m) for m in fut_months]
 fy_other_fut = [cf_proj_month_sum(62, m) for m in fut_months]
 fy_gg_out_fut= [cf_proj_month_sum(64, m) for m in fut_months]
 fy_forex_fut = [safe_int(month_sum(66, cf_month_cols_all.get(m.lower(), []))) for m in fut_months]
+
+fy_cos_cf = fy_cos_cf + fy_cos_fut
+assert len(fy_cos_cf) == 12, f"FY_COS_CF must have 12 entries, got {len(fy_cos_cf)}"
 
 # FY_PAY24 and FY_PAY25 remain manual — carried from data (script cannot derive)
 # Output them as zero placeholders with a comment; user pastes from prior week
