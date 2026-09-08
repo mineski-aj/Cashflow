@@ -649,8 +649,8 @@ function WeeklyTableCombined() {
         h('div',{style:{fontSize:16,fontWeight:500}},"Weekly Cash Flow Table"),
         h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginTop:2}},
           showLiq
-            ?"Actuals W1–W35 · COS = Filed Andon POs + Unfiled PA estimates · GAE/Tax/etc from CF for Mancom"
-            :"Actuals W1–W35 · Projections W36–W52 · All figures in ₱"
+            ?"Actuals W1–W36 · COS = Filed Andon POs + Unfiled PA estimates · GAE/Tax/etc from CF for Mancom"
+            :"Actuals W1–W36 · Projections W37–W52 · All figures in ₱"
         )
       ),
       h('div',{style:{marginLeft:"auto",display:"flex",gap:4,alignItems:"center",paddingTop:2}},
@@ -769,7 +769,7 @@ function ARSummary() {
     {label:"For payment follow-up",val:fmt(AR_OPEN.filter(function(r){return r.status==="For Payment Follow-Up";}).reduce(function(s,r){return s+r.amount;},0),true),sub:"Awaiting client payment",col:"#c85000"},
     {label:"For invoicing",val:fmt(AR_OPEN.filter(function(r){return r.status==="For Invoicing";}).reduce(function(s,r){return s+r.amount;},0),true),sub:"Invoice not yet raised",col:"#1a7a4a"},
     {label:"Collected YTD",val:fmt(totalCollected,true),sub:COLLECTED.length+" invoices closed",col:"#1a7a4a"},
-    {label:"Due this week (W36)",val:fmt(thisWeekTotal,true),sub:thisWeekAR.length+" items",col:"#7a0000"},
+    {label:"Due this week (W37)",val:fmt(thisWeekTotal,true),sub:thisWeekAR.length+" items",col:"#7a0000"},
   ];
 
   return h('div',null,
@@ -1186,7 +1186,7 @@ function ArrearsTab() {
   return h('div',null,
     h('div',{style:{fontSize:16,fontWeight:500,marginBottom:2}},"Cost of Sales Payables"),
     h('div',{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:14}},
-      "Source: PH Cash Flow Monitoring W36 · AP tab · Cost of Sales rows only · All figures in ₱"
+      "Source: PH Cash Flow Monitoring W37 · AP tab · Cost of Sales rows only · All figures in ₱"
     ),
     h('table',{style:{borderCollapse:"collapse",fontSize:12,width:"100%",maxWidth:620}},
       h('thead',null,

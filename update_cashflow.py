@@ -205,6 +205,17 @@ def is_gg(row):
 
 INFLOW_CATS = {'Operating cash-in', 'Other Receipt', 'Loan Repayment'}
 
+# Bug 11 (W37): 'Bank Transfers' is money moved between the company's own bank
+# accounts, not real economic inflow/outflow — every row nets to ~0 across the
+# whole GL (confirmed: one negative "from" leg + one matching positive "to" leg
+# per transfer). INFLOW_CATS already excludes it implicitly (only 3 named
+# categories are allowed in), but the outflow queries below had no category
+# filter at all, so the negative "from" leg of every large internal transfer
+# (e.g. "Bank Transfer from Chinabank (METPH-PHP)" -22,240,000) was landing in
+# the PDEI/GG Outflow top-5 — often the single largest line — crowding out the
+# real vendor/GAE/tax payments the tooltip exists to show. Excluded below.
+EXCLUDE_OUTFLOW_CATS = {'Bank Transfers'}
+
 def gl_period_label(col_i):
     """Return the week string for a given act_col index (e.g. 'W26')."""
     return str(label_row.iloc[col_i]).strip()
@@ -233,12 +244,14 @@ def top_gl_inflows_gg(week_set, n=5):
     return [{'l': trunc(r['_desc']), 'a': safe_int(r['_debit'])} for _, r in top.iterrows()]
 
 def top_gl_outflows_pdei(week_set, n=5):
-    sub = gl[gl['_week'].isin(week_set) & ~gl.apply(is_gg, axis=1) & (gl['_net'] < 0)]
+    sub = gl[gl['_week'].isin(week_set) & ~gl.apply(is_gg, axis=1) &
+             ~gl['_cat'].isin(EXCLUDE_OUTFLOW_CATS) & (gl['_net'] < 0)]
     top = sub.nsmallest(n, '_net')
     return [{'l': trunc(r['_desc']), 'a': safe_int(r['_net'])} for _, r in top.iterrows()]
 
 def top_gl_outflows_gg(week_set, n=5):
-    sub = gl[gl['_week'].isin(week_set) & gl.apply(is_gg, axis=1) & (gl['_net'] < 0)]
+    sub = gl[gl['_week'].isin(week_set) & gl.apply(is_gg, axis=1) &
+             ~gl['_cat'].isin(EXCLUDE_OUTFLOW_CATS) & (gl['_net'] < 0)]
     top = sub.nsmallest(n, '_net')
     return [{'l': trunc(r['_desc']), 'a': safe_int(r['_net'])} for _, r in top.iterrows()]
 
