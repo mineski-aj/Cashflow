@@ -818,6 +818,17 @@ function ARSummary() {
 
 // ── FULL YEAR ─────────────────────────────────────────────────────────────────
 
+// Hardcoded, manually-maintained optional payables — NOT derived from AP_PAYABLES or
+// any xlsx tab. User-specified fixed totals, each independently toggleable in the Full
+// Year tab, applied as a one-time outflow in December (all default OFF). Update the
+// `amount` values by hand when the user gives you new figures; there is no script for
+// these.
+var HARDCODED_PAYABLES = [
+  {key:"y2024", label:"2024 Payables", amount:8839560.00},
+  {key:"y2025", label:"2025 Payables", amount:10000176.25},
+  {key:"apex",  label:"Apex",          amount:39643738.50},
+];
+
 function FullYear(props) {
   // COLUMN DEFINITIONS
   // 100% CF for Mancom, weeks consolidated to months, for all 12 months.
@@ -893,6 +904,15 @@ function FullYear(props) {
   // by update_cashflow.py. Whatever residual CF carries per month (see Bug 9 note)
   // is CF's own, not something this dashboard should re-derive.
 
+  // TOGGLES — HARDCODED_PAYABLES, each independently on/off, all default OFF. Applied
+  // as a one-time outflow in December only (index 11) — doesn't touch any other month's
+  // Beginning/Closing since these sit after the last projected month.
+  var _hc = useState({y2024:false, y2025:false, apex:false});
+  var hcOn = _hc[0], setHcOn = _hc[1];
+  var toggleHc = function(key){ setHcOn(function(prev){ var next={}; for(var k in prev) next[k]=prev[k]; next[key]=!next[key]; return next; }); };
+  var hcTotal = HARDCODED_PAYABLES.reduce(function(s,p){ return s + (hcOn[p.key]?p.amount:0); }, 0);
+  FY_NET[11] = FY_NET[11] - hcTotal;
+
   // STATE — tracks which row + col is highlighted
   var _s = useState({bdKey:"",col:-1});
   var hlBdKey = _s[0].bdKey;
@@ -914,10 +934,17 @@ function FullYear(props) {
     {label:"  Loan Repayment",     data:FY_LOAN.map(function(v){return -v;}),  color:"#c00", projBg:"#fff8f8"},
     {label:"  Other Payment",      data:FY_OTHER.map(function(v){return -v;}), color:"#c00", projBg:"#fff8f8"},
     {label:"  GG Company Outflow", data:FY_GG_OUT.map(function(v){return -v;}),color:"#c00", projBg:"#fff8f8"},
+  ].concat(HARDCODED_PAYABLES.map(function(p){
+    // Value always shown (so the presenter can see the amount before switching it on);
+    // only counted in Net Cash / Closing (FY_NET[11], adjusted above) when toggled on.
+    var data = [0,0,0,0,0,0,0,0,0,0,0, -p.amount];
+    return {label:"  "+p.label+" (Dec, optional)", data:data, color:"#c00", projBg:"#fff8f8",
+            toggleKey:p.key, toggleOn:hcOn[p.key]};
+  })).concat([
     {label:"  STP",                data:FY_STP,     color:"#c00", projBg:"#fff8f8"},
     {label:"  Forex",              data:FY_FOREX,   color:"#888"},
     {label:"Net Cash / Closing",   data:FY_NET,     bold:true, bg:"#0f0f0f", textColor:"#fff", projBg:"#3a3520", projTextColor:"#e8d88a"},
-  ];
+  ]);
 
   var allRows = [];
   rows.forEach(function(row,ri){
@@ -931,11 +958,15 @@ function FullYear(props) {
     var hasBd = !!row.bdKey;
     var isInflow = row.bdKey==="pdeiIn"||row.bdKey==="ggIn";
     var isApRow  = row.bdKey==="pay26";
+    var isToggle = !!row.toggleKey;
     allRows.push(h('tr',{key:"r"+ri,style:{borderBottom:"0.5px solid #e0e0e0"}},
       h('td',{style:{padding:"7px 10px",fontWeight:row.bold?600:400,background:row.bg||"#fff",color:row.textColor||"var(--color-text-primary)",fontSize:11,position:"sticky",left:0,zIndex:1,borderRight:"1px solid #ddd",whiteSpace:"nowrap"}},
+        isToggle && h('input',{type:"checkbox",checked:row.toggleOn,onChange:function(){ toggleHc(row.toggleKey); },
+          style:{marginRight:6,verticalAlign:"middle",cursor:"pointer"}}),
         row.label,
         isApRow&&h('span',{style:{marginLeft:5,fontSize:9,color:"#7a1fa2",fontWeight:400}}," [CF]"),
-        isInflow&&h('span',{style:{marginLeft:5,fontSize:9,color:"#1a7a4a",fontWeight:400}}," [CSV]")
+        isInflow&&h('span',{style:{marginLeft:5,fontSize:9,color:"#1a7a4a",fontWeight:400}}," [CSV]"),
+        isToggle&&h('span',{style:{marginLeft:5,fontSize:9,color:row.toggleOn?"#c00":"#aaa",fontWeight:400}}, row.toggleOn?" ON":" OFF")
       ),
       (row.data||[]).map(function(val,i){
         var cd = colDefs[i];
@@ -948,15 +979,17 @@ function FullYear(props) {
         var col    = row.textColor ? (row.projTextColor&&!isAct?row.projTextColor:row.textColor)
                                    : (val<0?"#c00":(row.color||"var(--color-text-primary)"));
         if(isApRow) col = val<0?"#7a1fa2":"var(--color-text-tertiary)";
+        if(isToggle && !row.toggleOn) col = "var(--color-text-tertiary)";
         var hlBg   = isInflow ? "#D4F5E4" : "#EFD4FF";
         var hlOut  = isInflow ? "#1a7a4a" : "#7a1fa2";
         return h('td',{key:i,
           style:{textAlign:"right",padding:"7px 8px",fontWeight:row.bold?600:400,
             background:isHL?hlBg:baseBg,
             color:val===0?"var(--color-text-tertiary)":col,
-            fontSize:11,cursor:hasBdItem?"pointer":"default",
+            fontSize:11,cursor:(hasBdItem||isToggle)?"pointer":"default",
+            opacity:(isToggle && !row.toggleOn && val!==0)?0.5:1,
             outline:isHL?"2px solid "+hlOut:"none",transition:"background 0.1s"},
-          onClick:hasBdItem?function(){setHl(row.bdKey,i);}:undefined},
+          onClick:hasBdItem?function(){setHl(row.bdKey,i);}:(isToggle?function(){ toggleHc(row.toggleKey); }:undefined)},
           val===0?"—":fmt(val,false)
         );
       })
@@ -1071,7 +1104,8 @@ function FullYear(props) {
         (improves?"📈 Projected closing improves to ":"⚠ Projected closing deteriorates to "),
         h('strong',null,(FY_NET[11]<0?"₱(":"₱")+(Math.abs(FY_NET[11])/1e6).toFixed(1)+"M"+(FY_NET[11]<0?")":"")+" by December"),
         " (vs. "+(FY_NET[lastActIdx]<0?"₱(":"₱")+(Math.abs(FY_NET[lastActIdx])/1e6).toFixed(1)+"M"+(FY_NET[lastActIdx]<0?")":"")+" as of "+colDefs[lastActIdx].label+", the last closed month)",
-        " — every row is CF for Mancom, weeks consolidated to months (actual weeks and projected weeks folded together for any month straddling the boundary — same source Weekly Table uses): PDEI/GG Inflow from rows 53–54, COS from row 57, GAE/Tax/CAPEX/Loan/Other from rows 58–62, GG Outflow from row 64, Forex from row 66, Beginning/Closing from rows 49/67. No AP sheet or arrears schedule added on top."
+        " — every row is CF for Mancom, weeks consolidated to months (actual weeks and projected weeks folded together for any month straddling the boundary — same source Weekly Table uses): PDEI/GG Inflow from rows 53–54, COS from row 57, GAE/Tax/CAPEX/Loan/Other from rows 58–62, GG Outflow from row 64, Forex from row 66, Beginning/Closing from rows 49/67. No AP sheet or arrears schedule added on top.",
+        hcTotal>0 && h('span',null, " Includes hardcoded December add-on"+(HARDCODED_PAYABLES.filter(function(p){return hcOn[p.key];}).length>1?"s":"")+": "+HARDCODED_PAYABLES.filter(function(p){return hcOn[p.key];}).map(function(p){return p.label;}).join(", ")+".")
       );
     })()
   );
