@@ -696,21 +696,28 @@ fy_pay24 = [0]*12
 fy_pay25 = [0]*12
 fy_stp   = [0]*12
 
-# Chain beginning balances Jul-Dec
+# Jul-Dec Beginning/Closing: 100% CF for Mancom, same rule as Jan-Jun — read row 49
+# (Beginning) at the first column of the month and row 67 (Net Cash Inflow/Outflow,
+# i.e. Closing) at the last column of the month. This replaces a prior hand-rolled
+# chain that (a) sourced its outflow from the AP sheet's H2 schedule instead of CF's
+# own COS projection, and (b) had a double-negation sign bug (`b + inflow - outflow`
+# where `outflow` was already negative, so costs were being ADDED to the balance
+# instead of subtracted) — together these made Full Year's Dec closing come out
+# strongly positive while CF for Mancom's own row 67 for W52 was strongly negative.
+# Reading CF's own row 49/67 directly — for every month, actual or projected or
+# mixed — can't diverge from CF for Mancom, by construction.
+cf_month_cols_full = {m.lower(): [] for m in _ALL_MONTH_NAMES}
+for c in act_cols + proj_cols:
+    label = get_cf_label(c)
+    for m in _ALL_MONTH_NAMES:
+        if m in label:
+            cf_month_cols_full[m.lower()].append(c)
+            break
+
 fy_beg_act  = [beg_jan, beg_feb, beg_mar, beg_apr, beg_may, beg_jun]
 fy_net_act  = [close_jan, close_feb, close_mar, close_apr, close_may, close_jun]
-fy_beg_fut  = []
-fy_net_fut  = []
-
-b = close_jun
-for i, month in enumerate(fut_months):
-    fy_beg_fut.append(safe_int(b))
-    inflow  = fy_pdei_in_fut[i] + fy_gg_in_fut[i]
-    outflow = -(fy_ap_tot_arr[i] + fy_pay24[6+i] + fy_pay25[6+i]
-                + fy_gae_fut[i] + fy_tax_fut[i] + fy_capex_fut[i]
-                + fy_loan_fut[i] + fy_other_fut[i] + fy_gg_out_fut[i])
-    b = b + inflow - outflow
-    fy_net_fut.append(safe_int(b))
+fy_beg_fut  = [safe_int(cfv(49, cf_month_cols_full[m.lower()][0]))  for m in fut_months]
+fy_net_fut  = [safe_int(cfv(67, cf_month_cols_full[m.lower()][-1])) for m in fut_months]
 
 fy_beg_full = fy_beg_act + fy_beg_fut
 fy_net_full = fy_net_act + fy_net_fut
